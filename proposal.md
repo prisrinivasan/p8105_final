@@ -4,7 +4,11 @@ proposal
 The group members (names and UNIs)
 ----------------------------------
 
-Lorraine () Hannah Bowlin, hmb2161 Priyanka Srinivasan, ps3070 Alice Tivarovsky Kelly Wang, kzw2102
+-   Hannah Bowlin, hmb2161
+-   Lorraine Kwok, lk2761
+-   Priyanka Srinivasan, ps3070
+-   Alice Tivarovsky, at3343
+-   Kelly Wang, kzw2102
 
 The tentative project title
 ---------------------------
