@@ -1,0 +1,25 @@
+proposal
+================
+
+The group members (names and UNIs)
+----------------------------------
+
+Lorraine () Hannah Bowlin, hmb2161 Priyanka Srinivasan, ps3070 Alice Tivarovsky Kelly Wang, kzw2102
+
+The tentative project title
+---------------------------
+
+The motivation for this project
+-------------------------------
+
+The intended final products
+---------------------------
+
+The anticipated data sources
+----------------------------
+
+The planned analyses / visualizations / coding challenges
+---------------------------------------------------------
+
+The planned timeline
+--------------------
