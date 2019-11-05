@@ -19,9 +19,11 @@ theme_set(theme_bw() + theme(legend.position = "bottom"))
 
 
 ```{r}
-pests_home = read_csv(file = "./final_data/mold_home.csv")
+pests_home = read_csv(file = "./final_data/mold_home.csv") %>%
+  janitor::clean_names()
 
-air_conc = read_csv(file = "./final_data/air_conc.csv")
+air_conc = read_csv(file = "./final_data/air_conc.csv") %>%
+  janitor::clean_names()
 
 mice_home = read_csv(file = "./final_data/mice_home.csv") %>%
   janitor::clean_names()

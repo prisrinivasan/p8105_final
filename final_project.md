@@ -2,7 +2,8 @@ final\_project
 ================
 
 ``` r
-pests_home = read_csv(file = "./final_data/mold_home.csv")
+pests_home = read_csv(file = "./final_data/mold_home.csv") %>%
+  janitor::clean_names()
 ```
 
     ## Parsed with column specification:
@@ -21,7 +22,8 @@ pests_home = read_csv(file = "./final_data/mold_home.csv")
     ## See problems(...) for more details.
 
 ``` r
-air_conc = read_csv(file = "./final_data/air_conc.csv")
+air_conc = read_csv(file = "./final_data/air_conc.csv") %>%
+  janitor::clean_names()
 ```
 
     ## Parsed with column specification:
