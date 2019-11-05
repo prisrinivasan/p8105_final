@@ -1,0 +1,30 @@
+---
+title: "final_project"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(dplyr)
+library(viridis)
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+theme_set(theme_bw() + theme(legend.position = "bottom"))
+```
+
+
+```{r}
+pests_home = read_csv(file = "./final_data/mold_home.csv")
+
+air_conc = read_csv(file = "./final_data/air_conc.csv")
+
+mice_home = read_csv(file = "./final_data/mice_home.csv") %>%
+  janitor::clean_names()
+
+```
+
