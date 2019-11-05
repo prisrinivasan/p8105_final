@@ -41,15 +41,24 @@ among those who have asthma or respiratory reactions to cockroaches.
 
 ## The planned analyses / visualizations / coding challenges
 
-Planned analyses and visualizations: 1. Spatial visualization of
-reported household cockroach exposure across the five boroughs 2. Shiny
-visualization for people to input neighborhood or demographic info and
-see spread of cockroaches across NYC 3. Graphs depicting temporal
-changes in factors relating to asthma and cockroaches
+Planned analyses and visualizations:
 
-Challenges: 1. Learning how to use Shiny 2. Using geographic indicators
-across different datasets 3. Cleaning and tidying datasets to properly
-merge
+1.  Spatial visualization of reported household cockroach exposure
+    across the five boroughs
+
+2.  Shiny visualization for people to input neighborhood or demographic
+    info and see spread of cockroaches across NYC
+
+3.  Graphs depicting temporal changes in factors relating to asthma and
+    cockroaches
+
+Challenges:
+
+1.  Learning how to use Shiny
+
+2.  Using geographic indicators across different datasets
+
+3.  Cleaning and tidying datasets to properly merge
 
 ## The planned timeline
 

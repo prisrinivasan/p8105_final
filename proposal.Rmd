@@ -32,13 +32,19 @@ In 2017, 15.6% of households [reported](http://www.sternenvironmental.com/blog/2
 ## The planned analyses / visualizations / coding challenges
 
 Planned analyses and visualizations:
+
 1. Spatial visualization of reported household cockroach exposure across the five boroughs 
+
 2. Shiny visualization for people to input neighborhood or demographic info and see spread of cockroaches across NYC
+
 3. Graphs depicting temporal changes in factors relating to asthma and cockroaches
 
 Challenges:
+
 1. Learning how to use Shiny
+
 2. Using geographic indicators across different datasets
+
 3. Cleaning and tidying datasets to properly merge
 
 ## The planned timeline
