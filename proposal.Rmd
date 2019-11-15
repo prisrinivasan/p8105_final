@@ -54,6 +54,9 @@ Nov 15th - 20th:
   * Meet with teaching team to review proposal
   * Data cleaning
   * Data exploration/lit review and drafting plots/figures 
+  Hannah and Kelly: lit review
+  Alice and Lorraine: data cleaning
+  Priyanka: mapping UHF codes
 
 Nov 20th - 27nd, during meeting:
 
