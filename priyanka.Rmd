@@ -41,7 +41,6 @@ Reading JSON file for UHF geo
 ```{r}
 uhf <- jsonlite::fromJSON("./final_data/UHF42.json", flatten = TRUE)
 
-<<<<<<< HEAD
 ```
 Conclusion: the JSON file is weird.
 
@@ -52,14 +51,12 @@ Shape files turned out better. Used a different file from nyc.gov because the En
 
 ```{r}
 shape = st_read("./final_data/shapefiles/", quiet = TRUE)
-=======
+
 nyc_neighborhoods <- readOGR(content(uhf,'text'), 'OGRGeoJSON', verbose = F)
->>>>>>> 4b7be8f58ba56526cb65f7ef67567e47c54f230c
 
 #look at what we have
 str(shape)
 
-<<<<<<< HEAD
 #plot all polygon boundaries
 plot(shape)
 
@@ -69,19 +66,5 @@ plot(st_geometry(shape))
 
 ```{r}
 merged <- merge(shape, air_conc, by.x = "UHF34_CODE", by.y = "geo_entity_id")
-=======
-```{r}
-nyc_water = 
-  GET("https://www1.nyc.gov/assets/doh/downloads/zip/uhf42_dohmh_2009.zip") %>% 
-  content("text") %>%
-  jsonlite::fromJSON() %>%
-  as_tibble()
+
 ```
-
-```{r}
-neigh <- GET('http://data.beta.nyc//dataset/0ff93d2d-90ba-457c-9f7e-39e47bf2ac5f/resource/35dd04fb-81b3-479b-a074-a27a37888ce7/download/d085e2f8d0b54d4590b1e7d1f35594c1pediacitiesnycneighborhoods.geojson')
-nyc_neighborhoods <- readOGR(content(r,'text'), 'OGRGeoJSON', verbose = F)
-
->>>>>>> 4b7be8f58ba56526cb65f7ef67567e47c54f230c
-```
-
