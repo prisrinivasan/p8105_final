@@ -18,3 +18,16 @@ asthma_data = read_csv("./final_data/asthma_data.csv") %>%
     ##   data_value = col_character(),
     ##   message = col_character()
     ## )
+
+``` r
+fix_problems = 
+  problems(asthma_data) %>%
+  separate(actual, c("annual", "average", "year"), sep = " ")
+```
+
+``` r
+asthma_data_tidy = 
+  asthma_data %>%
+  rename(year = year_description) %>%
+  mutate(data_value = as.numeric(data_value))
+```
