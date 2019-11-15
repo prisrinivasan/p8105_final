@@ -16,6 +16,7 @@ library(ggmap)
 library(broom)
 library(httr)
 library(rgdal)
+library(sf)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -39,11 +40,17 @@ mice_home = read_csv(file = "./final_data/mice_home.csv") %>%
 
 Reading JSON file for UHF geo
 ```{r}
-uhf <- jsonlite::fromJSON("./final_data/UHF42.json", flatten = TRUE)
+uhf <- jsonlite::fromJSON("./final_data/UHF42.json")
+uhf1 <- jsonlite::fromJSON("./final_data/UHF42.json", flatten=TRUE)
 
+```
+
+other stuff
+```{r}
 nyc_neighborhoods <- readOGR(content(uhf,'text'), 'OGRGeoJSON', verbose = F)
 
 ```
+
 
 ```{r}
 nyc_water = 
@@ -53,9 +60,8 @@ nyc_water =
   as_tibble()
 ```
 
+Trying to use shapefiles
 ```{r}
-neigh <- GET('http://data.beta.nyc//dataset/0ff93d2d-90ba-457c-9f7e-39e47bf2ac5f/resource/35dd04fb-81b3-479b-a074-a27a37888ce7/download/d085e2f8d0b54d4590b1e7d1f35594c1pediacitiesnycneighborhoods.geojson')
-nyc_neighborhoods <- readOGR(content(r,'text'), 'OGRGeoJSON', verbose = F)
-
+shape = st_read("./final_data/shapefiles/", quiet = TRUE)
 ```
 
