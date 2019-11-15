@@ -62,26 +62,24 @@ Challenges:
 
 ## The planned timeline
 
-Nov 5th - 15th:
+Nov 15th - 20th:
 
   - Meet with teaching team to review proposal
   - Data cleaning
-  - Data exploration/lit review and drafting plots/figures
+  - Data exploration/lit review and drafting plots/figures Hannah and
+    Kelly: lit review Alice and Lorraine: data cleaning Priyanka:
+    mapping UHF codes
 
-Nov 15th - 22nd:
+Nov 20th - 27nd, during meeting:
 
-  - Figure out Shiny
-  - Start drafting website
+  - start drafting website
+  - finalize analyses (as best we can)
 
-Nov 23th - Nov 29th:
+Nov 27th - Nov 29th:
 
   - Draft report
 
-Nov 30th - Dec 4th:
+Dec 3rd:
 
   - Finalize report
   - Create screencast
-
-Dec 5th - Dec 10th:
-
-  - Prepare presentation to class
