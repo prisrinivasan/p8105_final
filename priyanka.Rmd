@@ -44,24 +44,27 @@ uhf <- jsonlite::fromJSON("./final_data/UHF42.json")
 uhf1 <- jsonlite::fromJSON("./final_data/UHF42.json", flatten=TRUE)
 
 ```
+Conclusion: the JSON file is weird.
 
-other stuff
-```{r}
-nyc_neighborhoods <- readOGR(content(uhf,'text'), 'OGRGeoJSON', verbose = F)
+# Shape files
+Shape files turned out better. Used a different file from nyc.gov because the Env & Health Data Portal file was inconsistent - combined certain neighborhoods that weren't combined in the rest of the datasets.
 
-```
+[Source of shape files](https://www1.nyc.gov/site/doh/data/health-tools/maps-gis-data-files-for-download.page)
 
-
-```{r}
-nyc_water = 
-  GET("https://www1.nyc.gov/assets/doh/downloads/zip/uhf42_dohmh_2009.zip") %>% 
-  content("text") %>%
-  jsonlite::fromJSON() %>%
-  as_tibble()
-```
-
-Trying to use shapefiles
 ```{r}
 shape = st_read("./final_data/shapefiles/", quiet = TRUE)
+
+#look at what we have
+str(shape)
+
+#plot all polygon boundaries
+plot(shape)
+
+#plot just geometry column
+plot(st_geometry(shape))
+```
+
+```{r}
+merged <- merge(shape, air_conc, by.x = "UHF34_CODE", by.y = "geo_entity_id")
 ```
 
