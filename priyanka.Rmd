@@ -5,24 +5,57 @@ output: github_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(dplyr)
+library(viridis)
+library(sp)
+library(rvest)
+library(tigris)
+library(maptools)
+library(ggmap)
+library(broom)
+library(httr)
+library(rgdal)
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+theme_set(theme_bw() + theme(legend.position = "bottom"))
 ```
 
-## R Markdown
+```{r}
+pests_home = read_csv(file = "./final_data/mold_home.csv") %>%
+  janitor::clean_names()
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+air_conc = read_csv(file = "./final_data/air_conc.csv") %>%
+  janitor::clean_names()
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+mice_home = read_csv(file = "./final_data/mice_home.csv") %>%
+  janitor::clean_names()
 
-```{r cars}
-summary(cars)
 ```
 
-## Including Plots
+Reading JSON file for UHF geo
+```{r}
+uhf <- jsonlite::fromJSON("./final_data/UHF42.json", flatten = TRUE)
 
-You can also embed plots, for example:
+nyc_neighborhoods <- readOGR(content(uhf,'text'), 'OGRGeoJSON', verbose = F)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+nyc_water = 
+  GET("https://www1.nyc.gov/assets/doh/downloads/zip/uhf42_dohmh_2009.zip") %>% 
+  content("text") %>%
+  jsonlite::fromJSON() %>%
+  as_tibble()
+```
+
+```{r}
+neigh <- GET('http://data.beta.nyc//dataset/0ff93d2d-90ba-457c-9f7e-39e47bf2ac5f/resource/35dd04fb-81b3-479b-a074-a27a37888ce7/download/d085e2f8d0b54d4590b1e7d1f35594c1pediacitiesnycneighborhoods.geojson')
+nyc_neighborhoods <- readOGR(content(r,'text'), 'OGRGeoJSON', verbose = F)
+
+```
+
