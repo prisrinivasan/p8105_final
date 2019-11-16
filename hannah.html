@@ -10,11 +10,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Alice Tivarovsky" />
 
-<meta name="date" content="2019-11-15" />
 
-<title>alice data review</title>
+<title>hannah</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -306,25 +304,13 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">alice data review</h1>
-<h4 class="author">Alice Tivarovsky</h4>
-<h4 class="date">11/15/2019</h4>
+<h1 class="title toc-ignore">hannah</h1>
 
 </div>
 
 
-<div id="data-cleaning" class="section level2">
-<h2>Data Cleaning</h2>
-<pre class="r"><code>asthma_data = read_csv(file = &quot;./final_data/asthma_data.csv&quot;) %&gt;% 
-  janitor::clean_names() %&gt;% 
-  filter(data_value != &quot;NULL&quot;) %&gt;% 
-  mutate(data_value = as.numeric(data_value)) %&gt;% 
-  rename(year = year_description) %&gt;% 
-  mutate(
-    year = str_replace(year, &quot;Annual Average&quot;, &quot;&quot;)) %&gt;%
-  group_by(year) %&gt;% 
-  summarize(n = n()) %&gt;% 
-  view()</code></pre>
+<pre class="r"><code>allergens_home = read_csv(file = &quot;./final_data/mice_home.csv&quot;) %&gt;%
+  janitor::clean_names()</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   indicator_data_id = col_double(),
@@ -338,15 +324,31 @@ $(document).ready(function () {
 ##   message = col_character()
 ## )</code></pre>
 <pre><code>## Warning: 3486 parsing failures.
-##  row              col expected              actual                           file
-## 5167 year_description a double Annual Average 2009 &#39;./final_data/asthma_data.csv&#39;
-## 5168 year_description a double Annual Average 2009 &#39;./final_data/asthma_data.csv&#39;
-## 5169 year_description a double Annual Average 2009 &#39;./final_data/asthma_data.csv&#39;
-## 5170 year_description a double Annual Average 2009 &#39;./final_data/asthma_data.csv&#39;
-## 5171 year_description a double Annual Average 2009 &#39;./final_data/asthma_data.csv&#39;
-## .... ................ ........ ................... ..............................
+##  row              col expected              actual                         file
+## 5167 year_description a double Annual Average 2009 &#39;./final_data/mice_home.csv&#39;
+## 5168 year_description a double Annual Average 2009 &#39;./final_data/mice_home.csv&#39;
+## 5169 year_description a double Annual Average 2009 &#39;./final_data/mice_home.csv&#39;
+## 5170 year_description a double Annual Average 2009 &#39;./final_data/mice_home.csv&#39;
+## 5171 year_description a double Annual Average 2009 &#39;./final_data/mice_home.csv&#39;
+## .... ................ ........ ................... ............................
 ## See problems(...) for more details.</code></pre>
-</div>
+<pre class="r"><code>allergens_home %&gt;%
+  janitor::clean_names()</code></pre>
+<pre><code>## # A tibble: 9,366 x 9
+##    indicator_data_… indicator_id name  measure geo_type_name geo_entity_id
+##               &lt;dbl&gt;        &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;                 &lt;dbl&gt;
+##  1           130271          634 Adul… Percent UHF42                   101
+##  2           130272          634 Adul… Percent UHF42                   102
+##  3           130273          634 Adul… Percent UHF42                   103
+##  4           130274          634 Adul… Percent UHF42                   104
+##  5           130275          634 Adul… Percent UHF42                   105
+##  6           130276          634 Adul… Percent UHF42                   106
+##  7           130277          634 Adul… Percent UHF42                   107
+##  8           130278          634 Adul… Percent UHF42                   201
+##  9           130279          634 Adul… Percent UHF42                   202
+## 10           130280          634 Adul… Percent UHF42                   203
+## # … with 9,356 more rows, and 3 more variables: year_description &lt;dbl&gt;,
+## #   data_value &lt;chr&gt;, message &lt;chr&gt;</code></pre>
 
 
 
