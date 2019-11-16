@@ -13,9 +13,16 @@ library(tidyverse)
 ## Data Cleaning
 
 ```{r}
-read_csv("../asthma_data.csv") %>% 
+
+asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>% 
   janitor::clean_names() %>% 
   filter(data_value != "NULL") %>% 
-  mutate(data_value = as.numeric(data_value))
+  mutate(data_value = as.numeric(data_value)) %>% 
+  rename(year = year_description) %>% 
+  mutate(
+    year = str_replace(year, "Annual Average", "")) %>%
+  group_by(year) %>% 
+  summarize(n = n()) %>% 
+  view()
 ```
 
