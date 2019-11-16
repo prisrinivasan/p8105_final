@@ -5,24 +5,35 @@ date: "11/15/2019"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+## Setup
+```{r setup}
+
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+
 ```
 
-## Data Cleaning
+## Data import and tidying
 
+Loading in and tidying data: 
 ```{r}
 
-asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>% 
-  janitor::clean_names() %>% 
-  filter(data_value != "NULL") %>% 
-  mutate(data_value = as.numeric(data_value)) %>% 
-  rename(year = year_description) %>% 
-  mutate(
-    year = str_replace(year, "Annual Average", "")) %>%
-  group_by(year) %>% 
-  summarize(n = n()) %>% 
-  view()
+# asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>% 
+#   mutate(year_description = as.factor(year_description)) %>% 
+#   group_by(year_description) %>% 
+#   summarize(n = n())
+# 
+# %>% 
+#   janitor::clean_names() %>% 
+#   filter(data_value != "NULL") %>% 
+#   mutate(
+#     data_value = as.numeric(data_value)) %>% 
+#   rename(year = year_description) %>% 
+#   drop_na(year)  %>% 
+#   view()
 ```
+
+We removed entries that included non-numerical year values. The resulting dataset contains 5,796 entries across 9 variables. 
+
+
 
