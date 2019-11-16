@@ -12,7 +12,7 @@
 
 
 
-<title>priyanka.utf8.md</title>
+<title>priyanka</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -288,7 +288,7 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="dashboard2.html">Maps</a>
+      <a href="priyanka.html">Maps</a>
     </li>
     <li>
       <a href="regression.html">Regression Analyses</a>
@@ -304,12 +304,11 @@ $(document).ready(function () {
 
 
 
+<h1 class="title toc-ignore">priyanka</h1>
 
 </div>
 
 
-<div id="priyanka" class="section level1">
-<h1>priyanka</h1>
 <pre class="r"><code>pests_home = read_csv(file = &quot;./final_data/mold_home.csv&quot;) %&gt;%
   janitor::clean_names()
 
@@ -321,7 +320,6 @@ mice_home = read_csv(file = &quot;./final_data/mice_home.csv&quot;) %&gt;%
 <p>Reading JSON file for UHF geo</p>
 <pre class="r"><code>uhf &lt;- jsonlite::fromJSON(&quot;./final_data/UHF42.json&quot;, flatten = TRUE)</code></pre>
 <p>Conclusion: the JSON file is weird, will try shape file before spending more time figuring out JSON.</p>
-</div>
 <div id="shape-files" class="section level1">
 <h1>Shape files</h1>
 <p>Shape files turned out better. Used a different file from nyc.gov because the Env &amp; Health Data Portal file was inconsistent - combined certain neighborhoods that weren’t combined in the rest of the datasets.</p>
@@ -358,22 +356,22 @@ str(shape)</code></pre>
 ##   ..- attr(*, &quot;names&quot;)= chr  &quot;OBJECTID&quot; &quot;UHFCODE&quot; &quot;SHAPE_Leng&quot; &quot;SHAPE_Area&quot; ...</code></pre>
 <pre class="r"><code>#plot all polygon boundaries
 plot(shape)</code></pre>
-<p><img src="priyanka_files/figure-markdown_github/unnamed-chunk-3-1.png" width="90%" /></p>
+<p><img src="priyanka_files/figure-html/unnamed-chunk-3-1.png" width="90%" /></p>
 <pre class="r"><code>#plot just geometry column
 plot(st_geometry(shape))</code></pre>
-<p><img src="priyanka_files/figure-markdown_github/unnamed-chunk-3-2.png" width="90%" /></p>
+<p><img src="priyanka_files/figure-html/unnamed-chunk-3-2.png" width="90%" /></p>
 <p>Checking the <code>shape</code> tibble, it looks like the values we need are stored properly. Merged with one of our datasets below; we can change out the <code>air_conc</code> dataset with our final tidied data as long as the <code>geo_entity_id</code> is still there.</p>
 <pre class="r"><code>merged &lt;- merge(shape, air_conc, by.x = &quot;UHFCODE&quot;, by.y = &quot;geo_entity_id&quot;)</code></pre>
 <p>Plots with merged dataset: Geometry plot still works.</p>
 <pre class="r"><code>#look at geometry plot
 plot(st_geometry(merged))</code></pre>
-<p><img src="priyanka_files/figure-markdown_github/unnamed-chunk-5-1.png" width="90%" /></p>
+<p><img src="priyanka_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
 <p>I’ll try a random variable, ozone, which is coded as 386 under <code>indicator_id</code>:</p>
 <pre class="r"><code>ozone = merged %&gt;%
   filter(indicator_id == 386)
 
 plot(ozone[&quot;data_value&quot;])</code></pre>
-<p><img src="priyanka_files/figure-markdown_github/sick%20plot-1.png" width="90%" /></p>
+<p><img src="priyanka_files/figure-html/sick%20plot-1.png" width="90%" /></p>
 </div>
 
 

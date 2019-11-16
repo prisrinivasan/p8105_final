@@ -10,7 +10,7 @@ navbar:
     - text: "Dashboard"
       menu: 
       - text: "Maps"
-        href: dashboard2.html
+        href: priyanka.html
       - text: "Regression Analyses"
         href: "regression.html"
 
