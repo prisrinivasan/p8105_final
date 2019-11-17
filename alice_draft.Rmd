@@ -18,19 +18,16 @@ library(tidyverse)
 Loading in and tidying data: 
 ```{r}
 
-# asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>% 
-#   mutate(year_description = as.factor(year_description)) %>% 
-#   group_by(year_description) %>% 
-#   summarize(n = n())
-# 
-# %>% 
-#   janitor::clean_names() %>% 
-#   filter(data_value != "NULL") %>% 
-#   mutate(
-#     data_value = as.numeric(data_value)) %>% 
-#   rename(year = year_description) %>% 
-#   drop_na(year)  %>% 
-#   view()
+asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(data_value != "NULL") %>% 
+  rename(year = year_description) %>% 
+  mutate(
+    data_value = as.numeric(data_value),
+    year = as.factor(year)
+    ) %>% 
+  drop_na(year)  
+ 
 ```
 
 We removed entries that included non-numerical year values. The resulting dataset contains 5,796 entries across 9 variables. 

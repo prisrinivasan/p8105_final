@@ -386,19 +386,36 @@ library(tidyverse)</code></pre>
 <div id="data-import-and-tidying" class="section level2">
 <h2>Data import and tidying</h2>
 <p>Loading in and tidying data:</p>
-<pre class="r"><code># asthma_data = read_csv(file = &quot;./final_data/asthma_data.csv&quot;) %&gt;% 
-#   mutate(year_description = as.factor(year_description)) %&gt;% 
-#   group_by(year_description) %&gt;% 
-#   summarize(n = n())
-# 
-# %&gt;% 
-#   janitor::clean_names() %&gt;% 
-#   filter(data_value != &quot;NULL&quot;) %&gt;% 
-#   mutate(
-#     data_value = as.numeric(data_value)) %&gt;% 
-#   rename(year = year_description) %&gt;% 
-#   drop_na(year)  %&gt;% 
-#   view()</code></pre>
+<pre class="r"><code>asthma_data = read_csv(file = &quot;./final_data/asthma_data.csv&quot;) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  filter(data_value != &quot;NULL&quot;) %&gt;% 
+  rename(year = year_description) %&gt;% 
+  mutate(
+    data_value = as.numeric(data_value),
+    year = as.factor(year)
+    ) %&gt;% 
+  drop_na(year)  </code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   indicator_data_id = col_double(),
+##   indicator_id = col_double(),
+##   name = col_character(),
+##   Measure = col_character(),
+##   geo_type_name = col_character(),
+##   geo_entity_id = col_double(),
+##   year_description = col_double(),
+##   data_value = col_character(),
+##   message = col_character()
+## )</code></pre>
+<pre><code>## Warning: 3486 parsing failures.
+##  row              col expected              actual                           file
+## 5167 year_description a double Annual Average 2009 './final_data/asthma_data.csv'
+## 5168 year_description a double Annual Average 2009 './final_data/asthma_data.csv'
+## 5169 year_description a double Annual Average 2009 './final_data/asthma_data.csv'
+## 5170 year_description a double Annual Average 2009 './final_data/asthma_data.csv'
+## 5171 year_description a double Annual Average 2009 './final_data/asthma_data.csv'
+## .... ................ ........ ................... ..............................
+## See problems(...) for more details.</code></pre>
 <p>We removed entries that included non-numerical year values. The resulting dataset contains 5,796 entries across 9 variables.</p>
 </div>
 
