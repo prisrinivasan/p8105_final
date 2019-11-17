@@ -337,7 +337,16 @@ library(tidyverse)</code></pre>
     data_value = as.numeric(data_value),
     year = as.factor(year)
     ) %&gt;% 
-  drop_na(year)  </code></pre>
+  drop_na(year) %&gt;% 
+  filter(str_detect(name, c(&quot;[Aa]sthma&quot;, &quot;[Cc]ockroaches&quot;))) %&gt;% 
+  select(year, geo_entity_id, name, data_value) %&gt;% 
+  pivot_wider(
+    names_from = name,
+    values_from = data_value
+  ) %&gt;% 
+  group_by(geo_entity_id) %&gt;% 
+  summarize(&quot;Adults with Asthma in the Past 12 Months&quot; = mean(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm = TRUE)) %&gt;% 
+  view()</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   indicator_data_id = col_double(),
@@ -359,7 +368,136 @@ library(tidyverse)</code></pre>
 ## 5171 year_description a double Annual Average 2009 &#39;./final_data/asthma_data.csv&#39;
 ## .... ................ ........ ................... ..............................
 ## See problems(...) for more details.</code></pre>
-<p>We removed entries that included non-numerical year values. The resulting dataset contains 5,796 entries across 9 variables.</p>
+<pre><code>## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA
+
+## Warning in mean.default(&quot;Adults with Asthma in the Past 12 Months&quot;, na.rm =
+## TRUE): argument is not numeric or logical: returning NA</code></pre>
+<p>We removed entries that included non-numerical year values, missing values for data_value, and any indicator not containing the words “asthma”, “cockroaches”, or “poverty”. The resulting dataset contains 2,212 entries across 9 variables. Variables are defined as follows:</p>
+<ul>
+<li><code>indicator_data_id</code>: unique data entry id</li>
+<li><code>name</code>:</li>
+</ul>
 </div>
 
 
