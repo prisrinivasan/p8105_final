@@ -1,0 +1,19 @@
+name: "Who Let the 'Roaches Out?"
+output_dir: "."
+navbar:
+  title: "Home"
+  right:
+    - text: "Overview"
+      href: overview.html
+    - text: "Data Sources"
+      href: data_sources.html
+    - text: "Dashboard"
+      menu: 
+      - text: "Maps"
+        href: priyanka.html
+      - text: "Regression Analyses"
+        href: "regression.html"
+
+output:
+  html_document:
+    theme: flatly
