@@ -65,4 +65,20 @@ We removed entries that included non-numerical year values, missing values for d
 * `name`: 
 
 
+## Trying with all available data 
+
+```{r}
+all_data = 
+read.csv(file = "./final_data/all_available_data.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(data_value != "NULL") %>%
+  filter(str_detect(name, c("[Aa]sthma", "[Cc]ockroaches"))) 
+```
+
+```{r}
+ pull(distinct(all_data, time_period))
+```
+
+
+
 
