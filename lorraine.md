@@ -3,7 +3,7 @@ lorraine
 
 ``` r
 asthma_data = read_csv("./final_data/asthma_data.csv") %>%
-  janitor::clean_names()
+  janitor::clean_names() 
 ```
 
     ## Parsed with column specification:
@@ -20,9 +20,23 @@ asthma_data = read_csv("./final_data/asthma_data.csv") %>%
     ## )
 
 ``` r
+asthma_data2 = 
+  asthma_data %>%
+  mutate(year = year_description, 
+         row = row_number())
+```
+
+``` r
 fix_problems = 
   problems(asthma_data) %>%
-  separate(actual, c("annual", "average", "year"), sep = " ")
+  separate(actual, c("annual", "average", "year"), sep = " ") %>%
+  select(row, year) %>%
+  mutate(year = as.numeric(year))
+```
+
+``` r
+asthma_merged =
+  left_join(asthma_data2, fix_problems, by = "row")
 ```
 
 ``` r
