@@ -344,10 +344,12 @@ $(document).ready(function () {
 <p>Tidying the dataframe to be used for analysis and plots</p>
 <pre class="r"><code>asthma_data_tidy = 
   asthma_merged %&gt;%
-  rename(year = year_description) %&gt;%
   mutate(data_value = as.numeric(data_value), 
-         year_merged = coalesce(year.x, year.y)) %&gt;%
-  select(-indicator_data_id, -indicator_id)</code></pre>
+         year = coalesce(year.x, year.y)) %&gt;%
+  select(name, geo_entity_id, year, data_value) %&gt;%
+  drop_na(year)  %&gt;%
+  pivot_wider(names_from = name,
+              values_from = data_value)</code></pre>
 
 
 

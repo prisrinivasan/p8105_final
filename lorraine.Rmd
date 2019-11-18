@@ -78,10 +78,12 @@ Tidying the dataframe to be used for analysis and plots
 ```{r}
 asthma_data_tidy = 
   asthma_merged %>%
-  rename(year = year_description) %>%
   mutate(data_value = as.numeric(data_value), 
-         year_merged = coalesce(year.x, year.y)) %>%
-  select(-indicator_data_id, -indicator_id)
+         year = coalesce(year.x, year.y)) %>%
+  select(name, geo_entity_id, year, data_value) %>%
+  drop_na(year)  %>%
+  pivot_wider(names_from = name,
+              values_from = data_value)
 ```
 
 
