@@ -78,10 +78,13 @@ Geometry plot still works.
 plot(st_geometry(merged))
 ```
 
-I'll try a random variable, ozone, which is coded as 386 under `indicator_id`: 
+I'll try a random variable, ozone, which is coded as 386 under `indicator_id`, for the year "Summer 2016": 
+
+  * each UHF ID just has one observation, I think we need that?
+
 ```{r sick plot, message=FALSE, warning=FALSE}
 ozone = merged %>%
-  filter(indicator_id == 386)
+  filter(indicator_id == 386 & year_description == "Summer 2016")
 
 plot(ozone["data_value"])
 ```
