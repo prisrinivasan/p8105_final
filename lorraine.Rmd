@@ -5,8 +5,21 @@ output: github_document
 
 ```{r setup, include=FALSE}
 library(tidyverse)
+<<<<<<< HEAD
+library(dplyr)
+library(viridis)
+library(sp)
+library(rvest)
+library(tigris)
+library(maptools)
+library(ggmap)
+library(broom)
+library(httr)
+library(rgdal)
+=======
 library(readxl)
 library(patchwork)
+>>>>>>> b682072069c6ec899e62f5f61d0c58b20b031d7c
 
 knitr::opts_chunk$set(
   echo = TRUE,
@@ -25,6 +38,28 @@ theme_set(theme_minimal() + theme(legend.position = "bottom"))
 ```
 
 ```{r}
+<<<<<<< HEAD
+asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>%
+  janitor::clean_names()
+```
+
+This code chunk fixes the parsing failures.
+
+```{r}
+fix_problems = problems(asthma_data) %>%
+  filter(str_detect(actual, "^Annual")) %>%
+  separate(actual, c("annual", "average", "year"), sep = " ")
+```
+
+```{r}
+asthma_data_tidy = 
+  asthma_data %>%
+  rename(year = year_description) %>%
+  mutate(data_value = as.numeric(data_value)) %>%
+  select(-indicator_data_id, -indicator_id)
+```
+
+=======
 asthma_data = read_csv("./final_data/asthma_data.csv") %>%
   janitor::clean_names() 
 ```
@@ -56,3 +91,4 @@ asthma_data_tidy =
   mutate(data_value = as.numeric(data_value))
 ```
 
+>>>>>>> b682072069c6ec899e62f5f61d0c58b20b031d7c

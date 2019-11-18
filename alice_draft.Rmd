@@ -5,24 +5,44 @@ date: "11/15/2019"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+## Setup
+```{r setup}
+
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+
 ```
 
-## Data Cleaning
+## Data import and tidying
 
+Loading in and tidying data: 
 ```{r}
 
 asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>% 
   janitor::clean_names() %>% 
   filter(data_value != "NULL") %>% 
-  mutate(data_value = as.numeric(data_value)) %>% 
   rename(year = year_description) %>% 
   mutate(
-    year = str_replace(year, "Annual Average", "")) %>%
-  group_by(year) %>% 
-  summarize(n = n()) %>% 
+    data_value = as.numeric(data_value),
+    year = as.factor(year)
+    ) %>% 
+  drop_na(year) %>% 
+  filter(str_detect(name, c("[Aa]sthma", "[Cc]ockroaches"))) %>% 
+  select(year, geo_entity_id, name, data_value) %>% 
+  pivot_wider(
+    names_from = name,
+    values_from = data_value
+  ) %>% 
+  group_by(geo_entity_id) %>% 
+  summarize("Adults with Asthma in the Past 12 Months" = mean("Adults with Asthma in the Past 12 Months", na.rm = TRUE)) %>% 
   view()
+ 
 ```
+
+We removed entries that included non-numerical year values, missing values for data_value, and any indicator not containing the words "asthma", "cockroaches", or "poverty". The resulting dataset contains 2,212 entries across 9 variables. Variables are defined as follows: 
+
+* `indicator_data_id`: unique data entry id
+* `name`: 
+
+
 
