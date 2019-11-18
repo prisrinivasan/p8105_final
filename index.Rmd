@@ -1,0 +1,17 @@
+---
+title: "Who Let the 'Roaches Out?"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+---
+
+# Who Let the 'Roaches Out?
+
+## Allergens' effects on asthma in NYC
+
+_Hannah Bowlin, Lorraine Kwok, Priyanka Srinivasan, Alice Tivorovsky, Kelly Wang_
+
+_P8105 Data Science, Prof. Jeff Goldsmith_
+

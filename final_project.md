@@ -8,17 +8,25 @@ pests_home = read_csv(file = "./final_data/mold_home.csv") %>%
 
     ## Parsed with column specification:
     ## cols(
-    ##   `PK` = col_character()
+    ##   indicator_data_id = col_double(),
+    ##   indicator_id = col_double(),
+    ##   name = col_character(),
+    ##   Measure = col_character(),
+    ##   geo_type_name = col_character(),
+    ##   geo_entity_id = col_double(),
+    ##   year_description = col_double(),
+    ##   data_value = col_character(),
+    ##   message = col_character()
     ## )
 
-    ## Warning: 8078 parsing failures.
-    ## row            col expected        actual                         file
-    ##   2 PK          embedded null './final_data/mold_home.csv'
-    ##   3 PK          embedded null './final_data/mold_home.csv'
-    ##   4 PK          embedded null './final_data/mold_home.csv'
-    ##   5 PK          embedded null './final_data/mold_home.csv'
-    ##   6 PK          embedded null './final_data/mold_home.csv'
-    ## ... .............. ........ ............. ............................
+    ## Warning: 378 parsing failures.
+    ##  row              col               expected actual                         file
+    ## 1975 year_description no trailing characters  -2013 './final_data/mold_home.csv'
+    ## 1976 year_description no trailing characters  -2013 './final_data/mold_home.csv'
+    ## 1977 year_description no trailing characters  -2013 './final_data/mold_home.csv'
+    ## 1978 year_description no trailing characters  -2013 './final_data/mold_home.csv'
+    ## 1979 year_description no trailing characters  -2013 './final_data/mold_home.csv'
+    ## .... ................ ...................... ...... ............................
     ## See problems(...) for more details.
 
 ``` r
