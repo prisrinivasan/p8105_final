@@ -5,7 +5,7 @@ output: github_document
 
 ```{r setup, include=FALSE}
 library(tidyverse)
-<<<<<<< HEAD
+
 library(dplyr)
 library(viridis)
 library(sp)
@@ -16,10 +16,8 @@ library(ggmap)
 library(broom)
 library(httr)
 library(rgdal)
-=======
 library(readxl)
 library(patchwork)
->>>>>>> b682072069c6ec899e62f5f61d0c58b20b031d7c
 
 knitr::opts_chunk$set(
   echo = TRUE,
@@ -38,7 +36,6 @@ theme_set(theme_minimal() + theme(legend.position = "bottom"))
 ```
 
 ```{r}
-<<<<<<< HEAD
 asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>%
   janitor::clean_names()
 ```
@@ -57,11 +54,6 @@ asthma_data_tidy =
   rename(year = year_description) %>%
   mutate(data_value = as.numeric(data_value)) %>%
   select(-indicator_data_id, -indicator_id)
-```
-
-=======
-asthma_data = read_csv("./final_data/asthma_data.csv") %>%
-  janitor::clean_names() 
 ```
 
 ```{r}
@@ -86,9 +78,10 @@ asthma_merged =
 
 ```{r}
 asthma_data_tidy = 
-  asthma_data %>%
+  asthma_merged %>%
   rename(year = year_description) %>%
-  mutate(data_value = as.numeric(data_value))
+  mutate(data_value = as.numeric(data_value), 
+         year_merged = coalesce(year.x, year.y))
 ```
 
->>>>>>> b682072069c6ec899e62f5f61d0c58b20b031d7c
+
