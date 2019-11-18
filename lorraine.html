@@ -309,6 +309,7 @@ $(document).ready(function () {
 </div>
 
 
+<p>Reading in the csv file.</p>
 <pre class="r"><code>asthma_data = read_csv(file = &quot;./final_data/asthma_data.csv&quot;) %&gt;%
   janitor::clean_names()</code></pre>
 <pre><code>## Parsed with column specification:
@@ -324,30 +325,29 @@ $(document).ready(function () {
 ##   message = col_character()
 ## )</code></pre>
 <p>This code chunk fixes the parsing failures.</p>
-<pre class="r"><code>fix_problems = problems(asthma_data) %&gt;%
+<pre class="r"><code>fix_problems = 
+  problems(asthma_data) %&gt;%
   filter(str_detect(actual, &quot;^Annual&quot;)) %&gt;%
   separate(actual, c(&quot;annual&quot;, &quot;average&quot;, &quot;year&quot;), sep = &quot; &quot;)</code></pre>
-<pre class="r"><code>asthma_data_tidy = 
-  asthma_data %&gt;%
-  rename(year = year_description) %&gt;%
-  mutate(data_value = as.numeric(data_value)) %&gt;%
-  select(-indicator_data_id, -indicator_id)</code></pre>
-<pre class="r"><code>asthma_data2 = 
-  asthma_data %&gt;%
-  mutate(year = year_description, 
-         row = row_number())</code></pre>
 <pre class="r"><code>fix_problems = 
   problems(asthma_data) %&gt;%
   separate(actual, c(&quot;annual&quot;, &quot;average&quot;, &quot;year&quot;), sep = &quot; &quot;) %&gt;%
   select(row, year) %&gt;%
   mutate(year = as.numeric(year))</code></pre>
+<pre class="r"><code>asthma_data2 = 
+  asthma_data %&gt;%
+  mutate(year = year_description, 
+         row = row_number())</code></pre>
+<p>Merge the asthma dataframe and the fixed parsing failures dataframe together</p>
 <pre class="r"><code>asthma_merged =
   left_join(asthma_data2, fix_problems, by = &quot;row&quot;)</code></pre>
+<p>Tidying the dataframe to be used for analysis and plots</p>
 <pre class="r"><code>asthma_data_tidy = 
   asthma_merged %&gt;%
   rename(year = year_description) %&gt;%
   mutate(data_value = as.numeric(data_value), 
-         year_merged = coalesce(year.x, year.y))</code></pre>
+         year_merged = coalesce(year.x, year.y)) %&gt;%
+  select(-indicator_data_id, -indicator_id)</code></pre>
 
 
 

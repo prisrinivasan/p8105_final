@@ -35,6 +35,8 @@ scale_fill_discrete = scale_fill_viridis_d
 theme_set(theme_minimal() + theme(legend.position = "bottom"))
 ```
 
+Reading in the csv file. 
+
 ```{r}
 asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>%
   janitor::clean_names()
@@ -43,24 +45,10 @@ asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>%
 This code chunk fixes the parsing failures.
 
 ```{r}
-fix_problems = problems(asthma_data) %>%
+fix_problems = 
+  problems(asthma_data) %>%
   filter(str_detect(actual, "^Annual")) %>%
   separate(actual, c("annual", "average", "year"), sep = " ")
-```
-
-```{r}
-asthma_data_tidy = 
-  asthma_data %>%
-  rename(year = year_description) %>%
-  mutate(data_value = as.numeric(data_value)) %>%
-  select(-indicator_data_id, -indicator_id)
-```
-
-```{r}
-asthma_data2 = 
-  asthma_data %>%
-  mutate(year = year_description, 
-         row = row_number())
 ```
 
 ```{r}
@@ -72,16 +60,28 @@ fix_problems =
 ```
 
 ```{r}
+asthma_data2 = 
+  asthma_data %>%
+  mutate(year = year_description, 
+         row = row_number())
+```
+
+Merge the asthma dataframe and the fixed parsing failures dataframe together
+
+```{r}
 asthma_merged =
   left_join(asthma_data2, fix_problems, by = "row")
 ```
+
+Tidying the dataframe to be used for analysis and plots
 
 ```{r}
 asthma_data_tidy = 
   asthma_merged %>%
   rename(year = year_description) %>%
   mutate(data_value = as.numeric(data_value), 
-         year_merged = coalesce(year.x, year.y))
+         year_merged = coalesce(year.x, year.y)) %>%
+  select(-indicator_data_id, -indicator_id)
 ```
 
 
