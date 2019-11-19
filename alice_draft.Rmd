@@ -65,4 +65,31 @@ We removed entries that included non-numerical year values, missing values for d
 * `name`: 
 
 
+## Trying with all available data 
+
+```{r}
+all_data = 
+read.csv(file = "./final_data/all_available_data.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(name = as.character(name)) %>% 
+  filter(str_detect(name, c("[Aa]sthma", "[Cc]ockroaches", "[Pp]overty")),
+         geo_type_name == 'UHF42', 
+         str_detect(name, "NTA", negate = TRUE)
+         ) %>% 
+  select(unique_id, indicator_id, measure, name, geo_join_id, time_period, data_value) %>%
+  pivot_wider(
+    names_from = name,
+    values_from = data_value
+  ) %>% 
+  group_by(time_period, geo_join_id) %>% 
+  summarize(n = n())
+
+ 
+```
+
+
+```{r}
+ pull(distinct(all_data, name))
+```
+
 
