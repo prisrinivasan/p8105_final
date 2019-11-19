@@ -330,11 +330,18 @@ $(document).ready(function () {
          !str_detect(name, c(&quot;[Nn]TA&quot;)),
          name != &quot;Children 0-13 Years Old Ever Diagnosed with Asthma&quot;,
          name != &quot;Youth Asthma in the Past 12 Months&quot;,
-         name != &quot;Adults Reporting Cockroaches in the Home&quot;) %&gt;%
+         name != &quot;Adults Reporting Cockroaches in the Home&quot;,
+         geo_type_name == &quot;UHF42&quot;) %&gt;%
+  group_by(name) %&gt;%
   mutate(
     data_value = as.numeric(data_value), 
-    year = as.character(year)) %&gt;%
-  select(year, geo_join_id, name, data_value) %&gt;%
+    year = as.character(year),
+    row = row_number()) %&gt;%
+  select(row, year, geo_type_name, geo_join_id, name, data_value) %&gt;%
+  pivot_wider(names_from = &quot;name&quot;,
+              values_from = &quot;data_value&quot;) %&gt;%
+  select(-row) %&gt;%
+  janitor::clean_names() %&gt;%
   view()</code></pre>
 
 

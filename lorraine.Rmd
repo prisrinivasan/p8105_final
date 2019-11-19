@@ -62,11 +62,18 @@ all_data =
          !str_detect(name, c("[Nn]TA")),
          name != "Children 0-13 Years Old Ever Diagnosed with Asthma",
          name != "Youth Asthma in the Past 12 Months",
-         name != "Adults Reporting Cockroaches in the Home") %>%
+         name != "Adults Reporting Cockroaches in the Home",
+         geo_type_name == "UHF42") %>%
+  group_by(name) %>%
   mutate(
     data_value = as.numeric(data_value), 
-    year = as.character(year)) %>%
-  select(year, geo_join_id, name, data_value) %>%
+    year = as.character(year),
+    row = row_number()) %>%
+  select(row, year, geo_type_name, geo_join_id, name, data_value) %>%
+  pivot_wider(names_from = "name",
+              values_from = "data_value") %>%
+  select(-row) %>%
+  janitor::clean_names() %>%
   view()
 ```
 
