@@ -1,13 +1,11 @@
 ---
-title: "Who Let the 'Roaches Out?"
+title: "Allergens' effects on asthma in NYC"
 output: 
   html_document:
     toc: true
     toc_float: true
     theme: flatly
 ---
-
-## Allergens' effects on asthma in NYC
 
 _Hannah Bowlin, Lorraine Kwok, Priyanka Srinivasan, Alice Tivorovsky, Kelly Wang_
 
