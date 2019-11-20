@@ -80,9 +80,7 @@ read.csv(file = "./final_data/all_available_data.csv") %>%
   pivot_wider(
     names_from = name,
     values_from = data_value
-  ) %>% 
-  group_by(time_period, geo_join_id) %>% 
-  summarize(n = n())
+  ) 
 
  
 ```
@@ -92,4 +90,9 @@ read.csv(file = "./final_data/all_available_data.csv") %>%
  pull(distinct(all_data, name))
 ```
 
+```{r}
+all_data %>%  
+  group_by(geo_join_id, time_period) %>% 
+  summarize(n = n())
+```
 
