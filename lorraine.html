@@ -309,45 +309,40 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>asthma_data = read_csv(file = &quot;./final_data/asthma_data.csv&quot;) %&gt;%
-  janitor::clean_names()</code></pre>
-<pre><code>## Parsed with column specification:
-## cols(
-##   indicator_data_id = col_double(),
-##   indicator_id = col_double(),
-##   name = col_character(),
-##   Measure = col_character(),
-##   geo_type_name = col_character(),
-##   geo_entity_id = col_double(),
-##   year_description = col_double(),
-##   data_value = col_character(),
-##   message = col_character()
-## )</code></pre>
-<p>This code chunk fixes the parsing failures.</p>
-<pre class="r"><code>fix_problems = problems(asthma_data) %&gt;%
-  filter(str_detect(actual, &quot;^Annual&quot;)) %&gt;%
-  separate(actual, c(&quot;annual&quot;, &quot;average&quot;, &quot;year&quot;), sep = &quot; &quot;)</code></pre>
-<pre class="r"><code>asthma_data_tidy = 
-  asthma_data %&gt;%
-  rename(year = year_description) %&gt;%
-  mutate(data_value = as.numeric(data_value)) %&gt;%
-  select(-indicator_data_id, -indicator_id)</code></pre>
-<pre class="r"><code>asthma_data2 = 
-  asthma_data %&gt;%
-  mutate(year = year_description, 
-         row = row_number())</code></pre>
-<pre class="r"><code>fix_problems = 
-  problems(asthma_data) %&gt;%
-  separate(actual, c(&quot;annual&quot;, &quot;average&quot;, &quot;year&quot;), sep = &quot; &quot;) %&gt;%
-  select(row, year) %&gt;%
-  mutate(year = as.numeric(year))</code></pre>
-<pre class="r"><code>asthma_merged =
-  left_join(asthma_data2, fix_problems, by = &quot;row&quot;)</code></pre>
-<pre class="r"><code>asthma_data_tidy = 
-  asthma_merged %&gt;%
-  rename(year = year_description) %&gt;%
-  mutate(data_value = as.numeric(data_value), 
-         year_merged = coalesce(year.x, year.y))</code></pre>
+<p>Reading in the csv file.</p>
+<pre class="r"><code>asthma_data = read.csv(file = &quot;./final_data/asthma_data.csv&quot;) %&gt;%
+  janitor::clean_names() %&gt;%
+  mutate(
+    data_value = as.numeric(data_value), 
+    year = as.character(year_description)) %&gt;%
+  select(year, geo_entity_id, name, data_value) %&gt;%
+  pivot_wider(names_from = name,
+              values_from = data_value) %&gt;%
+  janitor::clean_names() %&gt;%
+  view()</code></pre>
+<p>Loading and tidying the new dataset with all available data</p>
+<pre class="r"><code>all_data = 
+  read.csv(file = &quot;./final_data/all_available_data.csv&quot;) %&gt;%
+  janitor::clean_names() %&gt;%
+  rename(year = time_period) %&gt;%
+  filter(data_value != &quot;NULL&quot;,
+         str_detect(name, c(&quot;[Aa]sthma&quot;, &quot;[Cc]ockroach&quot;, &quot;[Pp]overty&quot;)),
+         !str_detect(name, c(&quot;[Nn]TA&quot;)),
+         name != &quot;Children 0-13 Years Old Ever Diagnosed with Asthma&quot;,
+         name != &quot;Youth Asthma in the Past 12 Months&quot;,
+         name != &quot;Adults Reporting Cockroaches in the Home&quot;,
+         geo_type_name == &quot;UHF42&quot;) %&gt;%
+  group_by(name) %&gt;%
+  mutate(
+    data_value = as.numeric(data_value), 
+    year = as.character(year),
+    row = row_number()) %&gt;%
+  select(row, year, geo_type_name, geo_join_id, name, data_value) %&gt;%
+  pivot_wider(names_from = &quot;name&quot;,
+              values_from = &quot;data_value&quot;) %&gt;%
+  select(-row) %&gt;%
+  janitor::clean_names() %&gt;%
+  view()</code></pre>
 
 
 

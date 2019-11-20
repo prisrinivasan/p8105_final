@@ -35,53 +35,46 @@ scale_fill_discrete = scale_fill_viridis_d
 theme_set(theme_minimal() + theme(legend.position = "bottom"))
 ```
 
+Reading in the csv file. 
+
 ```{r}
-asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>%
-  janitor::clean_names()
+asthma_data = read.csv(file = "./final_data/asthma_data.csv") %>%
+  janitor::clean_names() %>%
+  mutate(
+    data_value = as.numeric(data_value), 
+    year = as.character(year_description)) %>%
+  select(year, geo_entity_id, name, data_value) %>%
+  pivot_wider(names_from = name,
+              values_from = data_value) %>%
+  janitor::clean_names() %>%
+  view()
 ```
 
-This code chunk fixes the parsing failures.
+Loading and tidying the new dataset with all available data
 
 ```{r}
-fix_problems = problems(asthma_data) %>%
-  filter(str_detect(actual, "^Annual")) %>%
-  separate(actual, c("annual", "average", "year"), sep = " ")
-```
-
-```{r}
-asthma_data_tidy = 
-  asthma_data %>%
-  rename(year = year_description) %>%
-  mutate(data_value = as.numeric(data_value)) %>%
-  select(-indicator_data_id, -indicator_id)
-```
-
-```{r}
-asthma_data2 = 
-  asthma_data %>%
-  mutate(year = year_description, 
-         row = row_number())
-```
-
-```{r}
-fix_problems = 
-  problems(asthma_data) %>%
-  separate(actual, c("annual", "average", "year"), sep = " ") %>%
-  select(row, year) %>%
-  mutate(year = as.numeric(year))
-```
-
-```{r}
-asthma_merged =
-  left_join(asthma_data2, fix_problems, by = "row")
-```
-
-```{r}
-asthma_data_tidy = 
-  asthma_merged %>%
-  rename(year = year_description) %>%
-  mutate(data_value = as.numeric(data_value), 
-         year_merged = coalesce(year.x, year.y))
+all_data = 
+  read.csv(file = "./final_data/all_available_data.csv") %>%
+  janitor::clean_names() %>%
+  rename(year = time_period) %>%
+  filter(data_value != "NULL",
+         str_detect(name, c("[Aa]sthma", "[Cc]ockroach", "[Pp]overty")),
+         !str_detect(name, c("[Nn]TA")),
+         name != "Children 0-13 Years Old Ever Diagnosed with Asthma",
+         name != "Youth Asthma in the Past 12 Months",
+         name != "Adults Reporting Cockroaches in the Home",
+         geo_type_name == "UHF42") %>%
+  group_by(name) %>%
+  mutate(
+    data_value = as.numeric(data_value), 
+    year = as.character(year),
+    row = row_number()) %>%
+  select(row, year, geo_type_name, geo_join_id, name, data_value) %>%
+  pivot_wider(names_from = "name",
+              values_from = "data_value") %>%
+  select(-row) %>%
+  janitor::clean_names() %>%
+  view()
 ```
 
 

@@ -40,20 +40,9 @@ mice_home = read_csv(file = "./final_data/mice_home.csv") %>%
 ```
 
 Reading JSON file for UHF geo
-<<<<<<< HEAD
-```{r}
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 uhf <- jsonlite::fromJSON("./final_data/UHF42.json")
 uhf1 <- jsonlite::fromJSON("./final_data/UHF42.json", flatten=TRUE)
-
-```
-
-other stuff
-```{r}
-nyc_neighborhoods <- readOGR(content(uhf,'text'), 'OGRGeoJSON', verbose = F)
-=======
-
-```{r, message=FALSE, warning=FALSE}
-uhf <- jsonlite::fromJSON("./final_data/UHF42.json", flatten = TRUE)
 
 ```
 
@@ -78,39 +67,31 @@ plot(st_geometry(shape))
 ```
 
 Checking the `shape` tibble, it looks like the values we need are stored properly. Merged with one of our datasets below; we can change out the `air_conc` dataset with our final tidied data as long as the `geo_entity_id` is still there.
->>>>>>> b682072069c6ec899e62f5f61d0c58b20b031d7c
 
 ```{r, message=FALSE, warning=FALSE}
 merged <- merge(shape, air_conc, by.x = "UHFCODE", by.y = "geo_entity_id")
 ```
 
-<<<<<<< HEAD
-
-```{r}
-nyc_water = 
-  GET("https://www1.nyc.gov/assets/doh/downloads/zip/uhf42_dohmh_2009.zip") %>% 
-  content("text") %>%
-  jsonlite::fromJSON() %>%
-  as_tibble()
-```
-
-Trying to use shapefiles
-```{r}
-shape = st_read("./final_data/shapefiles/", quiet = TRUE)
-=======
-Plots with merged dataset:
-Geometry plot still works.
 ```{r, message=FALSE, warning=FALSE}
 #look at geometry plot
 plot(st_geometry(merged))
 ```
 
-I'll try a random variable, ozone, which is coded as 386 under `indicator_id`: 
+I'll try a random variable, ozone, which is coded as 386 under `indicator_id`, for the a random time frame "Summer 2016": 
+
+  * Filtered such that each UHF ID just has one observation - not totally sure but I think that is necessary.
+
 ```{r sick plot, message=FALSE, warning=FALSE}
 ozone = merged %>%
-  filter(indicator_id == 386)
+  filter(indicator_id == 386 & year_description == "Summer 2016")
 
 plot(ozone["data_value"])
->>>>>>> b682072069c6ec899e62f5f61d0c58b20b031d7c
+```
+
+Same with ggplot, which marks latitudes and longitudes:
+
+```{r}
+ggplot(ozone) + 
+  geom_sf(aes(fill = data_value))
 ```
 
