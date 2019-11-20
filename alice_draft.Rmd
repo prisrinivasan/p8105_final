@@ -113,7 +113,7 @@ read.csv(file = "./final_data/all_available_data.csv") %>%
 
 
 ```{r}
- pull(distinct(all_data, name))
+ pull(distinct(all_data, measure))
 ```
 
 Exploratory counts to verify filter steps: 
@@ -137,4 +137,26 @@ pivot_wider(
   ) %>% 
 view()
 ```
+
+
+## Tidy for school children
+
+```{r}
+all_data = 
+read.csv(file = "./final_data/all_available_data.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(name %in% c("Homes with Cockroaches", 
+                     "Poverty", 
+                     "Public School Children (5-14 Yrs Old) with Asthma", 
+                     "Public School Children (5-14 Yrs Old) with Persistent Asthma"),
+        geo_type_name == "UHF42", 
+        #time_period %in% c(2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017)
+         ) %>% view()
+```
+
+```{r}
+ pull(distinct(all_data, measure))
+```
+
+
 
