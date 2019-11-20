@@ -73,26 +73,38 @@ read.csv(file = "./final_data/all_available_data.csv") %>%
   janitor::clean_names() %>% 
   mutate(name = as.character(name)) %>% 
   filter(str_detect(name, c("[Aa]sthma", "[Cc]ockroaches", "[Pp]overty")),
-         geo_type_name == 'UHF42', 
-         str_detect(name, "NTA", negate = TRUE)
-         ) %>% 
-  select(unique_id, indicator_id, measure, name, geo_join_id, time_period, data_value) %>%
-  pivot_wider(
-    names_from = name,
-    values_from = data_value
-  ) 
+         str_detect(name, "Adults Reporting Cockroaches in the Home", negate = TRUE),
+         str_detect(name, "NTA", negate = TRUE),
+         geo_type_name == 'UHF42'
+         )
 
- 
 ```
 
 
 ```{r}
- pull(distinct(all_data, name))
+ pull(distinct(all_data, time_period))
 ```
+
+Exploratory counts to verify filter steps: 
 
 ```{r}
 all_data %>%  
-  group_by(geo_join_id, time_period) %>% 
-  summarize(n = n())
+  filter(time_period == 2003) %>% 
+  group_by(name, time_period, geo_join_id) %>% 
+  summarize(n = sum(data_value)) %>% 
+  view()
+```
+
+
+
+Tidying: 
+
+```{r}
+all_data %>% 
+pivot_wider(
+    names_from = name,
+    values_from = data_value
+  ) %>% 
+view()
 ```
 
