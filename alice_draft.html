@@ -317,12 +317,12 @@ $(document).ready(function () {
 <h2>Setup</h2>
 <pre class="r"><code>knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ───────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ── Attaching packages ────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.2.1     ✔ purrr   0.3.2
 ## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
 ## ✔ tidyr   1.0.0     ✔ stringr 1.4.0
 ## ✔ readr   1.3.1     ✔ forcats 0.4.0</code></pre>
-<pre><code>## ── Conflicts ──────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ───────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 </div>
@@ -2645,14 +2645,60 @@ library(tidyverse)</code></pre>
 <pre class="r"><code>all_data = 
 read.csv(file = &quot;./final_data/all_available_data.csv&quot;) %&gt;% 
   janitor::clean_names() %&gt;% 
-  filter(data_value != &quot;NULL&quot;) %&gt;%
-  filter(str_detect(name, c(&quot;[Aa]sthma&quot;, &quot;[Cc]ockroaches&quot;))) </code></pre>
-<pre class="r"><code> pull(distinct(all_data, time_period))</code></pre>
-<pre><code>##  [1] 2003      2012      2004      2006      2007      2008      2009     
-##  [8] 2010      2011      2013      2014      2016      2017      2005     
-## [15] 2015      2012-2014 2014-2016 1998      1999      2000      2001     
-## [22] 2002      2005-2007 2009-2011 2010-2011 2011-2012 2012-2013 2013-2014
-## 166 Levels: 1992 1993 1994 1995 1996 1997 1998 1999 1999-Q1 ... Winter 2016-17</code></pre>
+  filter(name %in% c(&quot;Adults with Asthma in the Past 12 Months&quot;,
+                     &quot;Asthma Emergency Department Visits (Adults)&quot;, 
+                     &quot;Asthma Emergency Department Visits (Children 0 to 4 Yrs Old)&quot;, 
+                     &quot;Asthma Emergency Department Visits (Children 5 to 17 Yrs Old)&quot;, 
+                     &quot;Asthma Hospitalizations (Adults)&quot;, 
+                     &quot;Asthma Hospitalizations (Children 0 to 4 Yrs Old)&quot;, 
+                     &quot;Asthma Hospitalizations (Children 5 to 17 Yrs Old)&quot;, 
+                     &quot;Children under 5 years old in Poverty&quot;, 
+                     &quot;Homes with Cockroaches&quot;, 
+                     &quot;Neighborhood Poverty&quot;, 
+                     &quot;Neighborhood Poverty (ACS)&quot;, 
+                     &quot;O3-Attributable Asthma Emergency Department Visits&quot;, 
+                     &quot;O3-Attributable Asthma Hospitalizations &quot;,
+                     &quot;PM2.5-Attributable Asthma Emergency Department Visits &quot;, 
+                     &quot;Poverty&quot;, 
+                     &quot;Public School Children (5-14 Yrs Old) with Asthma&quot;, 
+                     &quot;Public School Children (5-14 Yrs Old) with Persistent Asthma&quot;),
+        geo_type_name == &quot;UHF42&quot;, 
+        time_period %in% c(2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017)
+         ) %&gt;% 
+  distinct()</code></pre>
+<p>Other way:</p>
+<pre class="r"><code>all_data_2 = 
+read.csv(file = &quot;./final_data/all_available_data.csv&quot;) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  mutate(name = as.character(name)) %&gt;% 
+  filter(str_detect(name, c(&quot;[Aa]sthma&quot;, &quot;[Cc]ockroaches&quot;, &quot;[Pp]overty&quot;)),
+         str_detect(name, &quot;Adults Reporting Cockroaches in the Home&quot;, negate = TRUE),
+         str_detect(name, &quot;NTA&quot;, negate = TRUE),
+         geo_type_name == &#39;UHF42&#39;
+         ) %&gt;% 
+  distinct()</code></pre>
+<pre class="r"><code> pull(distinct(all_data, name))</code></pre>
+<pre><code>## [1] Adults with Asthma in the Past 12 Months                     
+## [2] Asthma Emergency Department Visits (Adults)                  
+## [3] Asthma Emergency Department Visits (Children 0 to 4 Yrs Old) 
+## [4] Asthma Emergency Department Visits (Children 5 to 17 Yrs Old)
+## [5] Asthma Hospitalizations (Adults)                             
+## [6] Asthma Hospitalizations (Children 0 to 4 Yrs Old)            
+## [7] Asthma Hospitalizations (Children 5 to 17 Yrs Old)           
+## [8] Homes with Cockroaches                                       
+## 254 Levels: Access to Alcohol ... Youth Who Binge Drink</code></pre>
+<p>Exploratory counts to verify filter steps:</p>
+<pre class="r"><code>all_data %&gt;%  
+  group_by(name, time_period, measure, geo_join_id) %&gt;% 
+  summarize(data_value = sum(data_value)) %&gt;% 
+  view()</code></pre>
+<p>Tidying:</p>
+<pre class="r"><code>all_data %&gt;%
+pivot_wider(
+    names_from = name,
+    values_from = data_value
+  ) %&gt;% 
+view()</code></pre>
 </div>
 
 
