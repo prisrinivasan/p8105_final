@@ -68,7 +68,19 @@ We removed entries that included non-numerical year values, missing values for d
 ## Trying with all available data 
 
 ```{r}
+
 all_data = 
+read.csv(file = "./final_data/all_available_data.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(name %in% c("Adults with Asthma in the Past 12 Months","Asthma Emergency Department Visits (Adults)", "Asthma Emergency Department Visits (Children 0 to 4 Yrs Old)", "Asthma Emergency Department Visits (Children 5 to 17 Yrs Old)", "Asthma Hospitalizations (Adults)", "Asthma Hospitalizations (Children 0 to 4 Yrs Old)", "Asthma Hospitalizations (Children 5 to 17 Yrs Old)", "Children under 5 years old in Poverty", "Homes with Cockroaches", "Neighborhood Poverty", "Neighborhood Poverty (ACS)", "O3-Attributable Asthma Emergency Department Visits", "O3-Attributable Asthma Hospitalizations", "PM2.5-Attributable Asthma Emergency Department Visits", "Poverty", "Public School Children (5-14 Yrs Old) with Asthma", "Public School Children (5-14 Yrs Old) with Persistent Asthma"), 
+         geo_type_name == "UHF42"
+         )
+
+```
+
+Other way: 
+```{r}
+all_data_2 = 
 read.csv(file = "./final_data/all_available_data.csv") %>% 
   janitor::clean_names() %>% 
   mutate(name = as.character(name)) %>% 
@@ -77,7 +89,6 @@ read.csv(file = "./final_data/all_available_data.csv") %>%
          str_detect(name, "NTA", negate = TRUE),
          geo_type_name == 'UHF42'
          )
-
 ```
 
 
@@ -100,7 +111,8 @@ all_data %>%
 Tidying: 
 
 ```{r}
-all_data %>% 
+all_data %>%
+  select(name, geo_join_id, time_period, measure, data_value) %>% 
 pivot_wider(
     names_from = name,
     values_from = data_value

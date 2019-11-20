@@ -2645,6 +2645,13 @@ library(tidyverse)</code></pre>
 <pre class="r"><code>all_data = 
 read.csv(file = &quot;./final_data/all_available_data.csv&quot;) %&gt;% 
   janitor::clean_names() %&gt;% 
+  filter(name %in% c(&quot;Adults with Asthma in the Past 12 Months&quot;,&quot;Asthma Emergency Department Visits (Adults)&quot;, &quot;Asthma Emergency Department Visits (Children 0 to 4 Yrs Old)&quot;, &quot;Asthma Emergency Department Visits (Children 5 to 17 Yrs Old)&quot;, &quot;Asthma Hospitalizations (Adults)&quot;, &quot;Asthma Hospitalizations (Children 0 to 4 Yrs Old)&quot;, &quot;Asthma Hospitalizations (Children 5 to 17 Yrs Old)&quot;, &quot;Children under 5 years old in Poverty&quot;, &quot;Homes with Cockroaches&quot;, &quot;Neighborhood Poverty&quot;, &quot;Neighborhood Poverty (ACS)&quot;, &quot;O3-Attributable Asthma Emergency Department Visits&quot;, &quot;O3-Attributable Asthma Hospitalizations&quot;, &quot;PM2.5-Attributable Asthma Emergency Department Visits&quot;, &quot;Poverty&quot;, &quot;Public School Children (5-14 Yrs Old) with Asthma&quot;, &quot;Public School Children (5-14 Yrs Old) with Persistent Asthma&quot;), 
+         geo_type_name == &quot;UHF42&quot;
+         )</code></pre>
+<p>Other way:</p>
+<pre class="r"><code>all_data_2 = 
+read.csv(file = &quot;./final_data/all_available_data.csv&quot;) %&gt;% 
+  janitor::clean_names() %&gt;% 
   mutate(name = as.character(name)) %&gt;% 
   filter(str_detect(name, c(&quot;[Aa]sthma&quot;, &quot;[Cc]ockroaches&quot;, &quot;[Pp]overty&quot;)),
          str_detect(name, &quot;Adults Reporting Cockroaches in the Home&quot;, negate = TRUE),
@@ -2665,12 +2672,17 @@ read.csv(file = &quot;./final_data/all_available_data.csv&quot;) %&gt;%
   summarize(n = sum(data_value)) %&gt;% 
   view()</code></pre>
 <p>Tidying:</p>
-<pre class="r"><code>all_data %&gt;% 
+<pre class="r"><code>all_data %&gt;%
+  select(name, geo_join_id, time_period, measure, data_value) %&gt;% 
 pivot_wider(
     names_from = name,
     values_from = data_value
   ) %&gt;% 
 view()</code></pre>
+<pre><code>## Warning: Values in `data_value` are not uniquely identified; output will contain list-cols.
+## * Use `values_fn = list(data_value = list)` to suppress this warning.
+## * Use `values_fn = list(data_value = length)` to identify where the duplicates arise
+## * Use `values_fn = list(data_value = summary_fun)` to summarise duplicates</code></pre>
 </div>
 
 
