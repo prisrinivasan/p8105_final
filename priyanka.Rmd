@@ -88,10 +88,10 @@ ozone = merged %>%
 plot(ozone["data_value"])
 ```
 
-Attempted with ggplot, but could not get the fill to differ:
+Same with ggplot, which marks latitudes and longitudes:
 
 ```{r}
 ggplot(ozone) + 
-  geom_sf(aes(fill = "data_value"))
+  geom_sf(aes(fill = data_value))
 ```
 
