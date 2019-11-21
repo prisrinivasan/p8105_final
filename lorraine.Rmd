@@ -5,7 +5,6 @@ output: github_document
 
 ```{r setup, include=FALSE}
 library(tidyverse)
-
 library(dplyr)
 library(viridis)
 library(sp)
@@ -50,30 +49,68 @@ asthma_data = read.csv(file = "./final_data/asthma_data.csv") %>%
   view()
 ```
 
-Loading and tidying the new dataset with all available data
+Loading and tidying the new dataset with all available data. THis generates 4536 observations. 
 
 ```{r}
-all_data = 
+all_data_1 = 
   read.csv(file = "./final_data/all_available_data.csv") %>%
   janitor::clean_names() %>%
   rename(year = time_period) %>%
+  mutate(
+    data_value = as.numeric(data_value), 
+    geo_join_id = as.numeric(geo_join_id),
+    year = as.character(year), 
+    name = as.character(name)) %>%
   filter(data_value != "NULL",
-         str_detect(name, c("[Aa]sthma", "[Cc]ockroach", "[Pp]overty")),
-         !str_detect(name, c("[Nn]TA")),
+         str_detect(name, c("[A]sthma", "[C]ockroach", "[P]overty")),
+         !str_detect(name, c("[N]TA")),
          name != "Children 0-13 Years Old Ever Diagnosed with Asthma",
          name != "Youth Asthma in the Past 12 Months",
          name != "Adults Reporting Cockroaches in the Home",
          geo_type_name == "UHF42") %>%
   group_by(name) %>%
-  mutate(
-    data_value = as.numeric(data_value), 
-    year = as.character(year),
-    row = row_number()) %>%
-  select(row, year, geo_type_name, geo_join_id, name, data_value) %>%
+  janitor::clean_names() %>%
+  view()
+```
+
+Tidying up the data using factors instead of strings for the `name` variable. 
+
+```{r}
+all_data = 
+  read.csv(file = "./final_data/all_available_data.csv") %>%
+  janitor::clean_names() %>%
+  mutate(data_value = as.numeric(data_value)) %>%
+  filter(name %in% c("Adults with Asthma in the Past 12 Months",
+                     "Asthma Emergency Department Visits (Adults)", 
+                     "Asthma Emergency Department Visits (Children 0 to 4 Yrs Old)", 
+                     "Asthma Emergency Department Visits (Children 5 to 17 Yrs Old)", 
+                     "Asthma Hospitalizations (Adults)", 
+                     "Asthma Hospitalizations (Children 0 to 4 Yrs Old)", 
+                     "Asthma Hospitalizations (Children 5 to 17 Yrs Old)", 
+                     "Children under 5 years old in Poverty", 
+                     "Homes with Cockroaches", 
+                     "Neighborhood Poverty", 
+                     "Neighborhood Poverty (ACS)", 
+                     "O3-Attributable Asthma Emergency Department Visits", 
+                     "O3-Attributable Asthma Hospitalizations ",
+                     "PM2.5-Attributable Asthma Emergency Department Visits ", 
+                     "Poverty", 
+                     "Public School Children (5-14 Yrs Old) with Asthma", 
+                     "Public School Children (5-14 Yrs Old) with Persistent Asthma"),
+         geo_type_name == "UHF42")
+```
+
+Filtering for variables of interest 
+
+```{r}
+all_data %>%
+    filter(name %in% c("Homes with Cockroaches",
+                     "Poverty", 
+                     "Public School Children (5-14 Yrs Old) with Asthma", 
+                     "Public School Children (5-14 Yrs Old) with Persistent Asthma")) %>%
+  select(name, measure, geo_join_id, time_period, data_value) %>%
   pivot_wider(names_from = "name",
               values_from = "data_value") %>%
-  select(-row) %>%
-  janitor::clean_names() %>%
   view()
 ```
 
