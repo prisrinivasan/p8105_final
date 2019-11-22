@@ -5,12 +5,54 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(PerformanceAnalytics)
 ```
 
-# Correlation Matrices
+# Correlation Matrix
+```{r, echo = FALSE, error = TRUE}
 
+asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(data_value != "NULL") %>% 
+  rename(year = year_description) %>% 
+  mutate(
+    data_value = as.numeric(data_value),
+    year = as.factor(year)
+    ) %>% 
+  drop_na(year) %>% 
+  filter(str_detect(name, c("[Aa]sthma", "[Cc]ockroaches"))) %>% 
+  select(year, geo_entity_id, name, data_value) %>% 
+  pivot_wider(
+    names_from = name,
+    values_from = data_value
+  ) %>% 
+  view() %>%
+  janitor::clean_names()
 
+chart.Correlation(asthma_data[,4:10], histogram = TRUE, method = c("pearson", "kendall", "spearman"))
+```
 
 # Cockroach Distribution by Boro
+```{r, echo = FALSE}
+violin_roaches = 
+  asthma_data %>%
+  filter(year == c("2008", "2011", "2014")) %>%
+  ggplot(aes(x = homes_with_cockroaches, y = geo_entity_id)) + 
+  geom_violin() +
+  facet_grid(~year) +
+  labs(
+    x = "Percent of Homes with Cockroaches",
+    y = "Geo Entity ID",
+    title = "Percent of Homes with Cockroaches by Geo ID per Year"
+  )
+
+violin_roaches
+```
 
 # Linear Model of Cockroach Presence, Poverty, and Neighobrhood on Asthma
+```{r}
+
+```
+

@@ -12,7 +12,7 @@
 
 
 
-<title>Allergens’ effects on asthma in NYC</title>
+<title>Exploratory Analyses</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,9 +20,6 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -251,63 +248,6 @@ $(document).ready(function () {
 
 
 
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-
 
 </head>
 
@@ -315,16 +255,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -374,20 +304,52 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Allergens’ effects on asthma in NYC</h1>
+<h1 class="title toc-ignore">Exploratory Analyses</h1>
 
 </div>
 
 
-<p><em>Hannah Bowlin, Lorraine Kwok, Priyanka Srinivasan, Alice Tivorovsky, Kelly Wang</em></p>
-<p><em>P8105 Data Science, Prof. Jeff Goldsmith</em></p>
-<p><img align="center" img src="images/allergies.jpg" style="width:75%"/></p>
-<p>Image from <a href="https://health.clevelandclinic.org/3-reasons-why-your-indoor-allergies-are-worse-in-the-winter-and-how-to-fight-back/">Cleveland Clinic</a></p>
-
-
-
+<div id="correlation-matrix" class="section level1">
+<h1>Correlation Matrix</h1>
+<pre><code>## Parsed with column specification:
+## cols(
+##   indicator_data_id = col_double(),
+##   indicator_id = col_double(),
+##   name = col_character(),
+##   Measure = col_character(),
+##   geo_type_name = col_character(),
+##   geo_entity_id = col_double(),
+##   year_description = col_double(),
+##   data_value = col_character(),
+##   message = col_character()
+## )</code></pre>
+<pre><code>## Warning: 3486 parsing failures.
+##  row              col expected              actual                           file
+## 5167 year_description a double Annual Average 2009 &#39;./final_data/asthma_data.csv&#39;
+## 5168 year_description a double Annual Average 2009 &#39;./final_data/asthma_data.csv&#39;
+## 5169 year_description a double Annual Average 2009 &#39;./final_data/asthma_data.csv&#39;
+## 5170 year_description a double Annual Average 2009 &#39;./final_data/asthma_data.csv&#39;
+## 5171 year_description a double Annual Average 2009 &#39;./final_data/asthma_data.csv&#39;
+## .... ................ ........ ................... ..............................
+## See problems(...) for more details.</code></pre>
+<pre><code>## Error in cor.test.default(as.numeric(x), as.numeric(y), method = method): not enough finite observations</code></pre>
+<p><img src="regression_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 </div>
+<div id="cockroach-distribution-by-boro" class="section level1">
+<h1>Cockroach Distribution by Boro</h1>
+<pre><code>## Warning in `==.default`(year, c(&quot;2008&quot;, &quot;2011&quot;, &quot;2014&quot;)): longer object
+## length is not a multiple of shorter object length</code></pre>
+<pre><code>## Warning in is.na(e1) | is.na(e2): longer object length is not a multiple of
+## shorter object length</code></pre>
+<pre><code>## Warning: Removed 24 rows containing non-finite values (stat_ydensity).</code></pre>
+<p><img src="regression_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 </div>
+<div id="linear-model-of-cockroach-presence-poverty-and-neighobrhood-on-asthma" class="section level1">
+<h1>Linear Model of Cockroach Presence, Poverty, and Neighobrhood on Asthma</h1>
+</div>
+
+
+
 
 </div>
 
@@ -420,32 +382,6 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
