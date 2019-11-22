@@ -1,28 +1,32 @@
 ---
 title: "Kelly"
-output: github
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(dplyr)
+library(ggridges)
+library(patchwork)
 ```
 
-## R Markdown
+```{r}
+all_available_data=
+  read_csv(file="./final_data/all_available_data.csv")
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Asthma_data=
+  read_csv(file="./final_data/asthma_data.csv")
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+mold_data=
+  read_csv(file="./final_data/mold_home.csv")
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+### Kelly vision: X : borough name , Y: Hospitalization Asthma Rate, by different boroughs 
+```{r}
+overview_plot=
+all_available_data %>% 
+  filter(Name= "Public School Children ())
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
