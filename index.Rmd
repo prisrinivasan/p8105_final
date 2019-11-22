@@ -11,5 +11,9 @@ _Hannah Bowlin, Lorraine Kwok, Priyanka Srinivasan, Alice Tivorovsky, Kelly Wang
 
 _P8105 Data Science, Prof. Jeff Goldsmith_
 
+<img align="center" img src="images/allergies.jpg" style="width:75%"/>  
+
+Image from [Cleveland Clinic](https://health.clevelandclinic.org/3-reasons-why-your-indoor-allergies-are-worse-in-the-winter-and-how-to-fight-back/)
+
 
 
