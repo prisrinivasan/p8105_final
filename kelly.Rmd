@@ -15,7 +15,18 @@ library(patchwork)
 ```{r}
 all_available_data=
   read_csv(file="./final_data/all_available_data.csv")
+
+Asthma_data=
+  read_csv(file="./final_data/asthma_data.csv")
+
+mold_data=
+  read_csv(file="./final_data/mold_home.csv")
 ```
 
 ### Kelly vision: X : borough name , Y: Hospitalization Asthma Rate, by different boroughs 
+```{r}
+overview_plot=
+all_available_data %>% 
+  filter(Name= "Public School Children ())
+```
 
