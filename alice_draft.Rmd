@@ -181,17 +181,29 @@ all_data  %>%
 
 ```
 
+### Smooshing: 
 
 ```{r}
-all_data_2 = 
+all_data_3 = 
   all_data %>% 
   mutate(
     time_period = recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-14" = "2011")) %>%
   filter(time_period %in% c("2011", "2012", "2013", "2014")) %>% 
   janitor::clean_names() %>% 
-  select(geo_join_id, geo_place_name, indicator_id, time_period, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma) 
+  select(geo_join_id, time_period, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma) %>%
+  group_by(geo_join_id, time_period) %>% 
+  summarize()
 
+all_data_4 = 
+  all_data %>% 
+  mutate(
+    time_period = recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-14" = "2011")) %>%
+  filter(time_period %in% c("2011", "2012", "2013", "2014")) %>% 
+  janitor::clean_names() %>% 
+  select(geo_join_id, time_period, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma)
   
+all_data_5 =
+ inner_join(all_data_2, all_data_3, by = "geo_join_id", "time_period")
 ```
 
 
@@ -215,4 +227,5 @@ all_data_2 %>%
   summarize(n = n())
 
 ```
+
 
