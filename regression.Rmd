@@ -10,7 +10,7 @@ library(tidyverse)
 library(PerformanceAnalytics)
 ```
 
-# Correlation Matrices
+# Correlation Matrix
 ```{r, echo = FALSE, error = TRUE}
 
 asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>% 
