@@ -5,12 +5,37 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(PerformanceAnalytics)
 ```
 
 # Correlation Matrices
+```{r, include = FALSE}
 
+asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(data_value != "NULL") %>% 
+  rename(year = year_description) %>% 
+  mutate(
+    data_value = as.numeric(data_value),
+    year = as.factor(year)
+    ) %>% 
+  drop_na(year) %>% 
+  filter(str_detect(name, c("[Aa]sthma", "[Cc]ockroaches"))) %>% 
+  select(year, geo_entity_id, name, data_value) %>% 
+  pivot_wider(
+    names_from = name,
+    values_from = data_value
+  ) %>% 
+  view() 
 
+chart.Correlation(asthma_data[,4:10], histogram = TRUE, method = c("pearson", "kendall", "spearman"))
+```
 
 # Cockroach Distribution by Boro
+```{r}
+
+```
 
 # Linear Model of Cockroach Presence, Poverty, and Neighobrhood on Asthma
