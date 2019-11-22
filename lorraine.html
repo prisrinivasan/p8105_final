@@ -344,49 +344,34 @@ $(document).ready(function () {
 <pre class="r"><code>all_data = 
   read.csv(file = &quot;./final_data/all_available_data.csv&quot;) %&gt;%
   janitor::clean_names() %&gt;%
-  mutate(data_value = as.numeric(data_value)) %&gt;%
-  filter(name %in% c(&quot;Adults with Asthma in the Past 12 Months&quot;,
-                     &quot;Asthma Emergency Department Visits (Adults)&quot;, 
-                     &quot;Asthma Emergency Department Visits (Children 0 to 4 Yrs Old)&quot;, 
-                     &quot;Asthma Emergency Department Visits (Children 5 to 17 Yrs Old)&quot;, 
-                     &quot;Asthma Hospitalizations (Adults)&quot;, 
-                     &quot;Asthma Hospitalizations (Children 0 to 4 Yrs Old)&quot;, 
-                     &quot;Asthma Hospitalizations (Children 5 to 17 Yrs Old)&quot;, 
-                     &quot;Children under 5 years old in Poverty&quot;, 
-                     &quot;Homes with Cockroaches&quot;, 
-                     &quot;Neighborhood Poverty&quot;, 
-                     &quot;Neighborhood Poverty (ACS)&quot;, 
-                     &quot;O3-Attributable Asthma Emergency Department Visits&quot;, 
-                     &quot;O3-Attributable Asthma Hospitalizations &quot;,
-                     &quot;PM2.5-Attributable Asthma Emergency Department Visits &quot;, 
+  mutate(data_value = as.numeric(data_value),
+         time_period = recode(time_period, &quot;2010-2011&quot; = &quot;2011&quot;, &quot;2011-2012&quot; = &quot;2012&quot;, &quot;2012-2013&quot; = &quot;2013&quot;, &quot;2013-2014&quot; = &quot;2014&quot;, &quot;2010-14&quot; = &quot;2011&quot;),
+         geo_join_id = as.numeric(geo_join_id)) %&gt;%
+  filter(name %in% c(&quot;Homes with Cockroaches&quot;,
                      &quot;Poverty&quot;, 
                      &quot;Public School Children (5-14 Yrs Old) with Asthma&quot;, 
                      &quot;Public School Children (5-14 Yrs Old) with Persistent Asthma&quot;),
-         geo_type_name == &quot;UHF42&quot;)</code></pre>
-<p>Filtering for variables of interest (1344 observations)</p>
-<pre class="r"><code>all_data %&gt;%
-  filter(name %in% c(&quot;Homes with Cockroaches&quot;,
-                     &quot;Poverty&quot;, 
-                     &quot;Public School Children (5-14 Yrs Old) with Asthma&quot;, 
-                     &quot;Public School Children (5-14 Yrs Old) with Persistent Asthma&quot;)) %&gt;%
-  mutate(row = row_number()) %&gt;%
-  select(row, name, measure, geo_join_id, time_period, data_value) %&gt;%
+                     measure == &quot;Percent&quot; | measure == &quot;Rate&quot;,
+         geo_type_name == &quot;UHF42&quot;,
+         time_period %in% c(&quot;2011&quot;, &quot;2012&quot;, &quot;2013&quot;, &quot;2014&quot;)) %&gt;%
+  mutate(row = row_number(),
+         time_period = as.numeric(time_period)) %&gt;%
   pivot_wider(names_from = &quot;name&quot;,
               values_from = &quot;data_value&quot;) %&gt;%
-  select(-row) %&gt;%
+  janitor::clean_names() %&gt;%
+  select(geo_join_id, time_period, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma) %&gt;%
+  view()</code></pre>
+<p>Filtering for variables of interest (1344 observations)</p>
+<pre class="r"><code>test =
+  all_data %&gt;%
+  group_by(time_period, geo_join_id) %&gt;%
+  summarise_each(funs(sum(., na.rm = TRUE))) %&gt;% 
   view()</code></pre>
 <pre class="r"><code>all_data %&gt;%
-  filter(name %in% c(&quot;Homes with Cockroaches&quot;,
-                     &quot;Poverty&quot;, 
-                     &quot;Public School Children (5-14 Yrs Old) with Asthma&quot;, 
-                     &quot;Public School Children (5-14 Yrs Old) with Persistent Asthma&quot;)) %&gt;%
-  mutate(row = row_number()) %&gt;%
-  select(row, name, measure, geo_join_id, time_period, data_value) %&gt;%
-  pivot_wider(names_from = &quot;time_period&quot;,
-              values_from = &quot;data_value&quot;) %&gt;%
-  select(-row) %&gt;%
-  view()</code></pre>
-<p>Attempting to create function to fill in NAs - Example: we want to use the 2008 data for cockroaches to fill in the missing values for any split-years that contain 2008 in the range.</p>
+  select(geo_join_id, poverty, time_period) %&gt;%
+  ggplot(aes(x = geo_join_id, y = poverty, color = time_period))  +
+  geom_line(aes(group = time_period))</code></pre>
+<p><img src="lorraine_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
 
 
 
