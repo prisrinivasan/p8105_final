@@ -100,18 +100,37 @@ all_data =
          geo_type_name == "UHF42")
 ```
 
-Filtering for variables of interest 
+Filtering for variables of interest (1344 observations) 
 
 ```{r}
 all_data %>%
-    filter(name %in% c("Homes with Cockroaches",
+  filter(name %in% c("Homes with Cockroaches",
                      "Poverty", 
                      "Public School Children (5-14 Yrs Old) with Asthma", 
                      "Public School Children (5-14 Yrs Old) with Persistent Asthma")) %>%
-  select(name, measure, geo_join_id, time_period, data_value) %>%
+  mutate(row = row_number()) %>%
+  select(row, name, measure, geo_join_id, time_period, data_value) %>%
   pivot_wider(names_from = "name",
               values_from = "data_value") %>%
+  select(-row) %>%
   view()
 ```
+
+```{r}
+all_data %>%
+  filter(name %in% c("Homes with Cockroaches",
+                     "Poverty", 
+                     "Public School Children (5-14 Yrs Old) with Asthma", 
+                     "Public School Children (5-14 Yrs Old) with Persistent Asthma")) %>%
+  mutate(row = row_number()) %>%
+  select(row, name, measure, geo_join_id, time_period, data_value) %>%
+  pivot_wider(names_from = "time_period",
+              values_from = "data_value") %>%
+  select(-row) %>%
+  view()
+```
+
+Attempting to create function to fill in NAs - Example: we want to use the 2008 data for cockroaches to fill in the missing values for any split-years that contain 2008 in the range. 
+
 
 
