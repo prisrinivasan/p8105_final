@@ -11,7 +11,7 @@ library(PerformanceAnalytics)
 ```
 
 # Correlation Matrices
-```{r, include = FALSE}
+```{r, echo = FALSE}
 
 asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>% 
   janitor::clean_names() %>% 
@@ -35,7 +35,7 @@ chart.Correlation(asthma_data[,4:10], histogram = TRUE, method = c("pearson", "k
 ```
 
 # Cockroach Distribution by Boro
-```{r}
+```{r, echo = FALSE}
 violin_roaches = 
   asthma_data %>%
   filter(year == c("2008", "2011", "2014")) %>%
@@ -45,7 +45,7 @@ violin_roaches =
   labs(
     x = "Percent of Homes with Cockroaches",
     y = "Geo Entity ID",
-    title = "Year"
+    title = "Percent of Homes with Cockroaches by Geo ID per Year"
   )
 
 violin_roaches
