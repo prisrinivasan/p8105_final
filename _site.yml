@@ -11,7 +11,7 @@ navbar:
       menu: 
       - text: "Maps"
         href: priyanka.html
-      - text: ""
+      - text: "Exploratory Analyses"
         href: "regression.html"
 
 output:

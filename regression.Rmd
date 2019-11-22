@@ -11,7 +11,7 @@ library(PerformanceAnalytics)
 ```
 
 # Correlation Matrices
-```{r, echo = FALSE}
+```{r, echo = FALSE, error = TRUE}
 
 asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>% 
   janitor::clean_names() %>% 
