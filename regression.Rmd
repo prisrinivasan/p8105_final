@@ -28,14 +28,31 @@ asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>%
     names_from = name,
     values_from = data_value
   ) %>% 
-  view() 
+  view() %>%
+  janitor::clean_names()
 
 chart.Correlation(asthma_data[,4:10], histogram = TRUE, method = c("pearson", "kendall", "spearman"))
 ```
 
 # Cockroach Distribution by Boro
 ```{r}
+violin_roaches = 
+  asthma_data %>%
+  filter(year == c("2008", "2011", "2014")) %>%
+  ggplot(aes(x = homes_with_cockroaches, y = geo_entity_id)) + 
+  geom_violin() +
+  facet_grid(~year) +
+  labs(
+    x = "Percent of Homes with Cockroaches",
+    y = "Geo Entity ID",
+    title = "Year"
+  )
 
+violin_roaches
 ```
 
 # Linear Model of Cockroach Presence, Poverty, and Neighobrhood on Asthma
+```{r}
+
+```
+
