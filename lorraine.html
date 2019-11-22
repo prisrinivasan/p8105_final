@@ -363,16 +363,30 @@ $(document).ready(function () {
                      &quot;Public School Children (5-14 Yrs Old) with Asthma&quot;, 
                      &quot;Public School Children (5-14 Yrs Old) with Persistent Asthma&quot;),
          geo_type_name == &quot;UHF42&quot;)</code></pre>
-<p>Filtering for variables of interest</p>
+<p>Filtering for variables of interest (1344 observations)</p>
 <pre class="r"><code>all_data %&gt;%
-    filter(name %in% c(&quot;Homes with Cockroaches&quot;,
+  filter(name %in% c(&quot;Homes with Cockroaches&quot;,
                      &quot;Poverty&quot;, 
                      &quot;Public School Children (5-14 Yrs Old) with Asthma&quot;, 
                      &quot;Public School Children (5-14 Yrs Old) with Persistent Asthma&quot;)) %&gt;%
-  select(name, measure, geo_join_id, time_period, data_value) %&gt;%
+  mutate(row = row_number()) %&gt;%
+  select(row, name, measure, geo_join_id, time_period, data_value) %&gt;%
   pivot_wider(names_from = &quot;name&quot;,
               values_from = &quot;data_value&quot;) %&gt;%
+  select(-row) %&gt;%
   view()</code></pre>
+<pre class="r"><code>all_data %&gt;%
+  filter(name %in% c(&quot;Homes with Cockroaches&quot;,
+                     &quot;Poverty&quot;, 
+                     &quot;Public School Children (5-14 Yrs Old) with Asthma&quot;, 
+                     &quot;Public School Children (5-14 Yrs Old) with Persistent Asthma&quot;)) %&gt;%
+  mutate(row = row_number()) %&gt;%
+  select(row, name, measure, geo_join_id, time_period, data_value) %&gt;%
+  pivot_wider(names_from = &quot;time_period&quot;,
+              values_from = &quot;data_value&quot;) %&gt;%
+  select(-row) %&gt;%
+  view()</code></pre>
+<p>Attempting to create function to fill in NAs - Example: we want to use the 2008 data for cockroaches to fill in the missing values for any split-years that contain 2008 in the range.</p>
 
 
 
