@@ -6,3 +6,16 @@ output: github_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
+library(tidyverse)
+library(dplyr)
+library(ggridges)
+library(patchwork)
+```
+
+```{r}
+all_available_data=
+  read_csv(file="./final_data/all_available_data.csv")
+```
+
+### Kelly vision: X : borough name , Y: Hospitalization Asthma Rate, by different boroughs 
+
