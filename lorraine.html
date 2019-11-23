@@ -531,8 +531,64 @@ tidy_asthma =
   full_join(df1, df2, by = c(&quot;geo_join_id&quot;, &quot;time_period&quot;)) %&gt;% 
   full_join(df3, by = c(&quot;geo_join_id&quot;, &quot;time_period&quot;)) %&gt;% 
   full_join(df4, by = c(&quot;geo_join_id&quot;, &quot;time_period&quot;)) %&gt;% 
-  select(geo_join_id, time_period, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma) %&gt;% 
+  select(geo_join_id, time_period, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma) %&gt;%
+  mutate(time_period = as.numeric(levels(time_period)) [time_period]) %&gt;%
   view()</code></pre>
+<p>PLOTS FOR PUBLIC SCHOOL CHILDREN VARIABLES</p>
+<pre class="r"><code>p1 = 
+  tidy_asthma %&gt;%
+  filter(time_period == &quot;2011&quot;) %&gt;%
+  ggplot(aes(x = geo_join_id, y = public_school_children_5_14_yrs_old_with_asthma, color = geo_join_id)) + 
+  geom_point()
+
+p2 = 
+  tidy_asthma %&gt;%
+  filter(time_period == &quot;2012&quot;) %&gt;%
+  ggplot(aes(x = geo_join_id, y = public_school_children_5_14_yrs_old_with_asthma, color = geo_join_id)) + 
+  geom_point()
+
+p3 = 
+  p1 = 
+  tidy_asthma %&gt;%
+  filter(time_period == &quot;2013&quot;) %&gt;%
+  ggplot(aes(x = geo_join_id, y = public_school_children_5_14_yrs_old_with_asthma, color = geo_join_id)) + 
+  geom_point()
+
+p4 = 
+  tidy_asthma %&gt;%
+  filter(time_period == &quot;2014&quot;) %&gt;%
+  ggplot(aes(x = geo_join_id, y = public_school_children_5_14_yrs_old_with_asthma, color = geo_join_id)) + 
+  geom_point()</code></pre>
+<pre class="r"><code>test_1 =
+  tidy_asthma %&gt;%
+  plot_ly(
+    x = ~geo_join_id, 
+    y = ~public_school_children_5_14_yrs_old_with_asthma, 
+    color = ~geo_join_id,
+    text = ~geo_join_id,
+    frame = ~time_period,
+    hoverinfo = &quot;text&quot;,
+    type = &#39;scatter&#39;,
+    mode = &#39;markers&#39;
+  )</code></pre>
+<pre class="r"><code>test_2 = 
+  tidy_asthma %&gt;%
+  ggplot(aes(x = geo_join_id, y = public_school_children_5_14_yrs_old_with_asthma, frame = time_period)) +
+geom_point(aes(colour = geo_join_id, alpha = 0.5)) + 
+labs(title = &quot;Test&quot;,
+x = &#39;UHF Code&#39;, 
+y = &#39;Public School Children (5-14 Years Old) with Asthma (%)&#39;,
+colour = &#39;Year&#39;) +
+theme(plot.title = element_text(size = 40, face = &quot;bold&quot;),
+axis.text = element_text(size = 18),
+axis.title = element_text(size = 18,face = &quot;bold&quot;)) + 
+theme(legend.text = element_text(size = 16), legend.title = element_text(size = 18,face = &quot;bold&quot;) ) +
+transition_states(time_period, transition_length = 1, state_length = 3, wrap = TRUE) +
+  enter_fade() +
+  exit_fade()
+
+animate(test_2, fps = 2, height = 600, width = 1000)</code></pre>
+<p><img src="lorraine_files/figure-html/unnamed-chunk-17-1.gif" width="90%" /></p>
 </div>
 </div>
 
