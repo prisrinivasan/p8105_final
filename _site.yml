@@ -6,7 +6,7 @@ navbar:
     - text: "About"
       href: about.html
     - text: "Overview"
-      href: overview.html
+      href: Overview.html
     - text: "Data Sources"
       href: data_sources.html
     - text: "Dashboard"
