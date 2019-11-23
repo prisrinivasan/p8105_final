@@ -1,6 +1,9 @@
 ---
 title: "about"
-output: html_document
+output: html_document:
+    toc: true
+    toc_float: true
+    theme: cosmo
 ---
 
 # Motivation
@@ -9,7 +12,7 @@ Asthma is one of the most common chronic illnesses for young children living in 
 
 In NYC, there are many prominent risk factors for childhood asthma including air pollution, dust mites, mice, cockroaches, and pets. Given the large presence of cockroaches in [NYC](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3271316/), children living in high-cockroach dense neighborhoods are more likely to develop asthma than children living in lower-cockroach dense neighborhoods.
 
-Through these analyses we hope to identify and analyze risk factors for childhood asthma to map where these risk factors may have the largest impact. The current literature 
+Through these analyses we hope to identify and analyze risk factors for childhood asthma to map where these risk factors may have the largest impact. The current literature focuses on IgE exposure, air pollution, and the effect of impoverished neighborhoods on childhood asthma rates 
 
 # Data
 

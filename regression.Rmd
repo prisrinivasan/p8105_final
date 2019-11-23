@@ -1,6 +1,9 @@
 ---
 title: "Exploratory Analyses"
-output: html_document
+output: html_document:
+    toc: true
+    toc_float: true
+    theme: cosmo
 ---
 
 ```{r setup, include=FALSE}
@@ -12,7 +15,7 @@ library(PerformanceAnalytics)
 # Crude Asthma Rate Analysis with Neighborhood, Poverty, and Pest Predictors
 
 Method
-
+The dataset we used was compiled using the Environmental 
 
 # Correlation Matrix
 ```{r, echo = FALSE, error = TRUE}
