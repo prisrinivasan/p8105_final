@@ -26,6 +26,11 @@ Because of this, we want to take a life course perspective and look at how hospi
 
 ## Data 
 
+# Data
+We built our dataset using the [NYC Gov Environmental & Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx). The map was built with the UHF code key from [NYC Health](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf). The asthma CSV file we used is linked (here)[asthma_data.csv]. We selected all variables relating to asthma, cockroaches, and poverty through string detection. 
+
+* Our github repository is linked [here](https://github.com/prisrinivasan/p8105_final)
+
 ## Exploratory analysis
 
 ## Discussion
