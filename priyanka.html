@@ -12,17 +12,14 @@
 
 
 
-<title>Allergens’ effects on asthma in NYC</title>
+<title>priyanka</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -106,33 +103,33 @@ summary {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 60px;
+  padding-top: 51px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 .section h2 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 .section h3 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 .section h4 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 .section h5 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 .section h6 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 56px;
+  margin-top: -56px;
 }
 .dropdown-submenu {
   position: relative;
@@ -251,63 +248,6 @@ $(document).ready(function () {
 
 
 
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-
 
 </head>
 
@@ -315,16 +255,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -377,19 +307,83 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Allergens’ effects on asthma in NYC</h1>
+<h1 class="title toc-ignore">priyanka</h1>
 
 </div>
 
 
-<p><img align="center" img src="images/allergies.jpg" style="width:75%"/></p>
-<p>Image from <a href="https://health.clevelandclinic.org/3-reasons-why-your-indoor-allergies-are-worse-in-the-winter-and-how-to-fight-back/">Cleveland Clinic</a></p>
-<p><em>Hannah Bowlin, Lorraine Kwok, Priyanka Srinivasan, Alice Tivorovsky, Kelly Wang</em></p>
+<pre class="r"><code>pests_home = read_csv(file = &quot;./final_data/mold_home.csv&quot;) %&gt;%
+  janitor::clean_names()
 
+air_conc = read_csv(file = &quot;./final_data/air_conc.csv&quot;) %&gt;%
+  janitor::clean_names()
 
+mice_home = read_csv(file = &quot;./final_data/mice_home.csv&quot;) %&gt;%
+  janitor::clean_names()</code></pre>
+<p>Reading JSON file for UHF geo</p>
+<p>Conclusion: the JSON file is weird, will try shape file before spending more time figuring out JSON.</p>
+<div id="shape-files" class="section level1">
+<h1>Shape files</h1>
+<p>Shape files turned out better. Used a different file from nyc.gov because the Env &amp; Health Data Portal file was inconsistent - combined certain neighborhoods that weren’t combined in the rest of the datasets.</p>
+<p><a href="https://www1.nyc.gov/site/doh/data/health-tools/maps-gis-data-files-for-download.page">Source of shape files</a></p>
+<pre class="r"><code>shape = st_read(&quot;./final_data/shapefiles/&quot;, quiet = TRUE)
 
+#look at what we have
+str(shape)</code></pre>
+<pre><code>## Classes &#39;sf&#39; and &#39;data.frame&#39;:   43 obs. of  7 variables:
+##  $ OBJECTID  : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ UHFCODE   : num  0 101 102 103 104 105 106 107 201 202 ...
+##  $ SHAPE_Leng: num  207588 57699 88219 59712 250903 ...
+##  $ SHAPE_Area: num  2.76e+08 1.33e+08 1.81e+08 1.41e+08 3.87e+08 ...
+##  $ UHF_NEIGH : Factor w/ 42 levels &quot;Bayside - Little Neck&quot;,..: NA 23 26 15 27 9 20 21 18 10 ...
+##  $ BOROUGH   : Factor w/ 6 levels &quot;Bronx&quot;,&quot;Brooklyn&quot;,..: 4 1 1 1 1 1 1 1 2 2 ...
+##  $ geometry  :sfc_MULTIPOLYGON of length 43; first list element: List of 7
+##   ..$ :List of 1
+##   .. ..$ : num [1:8, 1:2] 1052698 1052301 1052316 1052316 1052703 ...
+##   ..$ :List of 1
+##   .. ..$ : num [1:6, 1:2] 1054841 1054642 1054641 1054838 1054841 ...
+##   ..$ :List of 1
+##   .. ..$ : num [1:935, 1:2] 1033048 1033048 1033086 1033135 1033136 ...
+##   ..$ :List of 1
+##   .. ..$ : num [1:40, 1:2] 1013080 1013078 1013217 1013583 1014034 ...
+##   ..$ :List of 1
+##   .. ..$ : num [1:346, 1:2] 1019718 1019574 1019492 1019492 1019492 ...
+##   ..$ :List of 1
+##   .. ..$ : num [1:44, 1:2] 1010933 1011191 1011150 1010824 1010953 ...
+##   ..$ :List of 1
+##   .. ..$ : num [1:173, 1:2] 997406 998203 998217 998310 998252 ...
+##   ..- attr(*, &quot;class&quot;)= chr  &quot;XY&quot; &quot;MULTIPOLYGON&quot; &quot;sfg&quot;
+##  - attr(*, &quot;sf_column&quot;)= chr &quot;geometry&quot;
+##  - attr(*, &quot;agr&quot;)= Factor w/ 3 levels &quot;constant&quot;,&quot;aggregate&quot;,..: NA NA NA NA NA NA
+##   ..- attr(*, &quot;names&quot;)= chr  &quot;OBJECTID&quot; &quot;UHFCODE&quot; &quot;SHAPE_Leng&quot; &quot;SHAPE_Area&quot; ...</code></pre>
+<pre class="r"><code>#plot all polygon boundaries
+plot(shape)</code></pre>
+<p><img src="priyanka_files/figure-html/unnamed-chunk-3-1.png" width="90%" /></p>
+<pre class="r"><code>#plot just geometry column
+plot(st_geometry(shape))</code></pre>
+<p><img src="priyanka_files/figure-html/unnamed-chunk-3-2.png" width="90%" /></p>
+<p>Checking the <code>shape</code> tibble, it looks like the values we need are stored properly. Merged with one of our datasets below; we can change out the <code>air_conc</code> dataset with our final tidied data as long as the <code>geo_entity_id</code> is still there.</p>
+<pre class="r"><code>merged &lt;- merge(shape, air_conc, by.x = &quot;UHFCODE&quot;, by.y = &quot;geo_entity_id&quot;)</code></pre>
+<pre class="r"><code>#look at geometry plot
+plot(st_geometry(merged))</code></pre>
+<p><img src="priyanka_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
+<p>I’ll try a random variable, ozone, which is coded as 386 under <code>indicator_id</code>, for the a random time frame “Summer 2016”:</p>
+<ul>
+<li>Filtered such that each UHF ID just has one observation - not totally sure but I think that is necessary.</li>
+</ul>
+<pre class="r"><code>ozone = merged %&gt;%
+  filter(indicator_id == 386 &amp; year_description == &quot;Summer 2016&quot;)
+
+plot(ozone[&quot;data_value&quot;])</code></pre>
+<p><img src="priyanka_files/figure-html/sick%20plot-1.png" width="90%" /></p>
+<p>Same with ggplot, which marks latitudes and longitudes:</p>
+<pre class="r"><code>ggplot(ozone) + 
+  geom_sf(aes(fill = data_value))</code></pre>
+<p><img src="priyanka_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
 </div>
-</div>
+
+
+
 
 </div>
 
@@ -422,32 +416,6 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
