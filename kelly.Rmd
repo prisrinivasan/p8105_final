@@ -24,7 +24,7 @@ mold_data=
 ```
 
 ### Kelly vision: X : borough name , Y: Hospitalization Asthma Rate, by different boroughs 
-```{r}
+```{r, error = TRUE}
 overview_plot=
 all_available_data %>% 
   filter(Name= "Public School Children ())
