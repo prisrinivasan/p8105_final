@@ -1,8 +1,10 @@
 name: "Who Let the 'Roaches Out?"
-output_dir: "."
+output_dir: "docs"
 navbar:
   title: "Home"
   right:
+    - text: "About"
+      href: about.html
     - text: "Overview"
       href: overview.html
     - text: "Data Sources"
@@ -16,4 +18,4 @@ navbar:
 
 output:
   html_document:
-    theme: flatly
+    theme: cosmo
