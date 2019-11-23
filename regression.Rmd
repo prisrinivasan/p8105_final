@@ -37,7 +37,7 @@ asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>%
 
 chart.Correlation(asthma_data[,4:10], histogram = TRUE, method = c("pearson", "kendall", "spearman"))
 ```
-The correlation matrix displays the 
+The correlation matrix displays the baseline relationship between each variable. All of the correlations are above 0.77 which indicates strong correlation. As we model build we will be aware of any multicollinearity.
 
 # Cockroach Distribution by Boro
 ```{r, echo = FALSE}
@@ -55,6 +55,7 @@ violin_roaches =
 
 violin_roaches
 ```
+The cockroach distribution 
 
 # Linear Model of Cockroach Presence, Poverty, and Neighobrhood on Asthma
 ```{r}
