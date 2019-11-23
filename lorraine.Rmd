@@ -271,7 +271,8 @@ tidy_asthma =
   full_join(df3, by = c("geo_join_id", "time_period")) %>% 
   full_join(df4, by = c("geo_join_id", "time_period")) %>% 
   select(geo_join_id, time_period, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma) %>%
-  mutate(time_period = as.numeric(levels(time_period)) [time_period]) %>%
+  mutate(time_period = as.numeric(levels(time_period)) [time_period],
+         geo_join_id = as.numeric(levels(geo_join_id)) [geo_join_id]) %>%
   view()
   
 ```
@@ -308,6 +309,7 @@ p4 =
 ```{r}
 test_1 =
   tidy_asthma %>%
+  arrange(geo_join_id) %>%
   plot_ly(
     x = ~geo_join_id, 
     y = ~public_school_children_5_14_yrs_old_with_asthma, 
@@ -318,9 +320,11 @@ test_1 =
     type = 'scatter',
     mode = 'markers'
   )
+
+test_1
 ```
 
-```{r}
+
 test_2 = 
   tidy_asthma %>%
   ggplot(aes(x = geo_join_id, y = public_school_children_5_14_yrs_old_with_asthma, frame = time_period)) +
@@ -338,6 +342,6 @@ transition_states(time_period, transition_length = 1, state_length = 3, wrap = T
   exit_fade()
 
 animate(test_2, fps = 2, height = 600, width = 1000)
-```
+
 
     
