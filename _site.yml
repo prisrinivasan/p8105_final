@@ -1,12 +1,12 @@
 name: "Who Let the 'Roaches Out?"
-output_dir: "docs"
+output_dir: "."
 navbar:
   title: "Home"
   right:
     - text: "About"
       href: about.html
     - text: "Overview"
-      href: Overview.html
+      href: overview.html
     - text: "Data Sources"
       href: data_sources.html
     - text: "Dashboard"

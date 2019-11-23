@@ -1,8 +1,6 @@
 ---
 title: "Exploratory Analyses"
-output: html_document:
-    toc: true
-    toc_float: true
+output: html_document
     theme: cosmo
 ---
 
@@ -15,7 +13,7 @@ library(PerformanceAnalytics)
 # Crude Asthma Rate Analysis with Neighborhood, Poverty, and Pest Predictors
 
 Method
-The dataset we used was compiled using the Environmental 
+The dataset we used was compiled using the Environmental and Health Dataset from the NYC Health Department. We selected variables based on our preliminary hypothesis regarding asthma, poverty, neighborhood, cockroaches, and school children 
 
 # Correlation Matrix
 ```{r, echo = FALSE, error = TRUE}

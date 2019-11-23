@@ -1,9 +1,6 @@
 ---
 title: "about"
-output: html_document:
-    toc: true
-    toc_float: true
-    theme: cosmo
+output: html_document
 ---
 
 # Motivation
@@ -12,13 +9,8 @@ Asthma is one of the most common chronic illnesses for young children living in 
 
 In NYC, there are many prominent risk factors for childhood asthma including air pollution, dust mites, mice, cockroaches, and pets. Given the large presence of cockroaches in [NYC](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3271316/), children living in high-cockroach dense neighborhoods are more likely to develop asthma than children living in lower-cockroach dense neighborhoods.
 
-Through these analyses we hope to identify and analyze risk factors for childhood asthma to map where these risk factors may have the largest impact. The current literature focuses on IgE exposure, air pollution, and the effect of impoverished neighborhoods on [childhood asthma rates](https://www.ncbi.nlm.nih.gov/pubmed/28939248). 
+Through these analyses we hope to identify and analyze risk factors for childhood asthma to map where these risk factors may have the largest impact. The current literature focuses on IgE exposure, air pollution, and the effect of impoverished neighborhoods on [childhood asthma rates](https://www.ncbi.nlm.nih.gov/pubmed/28939248) and [childhood schooling rates](https://www.cdc.gov/pcd/issues/2019/19_0074.htm).
 
-# Data
-
-We built our dataset using the [NYC Gov Environmental & Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx). The map was built with the UHF code key from [NYC Health](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf). The asthma CSV file we used is linked (here)[asthma_data.csv]. We selected all variables relating to asthma, cockroaches, and poverty through string detection. 
-
-* Our github repository is linked [here](https://github.com/prisrinivasan/p8105_final)
 
 
 
