@@ -9,11 +9,14 @@ Asthma is one of the most common chronic illnesses for young children living in 
 
 In NYC, there are many prominent risk factors for childhood asthma including air pollution, dust mites, mice, cockroaches, and pets. Given the large presence of cockroaches in [NYC](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3271316/), children living in high-cockroach dense neighborhoods are more likely to develop asthma than children living in lower-cockroach dense neighborhoods.
 
-Through these analyses 
+Through these analyses we hope to identify and analyze risk factors for childhood asthma and 
 
 # Data
 
 We built our dataset using the [NYC Gov Environmental & Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx). The map was built with the UHF code key from [NYC Health](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf). The asthma CSV file we used is linked (here)[asthma_data.csv]. 
 
 * Our github repository is linked [here](https://github.com/prisrinivasan/p8105_final)
+
+
+
 
