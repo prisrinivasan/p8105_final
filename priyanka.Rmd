@@ -17,7 +17,7 @@ library(ggmap)
 library(broom)
 library(httr)
 library(rgdal)
-library(sf)
+library(tmap)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -27,26 +27,60 @@ knitr::opts_chunk$set(
 theme_set(theme_bw() + theme(legend.position = "bottom"))
 ```
 
-```{r, message=FALSE, warning=FALSE}
-pests_home = read_csv(file = "./final_data/mold_home.csv") %>%
-  janitor::clean_names()
+Alice's dataset (same code as her Rmd!):
+```{r}
+all_data = 
+read.csv(file = "./final_data/all_available_data.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(name %in% c("Homes with Cockroaches", 
+                     "Poverty", 
+                     "Public School Children (5-14 Yrs Old) with Asthma", 
+                     "Public School Children (5-14 Yrs Old) with Persistent Asthma"),
+        geo_type_name == "UHF42", 
+        measure %in% c("Percent", "Rate")
+         ) %>% 
+  mutate(geo_join_id = as.character(geo_join_id),
+         geo_join_id = if_else(geo_place_name == "Bensonhurst - Bay Ridge", "209", geo_join_id),
+         geo_join_id = as.factor(geo_join_id)) %>% 
+  pivot_wider(
+    names_from = name, 
+    values_from = data_value
+    ) %>%
+  mutate(
+    time_period = recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-14" = "2011")) %>%
+  filter(time_period %in% c("2011", "2012", "2013", "2014")) %>% 
+  janitor::clean_names() %>% 
+  select(geo_join_id, time_period, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma)
 
-air_conc = read_csv(file = "./final_data/air_conc.csv") %>%
-  janitor::clean_names()
-
-mice_home = read_csv(file = "./final_data/mice_home.csv") %>%
-  janitor::clean_names()
+df1 = 
+  all_data  %>% 
+  select(geo_join_id, time_period, measure, indicator_id, homes_with_cockroaches) %>% 
+  drop_na()
+df2 = 
+all_data %>% 
+  select(geo_join_id, time_period, measure, indicator_id, poverty) %>% 
+  drop_na()
+df2
+df3 = 
+  all_data %>% 
+  select(geo_join_id, time_period, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %>% 
+  drop_na()
+df3
+df4 = 
+  all_data %>% 
+  select(geo_join_id, time_period, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %>% 
+  drop_na()
+df4
+## Joining
+tidy_asthma = 
+  full_join(df1, df2, by = c("geo_join_id", "time_period")) %>% 
+  full_join(df3, by = c("geo_join_id", "time_period")) %>% 
+  full_join(df4, by = c("geo_join_id", "time_period")) %>% 
+  select(geo_join_id, time_period, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma) %>% 
+  view()
+  
 
 ```
-
-Reading JSON file for UHF geo
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
-uhf <- jsonlite::fromJSON("./final_data/UHF42.json")
-uhf1 <- jsonlite::fromJSON("./final_data/UHF42.json", flatten=TRUE)
-
-```
-
-Conclusion: the JSON file is weird, will try shape file before spending more time figuring out JSON.
 
 # Shape files
 Shape files turned out better. Used a different file from nyc.gov because the Env & Health Data Portal file was inconsistent - combined certain neighborhoods that weren't combined in the rest of the datasets.
@@ -57,41 +91,48 @@ Shape files turned out better. Used a different file from nyc.gov because the En
 shape = st_read("./final_data/shapefiles/", quiet = TRUE)
 
 #look at what we have
-str(shape)
+#str(shape)
 
 #plot all polygon boundaries
-plot(shape)
+#plot(shape)
 
 #plot just geometry column
 plot(st_geometry(shape))
 ```
 
-Checking the `shape` tibble, it looks like the values we need are stored properly. Merged with one of our datasets below; we can change out the `air_conc` dataset with our final tidied data as long as the `geo_entity_id` is still there.
+Checking the `shape` tibble, it looks like the values we need are stored properly. Merging with the `tidy_asthma`
+dataset below.
 
 ```{r, message=FALSE, warning=FALSE}
-merged <- merge(shape, air_conc, by.x = "UHFCODE", by.y = "geo_entity_id")
+merged <- merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id")
 ```
 
-```{r, message=FALSE, warning=FALSE}
-#look at geometry plot
-plot(st_geometry(merged))
-```
 
-I'll try a random variable, ozone, which is coded as 386 under `indicator_id`, for the a random time frame "Summer 2016": 
-
-  * Filtered such that each UHF ID just has one observation - not totally sure but I think that is necessary.
+Below is a plot filtered for 2011 poverty values. 
 
 ```{r sick plot, message=FALSE, warning=FALSE}
-ozone = merged %>%
-  filter(indicator_id == 386 & year_description == "Summer 2016")
+asthma_2011 = merged %>%
+  filter(time_period == "2011")
 
-plot(ozone["data_value"])
+plot(asthma_2011["poverty"])
 ```
 
 Same with ggplot, which marks latitudes and longitudes:
 
 ```{r}
-ggplot(ozone) + 
-  geom_sf(aes(fill = data_value))
+ggplot(asthma_2011) + 
+  geom_sf(aes(fill = poverty))
 ```
+
+Tmap with overlay on real map:
+
+```{r}
+tmap_mode("view")
+
+tm_shape(asthma_2011) +
+  tm_polygons("homes_with_cockroaches", 
+              style = "quantile",
+              title = "Poverty Levels in NYC Neighborhoods")
+```
+
 
