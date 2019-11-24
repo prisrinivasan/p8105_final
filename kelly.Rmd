@@ -38,22 +38,17 @@ all_available_data %>%
 pp = tidy_asthma %>%
   drop_na(homes_with_cockroaches) %>% 
   mutate(
-    geo_join_id=as.numeric(geo_join_id),
-    time_period=as.factor(time_period),
-    time_period=fct_relevel(time_period, "2011"="2011", "2012"="2012", "2013" = "2013", "2014" = "2014")
-  ) %>% 
-  ggplot(aes(x = geo_join_id, y = homes_with_cockroaches, frame = time_period)) + 
-  geom_point(aes(colour = time_period), alpha = 0.5) + 
-  xlim(0, 100) +
+    geo_join_id=as.numeric(geo_join_id) ) %>% 
+  ggplot(aes(x = geo_join_id, y = homes_with_cockroaches)) + 
+  geom_point(aes(colour = time_period), alpha = 0.5) +
   labs(title = "Prevalence of Cockroaches in Different Neighborhoods",
      x = 'Geo_ID', 
      y = 'Rate of Homes with Cockroaches(%)'
 )
+pp
 
 # gganimate parts
-transition_states(time_period, transition_length = 1, state_length = 3, wrap = TRUE) +
-enter_fade() +
-exit_fade()
+pp + transition_time(time_period) + labs(title="Year : {frame_time}")
 
 animate(pp, fps = 2, height = 600, width = 1000)
 ```
