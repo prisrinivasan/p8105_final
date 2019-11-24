@@ -11,51 +11,44 @@ runtime: shiny
 library(flexdashboard)
 library(tidyverse)
 library(viridis)
-library(p8105.datasets)
+library(leaflet)
 library(plotly)
+library(shiny)
+library(sf)
+library(tmap)
 ```
-
-```{r loading data, message=FALSE, warning=FALSE, echo=FALSE, include=FALSE}
-#We want to filter interactively based on user input.
-data("nyc_airbnb")
-
-nyc_airbnb = 
-  nyc_airbnb %>% 
-  mutate(rating = review_scores_location / 2) %>%
-  rename(latitude = lat, longitude = long) %>%
-  select(
-    boro = neighbourhood_group, neighbourhood, rating, price, room_type,
-    latitude, longitude) %>%
-  filter(!is.na(rating))
-```
-
 
 Column {.sidebar}
 -----------------------------------------------------------------------
 
 ```{r}
-boros = nyc_airbnb %>% distinct(boro) %>% pull()
+tidy_asthma = read_csv(file = "./final_data/tidy_asthma.csv")
 
+shape = st_read("./final_data/shapefiles/", quiet = TRUE)
+
+tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id") %>% 
+  janitor::clean_names() %>% 
+  mutate(uhfcode = as.character(uhfcode),
+         time_period = as.character(time_period))
+
+year = as.character(c("2011", "2012", "2013", "2014"))
 # selectInput widget to sidebar
 selectInput(
-  "boro_choice", 
-  label = h3("Select boro"),
-  choices = boros, selected = "Manhattan")
+  "year", 
+  label = h3("Select Year"),
+  choices = year,
+  selected = "2011")
 
-max_price = 1000
-min_price = nyc_airbnb %>% distinct(price) %>% min()
-  
-# sliderInput widget
-sliderInput(
-  "price_range", 
-  label = h3("Choose price range"), 
-  min = min_price, max = max_price, value = c(100, 400))
-room_choice = nyc_airbnb %>% distinct(room_type) %>% pull()
+#I (priyanka) didn't put the neighborhood names in yet, but we can replace the geo_join_id with those once we do
+neighborhood = tidy_asthma_sf %>% distinct(uhfcode) %>% pull(uhfcode)
+neighborhood = as.character(neighborhood)
+
 # radioButtons widget
 radioButtons(
-  "room_choice", 
-  label = h3("Choose room type"),
-  choices = room_choice, selected = "Entire home/apt")
+  "neighborhood", 
+  label = h3("Choose neighborhood"),
+  choices = neighborhood,
+  selected = "501")
 
 ```
 
@@ -63,45 +56,24 @@ Column {data-width=650}
 -----------------------------------------------------------------------
 
 ### Chart A
-
+### Figuring it out still!!
 ```{r}
-renderPlotly({ 
-  
-  
-  nyc_airbnb %>%
-    filter(
-      boro == input[["boro_choice"]], 
-      price %in% input$price_range[1]:input$price_range[2],
-      room_type == input$room_choice) %>% 
-    mutate(text_label = str_c("Price: $", price, '\nRating: ', rating)) %>% 
-    plot_ly(
-      x = ~longitude, y = ~latitude, type = "scatter", mode = "markers",
-      alpha = 0.5, color = ~price, text = ~text_label)
-  
-  
-  
+
+tmap_mode("view")
+
+
+tmap = reactive({
+  tm_shape(tidy_asthma_sf %>% filter(uhfcode == input$neighborhood, time_period == input$year)) +
+  tm_polygons("homes_with_cockroaches", 
+              style = "quantile",
+              title = "Roach Levels in NYC Neighborhoods")
 })
-```
 
-Column {data-width=350}
------------------------------------------------------------------------
+#OR
 
-### Chart B
-
-```{r}
-renderPrint({
-  
-  input[["price_range"]]
-  
-})
-```
-
-### Chart C
-
-```{r}
-renderPrint({
-  
-  input[["room_choice"]]
-  
+output = renderLeaflet({
+    tmap1 = tm_shape(tidy_asthma_sf %>% filter(uhfcode == input$neighborhood, time_period == input$year)) +
+      tm_polygons("homes_with_cockroaches", legend.title = "Roach Levels in NYC Neighborhoods")
+    tmap_leaflet(tmap1)
 })
 ```

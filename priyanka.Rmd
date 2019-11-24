@@ -71,6 +71,7 @@ df4 =
   select(geo_join_id, time_period, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %>% 
   drop_na()
 df4
+
 ## Joining
 tidy_asthma = 
   full_join(df1, df2, by = c("geo_join_id", "time_period")) %>% 
@@ -79,7 +80,8 @@ tidy_asthma =
   select(geo_join_id, time_period, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma) %>% 
   view()
   
-
+#save as csv
+write.csv(tidy_asthma,"./final_data/tidy_asthma.csv", row.names = FALSE)
 ```
 
 # Shape files
