@@ -4,7 +4,7 @@ navbar:
   title: "Home"
   right:
     - text: "Overview"
-      href: overview.html
+      href: Overview.html
     - text: "Data Sources"
       href: data_sources.html
     - text: "Dashboard"
