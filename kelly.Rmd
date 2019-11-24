@@ -10,6 +10,9 @@ library(tidyverse)
 library(dplyr)
 library(ggridges)
 library(patchwork)
+library(plotly)
+library(ggplot2)
+library(gganimate)
 ```
 
 ```{r}
@@ -24,9 +27,59 @@ mold_data=
 ```
 
 ### Kelly vision: X : borough name , Y: Hospitalization Asthma Rate, by different boroughs 
+## Trying to include Borough's in here--using Alice's Method to include Borough name
 ```{r, error = TRUE}
 overview_plot=
 all_available_data %>% 
   filter(Name= "Public School Children ())
+```
+
+```{r}
+pp = tidy_asthma %>%
+  drop_na(homes_with_cockroaches) %>% 
+  mutate(
+    geo_join_id=as.numeric(geo_join_id),
+    time_period=as.factor(time_period),
+    time_period=fct_relevel(time_period, "2011"="2011", "2012"="2012", "2013" = "2013", "2014" = "2014")
+  ) %>% 
+  ggplot(aes(x = geo_join_id, y = homes_with_cockroaches, frame = time_period)) + 
+  geom_point(aes(colour = time_period), alpha = 0.5) + 
+  xlim(0, 100) +
+  labs(title = "Prevalence of Cockroaches in Different Neighborhoods",
+     x = 'Geo_ID', 
+     y = 'Rate of Homes with Cockroaches(%)'
+)
+
+# gganimate parts
+transition_states(time_period, transition_length = 1, state_length = 3, wrap = TRUE) +
+enter_fade() +
+exit_fade()
+
+animate(pp, fps = 2, height = 600, width = 1000)
+```
+
+## using lorraine's code as a guide
+```{r}
+test_prev=
+  tidy_asthma %>% 
+  drop_na(homes_with_cockroaches) %>% 
+  mutate(
+    geo_join_id=as.numeric(geo_join_id),
+    time_period=as.factor(time_period),
+    time_period=fct_relevel(time_period, "2011"="2011", "2012"="2012", "2013" = "2013", "2014" = "2014")
+  ) %>% 
+  arrange(geo_join_id) %>% 
+  plot_ly(
+    x=~geo_join_id, 
+    y=~homes_with_cockroaches,
+    color=~geo_join_id,
+    frame=~ time_period,
+    hoverinfo= "text",
+    type="scatter",
+    mode="markers"
+  )
+
+test_prev
+  
 ```
 
