@@ -7,9 +7,11 @@ output:
     theme: flatly
 ---
 
-_Hannah Bowlin, Lorraine Kwok, Priyanka Srinivasan, Alice Tivorovsky, Kelly Wang_
+<img align="center" img src="images/allergies.jpg" style="width:75%"/>  
 
-_P8105 Data Science, Prof. Jeff Goldsmith_
+Image from [Cleveland Clinic](https://health.clevelandclinic.org/3-reasons-why-your-indoor-allergies-are-worse-in-the-winter-and-how-to-fight-back/)
+
+_Hannah Bowlin, Lorraine Kwok, Priyanka Srinivasan, Alice Tivorovsky, Kelly Wang_
 
 
 

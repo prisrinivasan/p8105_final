@@ -3,6 +3,8 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
+    - text: "About"
+      href: about.html
     - text: "Overview"
       href: Overview.html
     - text: "Data Sources"
@@ -11,8 +13,8 @@ navbar:
       menu: 
       - text: "Maps"
         href: priyanka.html
-      - text: "Regression Analyses"
-        href: "regression.html"
+      - text: "Exploratory Analyses"
+        href: regression.html
 
 output:
   html_document:

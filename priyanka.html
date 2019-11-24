@@ -275,7 +275,10 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="overview.html">Overview</a>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="Overview.html">Overview</a>
 </li>
 <li>
   <a href="data_sources.html">Data Sources</a>
@@ -291,7 +294,7 @@ $(document).ready(function () {
       <a href="priyanka.html">Maps</a>
     </li>
     <li>
-      <a href="regression.html">Regression Analyses</a>
+      <a href="regression.html">Exploratory Analyses</a>
     </li>
   </ul>
 </li>
@@ -318,7 +321,6 @@ air_conc = read_csv(file = &quot;./final_data/air_conc.csv&quot;) %&gt;%
 mice_home = read_csv(file = &quot;./final_data/mice_home.csv&quot;) %&gt;%
   janitor::clean_names()</code></pre>
 <p>Reading JSON file for UHF geo</p>
-<pre class="r"><code>uhf &lt;- jsonlite::fromJSON(&quot;./final_data/UHF42.json&quot;, flatten = TRUE)</code></pre>
 <p>Conclusion: the JSON file is weird, will try shape file before spending more time figuring out JSON.</p>
 <div id="shape-files" class="section level1">
 <h1>Shape files</h1>
@@ -362,16 +364,22 @@ plot(st_geometry(shape))</code></pre>
 <p><img src="priyanka_files/figure-html/unnamed-chunk-3-2.png" width="90%" /></p>
 <p>Checking the <code>shape</code> tibble, it looks like the values we need are stored properly. Merged with one of our datasets below; we can change out the <code>air_conc</code> dataset with our final tidied data as long as the <code>geo_entity_id</code> is still there.</p>
 <pre class="r"><code>merged &lt;- merge(shape, air_conc, by.x = &quot;UHFCODE&quot;, by.y = &quot;geo_entity_id&quot;)</code></pre>
-<p>Plots with merged dataset: Geometry plot still works.</p>
 <pre class="r"><code>#look at geometry plot
 plot(st_geometry(merged))</code></pre>
 <p><img src="priyanka_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
-<p>I’ll try a random variable, ozone, which is coded as 386 under <code>indicator_id</code>:</p>
+<p>I’ll try a random variable, ozone, which is coded as 386 under <code>indicator_id</code>, for the a random time frame “Summer 2016”:</p>
+<ul>
+<li>Filtered such that each UHF ID just has one observation - not totally sure but I think that is necessary.</li>
+</ul>
 <pre class="r"><code>ozone = merged %&gt;%
-  filter(indicator_id == 386)
+  filter(indicator_id == 386 &amp; year_description == &quot;Summer 2016&quot;)
 
 plot(ozone[&quot;data_value&quot;])</code></pre>
 <p><img src="priyanka_files/figure-html/sick%20plot-1.png" width="90%" /></p>
+<p>Same with ggplot, which marks latitudes and longitudes:</p>
+<pre class="r"><code>ggplot(ozone) + 
+  geom_sf(aes(fill = data_value))</code></pre>
+<p><img src="priyanka_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
 </div>
 
 
