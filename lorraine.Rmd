@@ -1,11 +1,11 @@
 ---
 title: "lorraine"
+
 output: github_document
 ---
 
 ```{r setup, include=FALSE}
 library(tidyverse)
-
 library(dplyr)
 library(viridis)
 library(sp)
@@ -18,6 +18,9 @@ library(httr)
 library(rgdal)
 library(readxl)
 library(patchwork)
+library(plotly)
+library(gganimate)
+library(magick)
 
 knitr::opts_chunk$set(
   echo = TRUE,
@@ -50,31 +53,318 @@ asthma_data = read.csv(file = "./final_data/asthma_data.csv") %>%
   view()
 ```
 
-Loading and tidying the new dataset with all available data
+Loading and tidying the new dataset with all available data. THis generates 4536 observations. 
 
 ```{r}
-all_data = 
+all_data_1 = 
   read.csv(file = "./final_data/all_available_data.csv") %>%
   janitor::clean_names() %>%
   rename(year = time_period) %>%
+  mutate(
+    data_value = as.numeric(data_value), 
+    geo_join_id = as.numeric(geo_join_id),
+    year = as.character(year), 
+    name = as.character(name)) %>%
   filter(data_value != "NULL",
-         str_detect(name, c("[Aa]sthma", "[Cc]ockroach", "[Pp]overty")),
-         !str_detect(name, c("[Nn]TA")),
+         str_detect(name, c("[A]sthma", "[C]ockroach", "[P]overty")),
+         !str_detect(name, c("[N]TA")),
          name != "Children 0-13 Years Old Ever Diagnosed with Asthma",
          name != "Youth Asthma in the Past 12 Months",
          name != "Adults Reporting Cockroaches in the Home",
          geo_type_name == "UHF42") %>%
   group_by(name) %>%
-  mutate(
-    data_value = as.numeric(data_value), 
-    year = as.character(year),
-    row = row_number()) %>%
-  select(row, year, geo_type_name, geo_join_id, name, data_value) %>%
-  pivot_wider(names_from = "name",
-              values_from = "data_value") %>%
-  select(-row) %>%
   janitor::clean_names() %>%
   view()
 ```
 
+Tidying up the data using factors instead of strings for the `name` variable. 
 
+```{r}
+all_data = 
+  read.csv(file = "./final_data/all_available_data.csv") %>%
+  janitor::clean_names() %>%
+  mutate(data_value = as.numeric(data_value),
+         time_period = recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-14" = "2011"),
+         geo_join_id = as.numeric(geo_join_id)) %>%
+  filter(name %in% c("Homes with Cockroaches",
+                     "Poverty", 
+                     "Public School Children (5-14 Yrs Old) with Asthma", 
+                     "Public School Children (5-14 Yrs Old) with Persistent Asthma"),
+                     measure == "Percent" | measure == "Rate",
+         geo_type_name == "UHF42",
+         time_period %in% c("2011", "2012", "2013", "2014")) %>%
+  mutate(row = row_number(),
+         time_period = as.numeric(time_period)) %>%
+  pivot_wider(names_from = "name",
+              values_from = "data_value") %>%
+  janitor::clean_names() %>%
+  select(geo_join_id, time_period, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma) %>%
+  view()
+```
+
+Filtering for variables of interest (1344 observations) 
+
+```{r}
+test =
+  all_data %>%
+  group_by(time_period, geo_join_id) %>%
+  summarise_each(funs(sum(., na.rm = TRUE))) %>% 
+  view()
+```
+
+```{r}
+all_data %>%
+  select(geo_join_id, poverty, time_period) %>%
+  ggplot(aes(x = geo_join_id, y = poverty, color = time_period))  +
+  geom_line(aes(group = time_period))
+```
+
+
+USE THIS: 
+
+```{r}
+all_data = 
+read.csv(file = "./final_data/all_available_data.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(name %in% c("Adults with Asthma in the Past 12 Months",
+                     "Asthma Emergency Department Visits (Adults)", 
+                     "Asthma Emergency Department Visits (Children 0 to 4 Yrs Old)", 
+                     "Asthma Emergency Department Visits (Children 5 to 17 Yrs Old)", 
+                     "Asthma Hospitalizations (Adults)", 
+                     "Asthma Hospitalizations (Children 0 to 4 Yrs Old)", 
+                     "Asthma Hospitalizations (Children 5 to 17 Yrs Old)", 
+                     "Children under 5 years old in Poverty", 
+                     "Homes with Cockroaches", 
+                     "Neighborhood Poverty", 
+                     "Neighborhood Poverty (ACS)", 
+                     "O3-Attributable Asthma Emergency Department Visits", 
+                     "O3-Attributable Asthma Hospitalizations ",
+                     "PM2.5-Attributable Asthma Emergency Department Visits ", 
+                     "Poverty", 
+                     "Public School Children (5-14 Yrs Old) with Asthma", 
+                     "Public School Children (5-14 Yrs Old) with Persistent Asthma"),
+        geo_type_name == "UHF42", 
+        time_period %in% c(2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017)
+         ) %>% 
+  distinct()
+```
+
+Other way: 
+
+```{r}
+all_data_2 = 
+read.csv(file = "./final_data/all_available_data.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(name = as.character(name)) %>% 
+  filter(str_detect(name, c("[Aa]sthma", "[Cc]ockroaches", "[Pp]overty")),
+         str_detect(name, "Adults Reporting Cockroaches in the Home", negate = TRUE),
+         str_detect(name, "NTA", negate = TRUE),
+         geo_type_name == 'UHF42'
+         ) %>% 
+  distinct()
+```
+
+
+```{r}
+ pull(distinct(all_data, measure))
+```
+
+Exploratory counts to verify filter steps: 
+
+```{r}
+all_data %>%  
+  group_by(name, time_period, measure, geo_join_id) %>% 
+  summarize(data_value = sum(data_value)) %>% 
+  view()
+```
+
+Tidying: 
+
+```{r}
+all_data %>%
+pivot_wider(
+    names_from = name,
+    values_from = data_value
+  ) %>% 
+view()
+```
+
+## Tidy for school children only - USE THIS 
+
+```{r}
+all_data = 
+read.csv(file = "./final_data/all_available_data.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(name %in% c("Homes with Cockroaches", 
+                     "Poverty", 
+                     "Public School Children (5-14 Yrs Old) with Asthma", 
+                     "Public School Children (5-14 Yrs Old) with Persistent Asthma"),
+        geo_type_name == "UHF42", 
+        measure %in% c("Percent", "Rate")
+         ) %>% 
+  pivot_wider(
+    names_from = name, 
+    values_from = data_value
+    ) %>% 
+  view()
+```
+
+For Homes with Cockroaches, Percent = estimated # of households in an area that reported seeing at least one cockroach daily over the last month divided by # households in the area
+
+For Poverty, Percent = estimated # of ppl for whom poverty status is determined whose annual income falls below 100% of FPL divided by # of ppl for whom poverty status is determined. 
+
+For public school children with asthma rates: # of public school children with diagnosis of asthma during current or previous school year divided by 5-14 year old population expresssed per 1000. 
+
+
+Exploring differences in poverty by time: 
+
+```{r}
+all_data  %>% 
+  select(geo_join_id, Poverty, time_period) %>% 
+  ggplot(aes(x = geo_join_id, y = Poverty, color = time_period)) +
+  geom_line(aes(group = time_period))
+```
+Conclude not much difference. Can recode years
+
+
+### Recoding years: 
+
+```{r}
+all_data = 
+  all_data %>% 
+  mutate(
+    time_period = recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-14" = "2011")) %>%
+  filter(time_period %in% c("2011", "2012", "2013", "2014")) %>% 
+  janitor::clean_names() %>% 
+  select(geo_join_id, time_period, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma)
+```
+
+Trying Jiayi's suggestion to get rid of stacking: 
+
+```{r}
+df1 = 
+  all_data  %>% 
+  select(geo_join_id, time_period, measure, indicator_id, homes_with_cockroaches) %>% 
+  drop_na()
+
+
+df2 = 
+all_data %>% 
+  select(geo_join_id, time_period, measure, indicator_id, poverty) %>% 
+  drop_na()
+df2
+
+df3 = 
+  all_data %>% 
+  select(geo_join_id, time_period, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %>% 
+  drop_na()
+df3
+
+df4 = 
+  all_data %>% 
+  select(geo_join_id, time_period, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %>% 
+  drop_na()
+df4
+```
+
+```{r}
+## Joining
+tidy_asthma = 
+  full_join(df1, df2, by = c("geo_join_id", "time_period")) %>% 
+  full_join(df3, by = c("geo_join_id", "time_period")) %>% 
+  full_join(df4, by = c("geo_join_id", "time_period")) %>% 
+  select(geo_join_id, time_period, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma) %>%
+  mutate(time_period = as.numeric(levels(time_period)) [time_period],
+         geo_join_id = as.character(as.numeric(levels(geo_join_id)) [geo_join_id])) %>%
+  view()
+```
+
+PLOTS FOR PUBLIC SCHOOL CHILDREN VARIABLES
+
+```{r}
+p1 = 
+  tidy_asthma %>%
+  filter(time_period == "2011") %>%
+  ggplot(aes(x = geo_join_id, y = public_school_children_5_14_yrs_old_with_asthma, color = geo_join_id)) + 
+  geom_point()
+
+p2 = 
+  tidy_asthma %>%
+  filter(time_period == "2012") %>%
+  ggplot(aes(x = geo_join_id, y = public_school_children_5_14_yrs_old_with_asthma, color = geo_join_id)) + 
+  geom_point()
+
+p3 = 
+  p1 = 
+  tidy_asthma %>%
+  filter(time_period == "2013") %>%
+  ggplot(aes(x = geo_join_id, y = public_school_children_5_14_yrs_old_with_asthma, color = geo_join_id)) + 
+  geom_point()
+
+p4 = 
+  tidy_asthma %>%
+  filter(time_period == "2014") %>%
+  ggplot(aes(x = geo_join_id, y = public_school_children_5_14_yrs_old_with_asthma, color = geo_join_id)) + 
+  geom_point()
+```
+
+```{r}
+plot_1 =
+  tidy_asthma %>%
+  arrange(geo_join_id) %>%
+    plot_ly(
+    x = ~geo_join_id, 
+    y = ~public_school_children_5_14_yrs_old_with_asthma, 
+    color = ~geo_join_id,
+    text = ~geo_join_id,
+    frame = ~time_period,
+    hoverinfo = "text",
+    type = 'scatter',
+    mode = 'markers'
+  )
+  
+plot_1
+```
+
+```{r}
+plot_2 =
+  tidy_asthma %>%
+  arrange(geo_join_id) %>%
+  plot_ly(
+    x = ~geo_join_id, 
+    y = ~public_school_children_5_14_yrs_old_with_persistent_asthma, 
+    color = ~geo_join_id,
+    text = ~geo_join_id,
+    frame = ~time_period,
+    hoverinfo = "text",
+    type = 'scatter',
+    mode = 'markers'
+  )
+
+plot_2
+```
+
+```{r}
+subplot(plot_1, plot_2)
+```
+
+test_2 = 
+  tidy_asthma %>%
+  ggplot(aes(x = geo_join_id, y = public_school_children_5_14_yrs_old_with_asthma, frame = time_period)) +
+geom_point(aes(colour = geo_join_id, alpha = 0.5)) + 
+labs(title = "Test",
+x = 'UHF Code', 
+y = 'Public School Children (5-14 Years Old) with Asthma (%)',
+colour = 'Year') +
+theme(plot.title = element_text(size = 40, face = "bold"),
+axis.text = element_text(size = 18),
+axis.title = element_text(size = 18,face = "bold")) + 
+theme(legend.text = element_text(size = 16), legend.title = element_text(size = 18,face = "bold") ) +
+transition_states(time_period, transition_length = 1, state_length = 3, wrap = TRUE) +
+  enter_fade() +
+  exit_fade()
+
+animate(test_2, fps = 2, height = 600, width = 1000)
+
+
+    

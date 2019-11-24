@@ -1,5 +1,5 @@
 ---
-title: "Who Let the 'Roaches Out?"
+title: "Allergens' effects on asthma in NYC"
 output: 
   html_document:
     toc: true
@@ -7,11 +7,11 @@ output:
     theme: flatly
 ---
 
-# Who Let the 'Roaches Out?
+<img align="center" img src="images/allergies.jpg" style="width:75%"/>  
 
-## Allergens' effects on asthma in NYC
+Image from [Cleveland Clinic](https://health.clevelandclinic.org/3-reasons-why-your-indoor-allergies-are-worse-in-the-winter-and-how-to-fight-back/)
 
 _Hannah Bowlin, Lorraine Kwok, Priyanka Srinivasan, Alice Tivorovsky, Kelly Wang_
 
-_P8105 Data Science, Prof. Jeff Goldsmith_
+
 
