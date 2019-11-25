@@ -14,7 +14,7 @@ tidy_asthma =
 
 tidy_asthma 
 ```
-# Crude Asthma Rate Analysis with Neighborhood, Poverty, and Pest Predictors
+## Crude Asthma Rate Analysis with Neighborhood, Poverty, and Pest Predictors
 
 Method
 The dataset we used was compiled using the Environmental and Health Dataset from the NYC Health Department. We selected variables based on our preliminary hypothesis regarding asthma, poverty, neighborhood, cockroaches, and school children 
@@ -27,7 +27,7 @@ chart.Correlation(tidy_asthma[,5:9], histogram = TRUE, method = c("pearson", "ke
 
 The correlation matrix displays the baseline relationship between each variable. All of the correlations are above 0.53 which indicates strong correlation. As we model build we will be aware of any multicollinearity.
 
-# Cockroach Distribution by Boro
+## Crude Association between Childhood Asthma and Cockroaches in the Home
 ```{r, echo = FALSE}
 
 crude_roaches = 
@@ -50,7 +50,7 @@ crude_roaches
 ```
 Our crude relationship between childhood asthma and cockroaches in the home is demonstrated here. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation. 
 
-# Linear Model of Cockroach Presence, Poverty, and Neighobrhood on Asthma
+## Linear Model of Cockroach Presence, Poverty, and Neighobrhood on Asthma
 ```{r}
 
 ```
