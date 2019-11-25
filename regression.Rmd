@@ -51,7 +51,22 @@ crude_roaches
 Our crude relationship between childhood asthma and cockroaches in the home is demonstrated here. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation. 
 
 ## _Linear Model of Cockroach Presence, Poverty, and Neighobrhood on Asthma_
-```{r}
+```{r, echo = FALSE}
+
+set.seed(10)
+library(ggplot2)
+  
+linear_model = 
+  lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty, data = tidy_asthma) %>%
+  broom::tidy()
+
+ggplot(tidy_asthma, aes(x = homes_with_cockroaches, y = public_school_children_5_14_yrs_old_with_asthma, color = poverty)) +
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  labs(x = "Percent of Homes with Cockroaches",
+       y = "Percent of School Children with Asthma",
+       title = "Effect of Homes with Cockroaches on Childhood Asthma adjusting for Poverty") +
+  viridis::scale_color_viridis(aes(color = poverty))
 
 ```
 
