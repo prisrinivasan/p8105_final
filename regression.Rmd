@@ -24,7 +24,8 @@ The dataset we used was compiled using the Environmental and Health Dataset from
 
 chart.Correlation(tidy_asthma[,5:9], histogram = TRUE, method = c("pearson", "kendall", "spearman"))
 ```
-The correlation matrix displays the baseline relationship between each variable. All of the correlations are above 0.51 which indicates strong correlation. As we model build we will be aware of any multicollinearity.
+
+The correlation matrix displays the baseline relationship between each variable. All of the correlations are above 0.53 which indicates strong correlation. As we model build we will be aware of any multicollinearity.
 
 # Cockroach Distribution by Boro
 ```{r, echo = FALSE}
