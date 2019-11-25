@@ -56,24 +56,14 @@ Column {data-width=650}
 -----------------------------------------------------------------------
 
 ### Chart A
-### Figuring it out still!!
+### This produces a map, but not one that tells anything interesting
 ```{r}
+#UI
+leafletOutput("tmap")
 
-tmap_mode("view")
-
-
-tmap = reactive({
-  tm_shape(tidy_asthma_sf %>% filter(uhfcode == input$neighborhood, time_period == input$year)) +
-  tm_polygons("homes_with_cockroaches", 
-              style = "quantile",
-              title = "Roach Levels in NYC Neighborhoods")
-})
-
-#OR
-
-output = renderLeaflet({
-    tmap1 = tm_shape(tidy_asthma_sf %>% filter(uhfcode == input$neighborhood, time_period == input$year)) +
+renderLeaflet({
+    tmap = tm_shape(tidy_asthma_sf %>% filter(uhfcode == input$neighborhood, time_period == input$year)) +
       tm_polygons("homes_with_cockroaches", legend.title = "Roach Levels in NYC Neighborhoods")
-    tmap_leaflet(tmap1)
+    tmap_leaflet(tmap)
 })
 ```
