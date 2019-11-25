@@ -318,38 +318,11 @@ $(document).ready(function () {
 </div>
 <div id="correlation-matrix" class="section level1">
 <h1>Correlation Matrix</h1>
-<pre><code>## Parsed with column specification:
-## cols(
-##   indicator_data_id = col_double(),
-##   indicator_id = col_double(),
-##   name = col_character(),
-##   Measure = col_character(),
-##   geo_type_name = col_character(),
-##   geo_entity_id = col_double(),
-##   year_description = col_double(),
-##   data_value = col_character(),
-##   message = col_character()
-## )</code></pre>
-<pre><code>## Warning: 3486 parsing failures.
-##  row              col expected              actual                           file
-## 5167 year_description a double Annual Average 2009 &#39;./final_data/asthma_data.csv&#39;
-## 5168 year_description a double Annual Average 2009 &#39;./final_data/asthma_data.csv&#39;
-## 5169 year_description a double Annual Average 2009 &#39;./final_data/asthma_data.csv&#39;
-## 5170 year_description a double Annual Average 2009 &#39;./final_data/asthma_data.csv&#39;
-## 5171 year_description a double Annual Average 2009 &#39;./final_data/asthma_data.csv&#39;
-## .... ................ ........ ................... ..............................
-## See problems(...) for more details.</code></pre>
-<pre><code>## Error in cor.test.default(as.numeric(x), as.numeric(y), method = method): not enough finite observations</code></pre>
-<p><img src="regression_files/figure-html/unnamed-chunk-1-1.png" width="672" /> The correlation matrix displays the baseline relationship between each variable. All of the correlations are above 0.77 which indicates strong correlation. As we model build we will be aware of any multicollinearity.</p>
+<p><img src="regression_files/figure-html/unnamed-chunk-1-1.png" width="672" /> The correlation matrix displays the baseline relationship between each variable. All of the correlations are above 0.51 which indicates strong correlation. As we model build we will be aware of any multicollinearity.</p>
 </div>
 <div id="cockroach-distribution-by-boro" class="section level1">
 <h1>Cockroach Distribution by Boro</h1>
-<pre><code>## Warning in `==.default`(year, c(&quot;2008&quot;, &quot;2011&quot;, &quot;2014&quot;)): longer object
-## length is not a multiple of shorter object length</code></pre>
-<pre><code>## Warning in is.na(e1) | is.na(e2): longer object length is not a multiple of
-## shorter object length</code></pre>
-<pre><code>## Warning: Removed 24 rows containing non-finite values (stat_ydensity).</code></pre>
-<p><img src="regression_files/figure-html/unnamed-chunk-2-1.png" width="672" /> The cockroach distribution</p>
+<p><img src="regression_files/figure-html/unnamed-chunk-2-1.png" width="672" /> Our crude relationship between childhood asthma and cockroaches in the home is demonstrated here. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation.</p>
 </div>
 <div id="linear-model-of-cockroach-presence-poverty-and-neighobrhood-on-asthma" class="section level1">
 <h1>Linear Model of Cockroach Presence, Poverty, and Neighobrhood on Asthma</h1>
