@@ -56,14 +56,20 @@ Column {data-width=650}
 -----------------------------------------------------------------------
 
 ### Chart A
-### This produces a map, but not one that tells anything interesting
-```{r}
-#UI
+### This produces a map, but not one that tells anything interesting yet
+```{r map}
+#what I would put in UI file
 leafletOutput("tmap")
 
+#what I would put in server file
 renderLeaflet({
-    tmap = tm_shape(tidy_asthma_sf %>% filter(uhfcode == input$neighborhood, time_period == input$year)) +
-      tm_polygons("homes_with_cockroaches", legend.title = "Roach Levels in NYC Neighborhoods")
-    tmap_leaflet(tmap)
+  
+  tmap = tm_shape(tidy_asthma_sf %>%
+                    filter(uhfcode == input$neighborhood,
+                           time_period == input$year)) +
+    tm_polygons("homes_with_cockroaches",
+                legend.title = "Roach Levels in NYC Neighborhoods")
+  
+  tmap_leaflet(tmap)
 })
 ```
