@@ -17,45 +17,31 @@ The dataset we used was compiled using the Environmental and Health Dataset from
 # Correlation Matrix
 ```{r, echo = FALSE, error = TRUE}
 
-asthma_data = read_csv(file = "./final_data/asthma_data.csv") %>% 
-  janitor::clean_names() %>% 
-  filter(data_value != "NULL") %>% 
-  rename(year = year_description) %>% 
-  mutate(
-    data_value = as.numeric(data_value),
-    year = as.factor(year)
-    ) %>% 
-  drop_na(year) %>% 
-  filter(str_detect(name, c("[Aa]sthma", "[Cc]ockroaches"))) %>% 
-  select(year, geo_entity_id, name, data_value) %>% 
-  pivot_wider(
-    names_from = name,
-    values_from = data_value
-  ) %>% 
-  view() %>%
-  janitor::clean_names()
-
-chart.Correlation(asthma_data[,4:10], histogram = TRUE, method = c("pearson", "kendall", "spearman"))
+chart.Correlation(tidy_asthma[,3:6], histogram = TRUE, method = c("pearson", "kendall", "spearman"))
 ```
 The correlation matrix displays the baseline relationship between each variable. All of the correlations are above 0.77 which indicates strong correlation. As we model build we will be aware of any multicollinearity.
 
 # Cockroach Distribution by Boro
 ```{r, echo = FALSE}
-violin_roaches = 
-  asthma_data %>%
-  filter(year == c("2008", "2011", "2014")) %>%
-  ggplot(aes(x = homes_with_cockroaches, y = geo_entity_id)) + 
-  geom_violin() +
-  facet_grid(~year) +
+crude_roaches = 
+  tidy_asthma %>%
+  filter(time_period == c("2011", "2014")) %>%
+  ggplot(aes(x = homes_with_cockroaches, 
+             y = public_school_children_5_14_yrs_old_with_asthma, 
+             color = homes_with_cockroaches)) + 
+  geom_point(aes(alpha = 0.5)) +
+  geom_line() +
+  viridis::scale_color_viridis(aes(x = homes_with_cockroaches)) +
+  facet_grid(~time_period) +
   labs(
     x = "Percent of Homes with Cockroaches",
-    y = "Geo Entity ID",
-    title = "Percent of Homes with Cockroaches by Geo ID per Year"
+    y = "Percent of Public School Children with Asthma",
+    title = "Percent of School Children with Asthma and Cockroaches in Home per Year"
   )
 
-violin_roaches
+crude_roaches
 ```
-The cockroach distribution 
+Our crude relationship between childhood asthma and cockroaches in the home is demonstrated here. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation. 
 
 # Linear Model of Cockroach Presence, Poverty, and Neighobrhood on Asthma
 ```{r}

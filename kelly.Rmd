@@ -10,6 +10,9 @@ library(tidyverse)
 library(dplyr)
 library(ggridges)
 library(patchwork)
+library(plotly)
+library(ggplot2)
+library(gganimate)
 ```
 
 ```{r}
@@ -23,10 +26,176 @@ mold_data=
   read_csv(file="./final_data/mold_home.csv")
 ```
 
-### Kelly vision: X : borough name , Y: Hospitalization Asthma Rate, by different boroughs 
+### Kelly vision: X : borough name , Y: Cockroach Rate, by different boroughs 
+#### Trying to include Borough's in here--using Alice's Method to include Borough name
+
+#### Vision did not work because did not really have enough time lapse for others. 
 ```{r, error = TRUE}
 overview_plot=
 all_available_data %>% 
-  filter(Name= "Public School Children ())
+  filter(Name= "Public_School_Children_ ())
 ```
 
+```{r}
+pp = tidy_asthma %>%
+  drop_na(homes_with_cockroaches) %>% 
+  mutate(
+    geo_join_id=as.numeric(geo_join_id) ) %>% 
+  ggplot(aes(x = geo_join_id, y = homes_with_cockroaches)) + 
+  geom_point(aes(colour = time_period), alpha = 0.5) +
+  labs(title = "Prevalence of Cockroaches in Different Neighborhoods",
+     x = 'Geo_ID', 
+     y = 'Rate of Homes with Cockroaches(%)'
+)
+pp
+
+# gganimate parts
+pp + transition_time(time_period) + labs(title="Year : {frame_time}")
+
+animate(pp, fps = 2, height = 600, width = 1000)
+```
+
+## using lorraine's code as a guide
+```{r}
+test_prev=
+  tidy_asthma %>% 
+  drop_na(homes_with_cockroaches) %>% 
+  mutate(
+    geo_join_id=as.numeric(geo_join_id),
+    time_period=as.factor(time_period),
+    time_period=fct_relevel(time_period, "2011"="2011", "2012"="2012", "2013" = "2013", "2014" = "2014")
+  ) %>% 
+  arrange(geo_join_id) %>% 
+  plot_ly(
+    x=~geo_join_id, 
+    y=~homes_with_cockroaches,
+    color=~geo_join_id,
+    frame=~ time_period,
+    hoverinfo= "text",
+    type="scatter",
+    mode="markers"
+  )
+
+test_prev
+  
+```
+
+
+## regression model:
+```{r}
+#set seed for reproducibility
+set.seed(10)
+#fit the full model
+test=
+  tidy_asthma %>% 
+  mutate(
+    public_school_children_5_14_yrs_old_with_asthma=as.numeric(public_school_children_5_14_yrs_old_with_asthma),
+    time_period=as.factor(time_period),
+    time_period=relevel(time_period, ref="2011"),
+    homes_with_cockroaches=as.numeric(homes_with_cockroaches),
+    poverty=as.numeric(poverty),
+    geo_join_id=as.numeric(geo_join_id)
+  )
+
+fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ time_period + homes_with_cockroaches + poverty + geo_join_id, data=test)
+
+fit
+
+test=
+  modelr::add_residuals(fit) %>% 
+  ggplot(aes(x = time_period, y = resid)) + geom_point()
+
+```
+## attempting to look at hospitalizations and Using Alice's Code
+```{r}
+all_data = 
+read.csv(file = "./final_data/all_available_data.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(name %in% c("Homes with Cockroaches", 
+                     "Poverty", 
+                     "Public School Children (5-14 Yrs Old) with Asthma", 
+                     "Public School Children (5-14 Yrs Old) with Persistent Asthma",
+                     "Asthma Hospitalizations (Children 5 to 17 Yrs Old)"),
+        geo_type_name == "UHF42", 
+        measure %in% c("Percent", "Rate").
+        geo_place_name
+         ) %>% 
+  pivot_wider(
+    names_from = name, 
+    values_from = data_value
+    ) %>% 
+  view()
+
+all_data=
+  all_data %>% 
+  mutate(
+    time_period = recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-14" = "2011")) %>%
+  filter(time_period %in% c("2011", "2012", "2013", "2014")) %>% 
+  janitor::clean_names() %>% 
+  select(geo_join_id, time_period, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma,asthma_hospitalizations_children_5_to_17_yrs_old, geo_place_name )
+````
+```{r}
+## merging using Alice's method
+df1 = 
+  all_data  %>% 
+  select(geo_join_id, time_period, measure, indicator_id, homes_with_cockroaches) %>% 
+  drop_na()
+
+
+df2 = 
+all_data %>% 
+  select(geo_join_id, time_period, measure, indicator_id, poverty) %>% 
+  drop_na()
+df2
+
+df3 = 
+  all_data %>% 
+  select(geo_join_id, time_period, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %>% 
+  drop_na()
+df3
+
+df4 = 
+  all_data %>% 
+  select(geo_join_id, time_period, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %>% 
+  drop_na()
+df4
+df5 = 
+  all_data %>% 
+  select(geo_join_id, time_period, measure, indicator_id, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
+  drop_na()
+df5
+
+
+## Joining
+tidy_asthma_hospitalization = 
+  full_join(df1, df2, by = c("geo_join_id", "time_period")) %>% 
+  full_join(df3, by = c("geo_join_id", "time_period")) %>% 
+  full_join(df4, by = c("geo_join_id", "time_period")) %>% 
+  full_join(df5, by= c("geo_join_id", "time_period")) %>% 
+  select(geo_join_id, time_period, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
+  view()
+```
+
+```{r}
+## see changes with Hospitalzation by time
+
+test_prev=
+  tidy_asthma_hospitalization %>% 
+  drop_na(asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
+  mutate(
+    geo_join_id=as.character(geo_join_id),
+   time_period = as.numeric(levels(time_period)) [time_period]
+  ) %>% 
+  arrange(geo_join_id) %>% 
+  plot_ly(
+    x=~geo_join_id, 
+    y=~asthma_hospitalizations_children_5_to_17_yrs_old,
+    color=~geo_join_id,
+    frame=~ time_period,
+    hoverinfo= "text",
+    type="scatter",
+    mode="markers"
+  )
+
+test_prev
+```
