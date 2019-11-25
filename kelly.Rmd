@@ -31,7 +31,7 @@ mold_data=
 ```{r, error = TRUE}
 overview_plot=
 all_available_data %>% 
-  filter(Name= "Public School Children ())
+  filter(Name= "Public_School_Children_ ())
 ```
 
 ```{r}
