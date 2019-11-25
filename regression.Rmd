@@ -69,4 +69,8 @@ ggplot(tidy_asthma, aes(x = homes_with_cockroaches, y = public_school_children_5
   viridis::scale_color_viridis(aes(color = poverty))
 
 ```
+```{r}
+summary(linear_model) %>%
+  knitr::kable()
+```
 

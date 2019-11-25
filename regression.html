@@ -331,6 +331,70 @@ $(document).ready(function () {
 <pre><code>## Warning: Removed 94 rows containing non-finite values (stat_smooth).</code></pre>
 <pre><code>## Warning: Removed 94 rows containing missing values (geom_point).</code></pre>
 <p><img src="regression_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>summary(linear_model) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="center">term</th>
+<th align="center">estimate</th>
+<th align="center">std.error</th>
+<th align="center">statistic</th>
+<th align="center">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td align="center">Length:4</td>
+<td align="center">Min. :-0.12146</td>
+<td align="center">Min. :0.01712</td>
+<td align="center">Min. :-0.1720</td>
+<td align="center">Min. :0.0000648</td>
+</tr>
+<tr class="even">
+<td></td>
+<td align="center">Class :character</td>
+<td align="center">1st Qu.:-0.01555</td>
+<td align="center">1st Qu.:0.37269</td>
+<td align="center">1st Qu.: 0.1203</td>
+<td align="center">1st Qu.:0.1913682</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td align="center">Mode :character</td>
+<td align="center">Median : 0.06335</td>
+<td align="center">Median :0.59864</td>
+<td align="center">Median : 0.6855</td>
+<td align="center">Median :0.5419088</td>
+</tr>
+<tr class="even">
+<td></td>
+<td align="center">NA</td>
+<td align="center">Mean :10.91469</td>
+<td align="center">Mean :2.76970</td>
+<td align="center">Mean : 1.4061</td>
+<td align="center">Mean :0.4870285</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td align="center">NA</td>
+<td align="center">3rd Qu.:10.99359</td>
+<td align="center">3rd Qu.:2.99566</td>
+<td align="center">3rd Qu.: 1.9714</td>
+<td align="center">3rd Qu.:0.8375692</td>
+</tr>
+<tr class="even">
+<td></td>
+<td align="center">NA</td>
+<td align="center">Max. :43.65353</td>
+<td align="center">Max. :9.86440</td>
+<td align="center">Max. : 4.4254</td>
+<td align="center">Max. :0.8642316</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
