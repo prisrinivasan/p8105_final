@@ -119,6 +119,7 @@ tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id
 #changing geometry to latitude and longitude
 tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
 
+#creating color palette Blues for cockroaches
 pal = colorQuantile("Blues", tidy_asthma_sf_ll$homes_with_cockroaches, n = 7)
 ```
 

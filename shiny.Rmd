@@ -15,11 +15,83 @@ library(leaflet)
 library(plotly)
 library(shiny)
 library(sf)
+library(sp)
 library(tmap)
 library(devtools)
+library(rgdal)
 library(rsconnect)
 
 ```
+
+```{r}
+all_data = 
+read.csv(file = "./attempt/final_data/all_available_data.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(name %in% c("Homes with Cockroaches", 
+                     "Poverty", 
+                     "Public School Children (5-14 Yrs Old) with Asthma", 
+                     "Public School Children (5-14 Yrs Old) with Persistent Asthma", 
+                     "Asthma Hospitalizations (Children 5 to 17 Yrs Old)"),
+        geo_type_name %in% c("UHF42", "Borough"), 
+        measure %in% c("Percent", "Rate")
+         ) %>% 
+  mutate(geo_join_id = as.character(geo_join_id),
+         geo_join_id = if_else(geo_place_name == "Bensonhurst - Bay Ridge", "209", geo_join_id),
+         geo_join_id = as.factor(geo_join_id)) %>% 
+  pivot_wider(
+    names_from = name, 
+    values_from = data_value
+    ) %>%
+  mutate(time_period = recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-14" = "2011")) %>%
+  filter(time_period %in% c("2011", "2012", "2013", "2014")) %>% 
+  janitor::clean_names() %>% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old)
+
+df1 = all_data  %>% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches) %>% 
+  drop_na()
+
+df2 = all_data %>% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, poverty) %>% 
+  drop_na()
+
+df3 = all_data %>% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %>% 
+  drop_na()
+
+df4 = all_data %>% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %>% 
+  drop_na()
+
+df5 = all_data %>% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
+  drop_na()
+
+## Joining
+tidy_asthma = 
+  full_join(df1, df2, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
+  full_join(df3, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
+  full_join(df4, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
+  full_join(df5, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
+  view()
+
+#shp = st_read("./attempt/final_data/shapefiles/", quiet = TRUE)
+write.table(shp, "./attempt/final_data/shape1.txt", sep = "\t")
+shape = read.table(file = "./attempt/final_data/shape.txt", sep = "@", fill = TRUE, header = TRUE)
+
+tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id") %>% 
+  janitor::clean_names() %>% 
+  mutate(uhfcode = as.character(uhfcode),
+         time_period = as.character(time_period),
+         homes_with_cockroaches = as.numeric(homes_with_cockroaches))
+
+#changing geometry to latitude and longitude
+tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
+
+pal = colorQuantile("Blues", tidy_asthma_sf_ll$homes_with_cockroaches, n = 7)
+```
+
 
 Column {.sidebar}
 -----------------------------------------------------------------------
@@ -68,22 +140,19 @@ Column {data-width=650}
 
 ### Chart A
 ```{r}
-#
-tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
 
-#what I would put in UI file
-leaf_input = reactive({
-  tidy_asthma_sf_ll %>%
-    mutate(borough = map(borough, func, input$borough)) %>% 
+renderLeaflet({tidy_asthma_sf_ll %>%
+    mutate(borough = map(borough, func, input$borough),
+           roach_label = str_c("Homes with Cockroaches", homes_with_cockroaches, "\n , Neighborhood: ", uhf_neigh)) %>% 
     filter(borough == TRUE,
-           time_period == input$year)
-})
-
-renderLeaflet({ 
-  leaf_input() %>% 
+           time_period == input$year) %>% 
     leaflet() %>%
-    addPolygons() %>%
-    addTiles()
+    addProviderTiles("CartoDB.Positron") %>%
+    addPolygons(stroke = FALSE,
+                color = ~pal(homes_with_cockroaches),
+                fillOpacity = 0.7,
+                smoothFactor = 0.2,
+                label = ~roach_label)
   })
 
 
