@@ -92,7 +92,8 @@ tidy_asthma =
   full_join(df5, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
   select(geo_type_name, geo_join_id, time_period, geo_place_name, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
   mutate(time_period = as.numeric(levels(time_period)) [time_period],
-         geo_join_id = as.character(as.numeric(levels(geo_join_id)) [geo_join_id])) %>%
+         geo_join_id = as.character(as.numeric(levels(geo_join_id)) [geo_join_id]),
+         geo_place_name = as.character(geo_place_name)) %>%
   view()
 ```
 
@@ -126,7 +127,7 @@ p4 =
 ```
 
 ```{r}
-plot_1 =
+plot_uhf_asthma =
   tidy_asthma %>%
   filter(geo_type_name == "UHF42") %>%
   arrange(geo_join_id) %>%
@@ -141,11 +142,11 @@ plot_1 =
     mode = 'markers'
   )
   
-plot_1
+plot_uhf_asthma
 ```
 
 ```{r}
-plot_2 =
+plot_uhf_persistent =
   tidy_asthma %>%
   filter(geo_type_name == "UHF42") %>%
   arrange(geo_join_id) %>%
@@ -160,11 +161,53 @@ plot_2 =
     mode = 'markers'
   )
 
-plot_2
+plot_uhf_persistent
 ```
 
 ```{r}
-subplot(plot_1, plot_2)
+subplot(plot_uhf_asthma, plot_uhf_persistent)
+```
+
+testing different types of plots for asthma variables
+
+BAR CHARTS
+
+```{r}
+plot_borough_asthma =
+  tidy_asthma %>%
+  filter(geo_type_name == "Borough") %>%
+  arrange(geo_join_id) %>%
+  plot_ly(
+    x = ~geo_place_name, 
+    y = ~public_school_children_5_14_yrs_old_with_asthma, 
+    color = ~geo_place_name,
+    text = ~geo_place_name,
+    frame = ~time_period,
+    hovertemplate = paste("<b>%{x}</b><br>",
+                          "<i>Rate</i>: %{y:.2f}"),
+    type = 'bar'
+  )
+
+plot_borough_asthma
+```
+
+```{r}
+plot_borough_persistent =
+  tidy_asthma %>%
+  filter(geo_type_name == "Borough") %>%
+  arrange(geo_join_id) %>%
+  plot_ly(
+    x = ~geo_place_name, 
+    y = ~public_school_children_5_14_yrs_old_with_persistent_asthma, 
+    color = ~geo_place_name,
+    text = ~geo_place_name,
+    frame = ~time_period,
+    hovertemplate = paste("<b>%{x}</b><br>",
+                          "<i>Rate</i>: %{y:.2f}"),
+    type = 'bar'
+  )
+
+plot_borough_persistent
 ```
 
 test_2 = 
