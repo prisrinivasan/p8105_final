@@ -55,18 +55,26 @@ Our crude relationship between childhood asthma and cockroaches in the home is d
 
 set.seed(10)
 library(ggplot2)
+
+ggplot_data = 
+tidy_asthma %>%
+  filter(time_period == c("2011", "2014"))
   
 linear_model = 
-  lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty, data = tidy_asthma) %>%
-  broom::tidy()
+  lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * time_period * geo_join_id, data = ggplot_data) %>%
+  broom::tidy() 
 
-ggplot(tidy_asthma, aes(x = homes_with_cockroaches, y = public_school_children_5_14_yrs_old_with_asthma, color = poverty)) +
+plot_tidy = 
+ggplot(ggplot_data, aes(x = homes_with_cockroaches, y = public_school_children_5_14_yrs_old_with_asthma, color = geo_join_id)) +
   geom_point() + 
   geom_smooth(method = "lm") +
+  facet_grid(~time_period) +
   labs(x = "Percent of Homes with Cockroaches",
        y = "Percent of School Children with Asthma",
-       title = "Effect of Homes with Cockroaches on Childhood Asthma adjusting for Poverty") +
-  viridis::scale_color_viridis(aes(color = poverty))
+       title = "Effect of Homes with Cockroaches on Childhood Asthma adjusting for Neighborhood") +
+  viridis::scale_color_viridis(aes(color = geo_join_id), discrete = FALSE)
+
+plot_tidy
 
 ```
 

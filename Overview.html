@@ -16,10 +16,13 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -103,33 +106,33 @@ summary {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 60px;
+  padding-top: 61px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h2 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h3 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h4 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h5 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .section h6 {
-  padding-top: 65px;
-  margin-top: -65px;
+  padding-top: 66px;
+  margin-top: -66px;
 }
 .dropdown-submenu {
   position: relative;
@@ -232,7 +235,6 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
-  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -249,6 +251,63 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -256,6 +315,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -313,30 +382,40 @@ $(document).ready(function () {
 </div>
 
 
-<div id="cockroach-prevalence-in-new-york-city" class="section level2">
-<h2>Cockroach Prevalence in New York City</h2>
-<div id="why-should-we-care" class="section level3">
-<h3>Why should we care?</h3>
+<div id="cockroach-prevalence-in-new-york-city" class="section level1">
+<h1>Cockroach Prevalence in New York City</h1>
+<div id="why-should-we-care" class="section level2">
+<h2>Why should we care?</h2>
+<p>In 2017, 15.6% of households <a href="http://www.sternenvironmental.com/blog/2017/04/18/nyc-breaks-the-top-ten-list-for-worst-rat-and-cockroach-problems/">reported</a> having pest infestations. One of the most common pests in NYC is cockroaches. As temperatures rise, cockroach populations are <a href="https://gothamist.com/arts-entertainment/its-summer-in-nyc-and-the-cockroaches-have-taken-flight">expected</a> to increase, posing additional public health challenges, particularly among those who have asthma or respiratory reactions to cockroaches.</p>
+<p>Because of this, we want to take a life course perspective and look at how hospitalization rates among children ages 0-4 are affected by prevalence of cockroaches in their homes.</p>
 <ul>
-<li>In 2017, 15.6% of households <a href="http://www.sternenvironmental.com/blog/2017/04/18/nyc-breaks-the-top-ten-list-for-worst-rat-and-cockroach-problems/">reported</a> having pest infestations. One of the most common pests in NYC is cockroaches. As temperatures rise, cockroach populations are <a href="https://gothamist.com/arts-entertainment/its-summer-in-nyc-and-the-cockroaches-have-taken-flight">expected</a> to increase, posing additional public health challenges, particularly among those who have asthma or respiratory reactions to cockroaches.<br />
-</li>
-<li>According to the <a href="https://www.cdc.gov/pcd/issues/2019/19_0074.htm">CDC</a>, approximately 1 in 101 schoolchildren in the United States have asthma. Of those with asthma, 49% have missed at least one day of school, costing billions of dollars in <a href="https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pubmed/23769497/">health care use</a>.</li>
-<li><a href="https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pmc/articles/PMC4803579/">Studies</a> showed that allergens trigger asthma attacks in 60-90% of children and in 50% of adults. Exposure to indoor environmental allergens such as cockroach, house dust mite, mice, pollen, and mold can induce allergic asthma. On average, in the United States, the prevalence of cockroach allergy ranges from 17-41% ; Cockroach allergens are detected in 85% of inner-city U.S.homes.</li>
+<li>Insert Map Here</li>
 </ul>
 </div>
-<div id="insert-map-here" class="section level3">
-<h3>Insert Map Here</h3>
+<div id="asthma-hospitalization-by-borough-graph" class="section level2">
+<h2>Asthma Hospitalization by Borough Graph</h2>
 </div>
-<div id="asthma-hospitalization-by-borough-graph" class="section level3">
-<h3>Asthma Hospitalization by Borough Graph</h3>
+<div id="cockroach-prevalence-by-borough-graph" class="section level2">
+<h2>Cockroach Prevalence by Borough Graph</h2>
 </div>
-<div id="cockroach-prevalence-by-borough-graph" class="section level3">
-<h3>Cockroach Prevalence by Borough Graph</h3>
+<div id="related-work" class="section level2">
+<h2>Related work</h2>
+</div>
+<div id="initial-questions" class="section level2">
+<h2>Initial Questions</h2>
+</div>
+<div id="data" class="section level2">
+<h2>Data</h2>
+</div>
+<div id="exploratory-analysis" class="section level2">
+<h2>Exploratory analysis</h2>
 </div>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -369,6 +448,32 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
