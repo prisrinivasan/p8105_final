@@ -16,7 +16,7 @@ navbar:
       - text: "Exploratory Analyses"
         href: regression.html
       - text: "Shiny Map"
-        href: http://127.0.0.1:3190/shiny.Rmd
+        href: https://prisrinivasan.shinyapps.io/roach_shiny/
 
 output:
   html_document:

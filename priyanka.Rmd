@@ -163,7 +163,7 @@ Leaflet:
 
 ```{r}
 tidy_asthma_sf_ll %>%
-    mutate(roach_label = str_c("Homes with Cockroaches: ", homes_with_cockroaches, "\n , Neighborhood: ", uhf_neigh)) %>% 
+    mutate(roach_label = str_c("Homes with Cockroaches: ", homes_with_cockroaches, "\n, Neighborhood: ", uhf_neigh)) %>% 
     filter(time_period == 2011) %>% 
     leaflet() %>%
     addProviderTiles("CartoDB.Positron") %>%
@@ -173,4 +173,22 @@ tidy_asthma_sf_ll %>%
                 smoothFactor = 0.2,
                 label = ~roach_label)
 ```
+
+
+The unused ggplot for shiny:
+```{r}
+Row
+-----------------------------------------------------------------------
+
+plot = renderPlot({tidy_asthma_sf_ll %>% 
+    mutate(borough = map(borough, func, input$borough),
+           roach_label = str_c("Homes with Cockroaches: ", homes_with_cockroaches, "\n , Neighborhood: ", uhf_neigh)) %>% 
+    filter(borough == TRUE,
+           time_period == input$year) %>%
+    ggplot() +
+    geom_sf(aes(fill = homes_with_cockroaches), show.legend = "polygon")
+})
+
+```
+
 
