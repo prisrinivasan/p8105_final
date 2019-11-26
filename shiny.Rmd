@@ -7,7 +7,7 @@ output:
 runtime: shiny
 ---
 
-```{r, include=FALSE, echo=FALSE}
+```{r, message = FALSE, warning = FALSE, include=FALSE, echo=FALSE}
 library(flexdashboard)
 library(tidyverse)
 library(viridis)
@@ -20,10 +20,9 @@ library(tmap)
 library(devtools)
 library(rgdal)
 library(rsconnect)
-
 ```
 
-```{r}
+```{r, message = FALSE, warning = FALSE, include=FALSE}
 all_data = 
 read.csv(file = "./final_data/all_available_data.csv") %>% 
   janitor::clean_names() %>% 
@@ -77,6 +76,8 @@ tidy_asthma =
   view()
 
 shape = st_read("./final_data/shapefiles/", quiet = TRUE)
+#write.table(shp, "./attempt/final_data/shape1.txt", sep = "\t")
+#shape = read.table(file = "./attempt/final_data/shape.txt", sep = "@", fill = TRUE, header = TRUE)
 
 tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id") %>% 
   janitor::clean_names() %>% 
@@ -90,20 +91,10 @@ tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
 pal = colorQuantile("Blues", tidy_asthma_sf_ll$homes_with_cockroaches, n = 7)
 ```
 
-
 Column {.sidebar}
 -----------------------------------------------------------------------
 
-```{r}
-tidy_asthma = read_csv(file = "./final_data/tidy_asthma.csv")
-
-shape = st_read("./final_data/shapefiles/", quiet = TRUE)
-
-tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id") %>% 
-  janitor::clean_names() %>% 
-  mutate(uhfcode = as.character(uhfcode),
-         time_period = as.character(time_period))
-
+```{r, echo=FALSE}
 year = as.character(c("2011", "2012", "2013", "2014"))
 
 #selectInput for year choices
@@ -118,11 +109,9 @@ borough = c("Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island")
 
 #function for borough choices
 func = function(element, borough) {
-  if(element %in% borough) {
+  if (element %in% borough) {
     TRUE} else{
-    FALSE
-  }
-}
+      FALSE}}
 
 #checkboxes
 checkboxGroupInput(
@@ -131,14 +120,14 @@ checkboxGroupInput(
   choices = borough,
   selected = "Manhattan")
 
+hr()
 ```
 
 Column {data-width=650}
 -----------------------------------------------------------------------
 
 ### Chart A
-```{r}
-
+```{r, echo = FALSE}
 renderLeaflet({tidy_asthma_sf_ll %>%
     mutate(borough = map(borough, func, input$borough),
            roach_label = str_c("Homes with Cockroaches", homes_with_cockroaches, "\n , Neighborhood: ", uhf_neigh)) %>% 
@@ -152,19 +141,4 @@ renderLeaflet({tidy_asthma_sf_ll %>%
                 smoothFactor = 0.2,
                 label = ~roach_label)
   })
-
-
-#what I would put in server file
-#renderLeaflet({
-  
-  #tmap = tm_shape(tidy_asthma_sf %>%
-                    #mutate(borough = map(borough, func, input$borough)) %>% 
-                    #filter(borough == TRUE,
-                           #time_period == input$year)) +
-    #tm_polygons("homes_with_cockroaches",
-                #text = "uhf_neigh",
-                #legend.title = "Roach Levels in NYC Neighborhoods")
-  
-  #tmap_leaflet(tmap)
-#})
 ```
