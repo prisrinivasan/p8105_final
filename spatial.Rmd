@@ -1,0 +1,62 @@
+---
+title: "Spatial"
+author: "Alice Tivarovsky"
+date: "11/25/2019"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(plotly)
+library(tmap)
+library(sf)
+library(maptools)
+library(viridis)
+
+```
+
+Get data: 
+```{r}
+roaches = 
+  read_csv("./final_data/tidy_asthma.csv") 
+```
+
+Cockroach prevalence by UHF: 
+
+```{r}
+roach_prev = 
+  roaches %>% 
+  filter(
+    geo_type_name == "UHF42", 
+    time_period == 2011) %>% 
+  select(geo_join_id, homes_with_cockroaches)
+```
+
+Reading in shape files: 
+
+```{r}
+uhf_map = 
+  st_read("./final_data/shapefiles/") %>% 
+  rename(geo_join_id = UHFCODE) %>% 
+  filter()
+
+str(uhf_map)
+```
+
+```{r}
+roaches_map = left_join(uhf_map, roach_prev, by = "geo_join_id")
+```
+
+```{r}
+
+tm_shape(roaches_map) + 
+  tm_polygons("homes_with_cockroaches", id = "geo_join_id", palette = "viridis")
+
+tmap_mode("view")
+tmap_last
+```
+
