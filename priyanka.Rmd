@@ -27,11 +27,13 @@ knitr::opts_chunk$set(
 theme_set(theme_bw() + theme(legend.position = "bottom"))
 ```
 
-Edits from Alice's code to:
+Edits below from Alice's code to:
 
   * recode `Bensonhurst - Bay Ridge` as `209`
   * add hospitalization variable
   * add geo_place_name variable
+
+These are saved as `tidy_asthma.csv` in our data folder.
 
 ```{r tidying data, message=FALSE, include=FALSE}
 all_data = 
