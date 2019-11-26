@@ -25,9 +25,6 @@ Asthma_data=
 
 mold_data=
   read_csv(file="./final_data/mold_home.csv")
-
-tidy_asthma=
-  read_csv(file="./final_data/tidy_asthma.csv")
 ```
 
 ### Kelly vision: X : borough name , Y: Cockroach Rate, by different boroughs 
@@ -40,7 +37,7 @@ all_available_data %>%
   filter(Name= "Public_School_Children_ ())
 ```
 
-```{r}
+```{r, error = TRUE}
 pp = tidy_asthma %>%
   drop_na(homes_with_cockroaches) %>% 
   mutate(
@@ -84,6 +81,32 @@ test_prev
   
 ```
 
+
+## regression model:
+```{r, error = TRUE}
+#set seed for reproducibility
+set.seed(10)
+#fit the full model
+test=
+  tidy_asthma %>% 
+  mutate(
+    public_school_children_5_14_yrs_old_with_asthma=as.numeric(public_school_children_5_14_yrs_old_with_asthma),
+    time_period=as.factor(time_period),
+    time_period=relevel(time_period, ref="2011"),
+    homes_with_cockroaches=as.numeric(homes_with_cockroaches),
+    poverty=as.numeric(poverty),
+    geo_join_id=as.numeric(geo_join_id)
+  )
+
+fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id, data=test)
+
+fit
+
+test=
+  modelr::add_residuals(fit) %>% 
+  ggplot(aes(x = geo_join_id, y = resid)) + geom_point()
+
+```
 ## attempting to look at hospitalizations and Using Alice's Code
 ```{r}
 all_data = 
@@ -95,7 +118,7 @@ read.csv(file = "./final_data/all_available_data.csv") %>%
                      "Public School Children (5-14 Yrs Old) with Persistent Asthma",
                      "Asthma Hospitalizations (Children 5 to 17 Yrs Old)"),
         geo_type_name == "UHF42", 
-        measure %in% c("Percent", "Rate").
+        measure %in% c("Percent", "Rate"),
         geo_place_name
          ) %>% 
   pivot_wider(
@@ -157,84 +180,23 @@ tidy_asthma_hospitalization =
 ```{r}
 ## see changes with Hospitalzation by time
 
-plot_borough_hospitalization=
-  tidy_asthma %>% 
+test_prev=
+  tidy_asthma_hospitalization %>% 
   drop_na(asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
-  filter(geo_type_name == "Borough")  %>% 
-  arrange(geo_join_id) %>% 
-  plot_ly(
-    x = ~geo_place_name, 
-    y=~asthma_hospitalizations_children_5_to_17_yrs_old,
-    color=~geo_place_name,
-    text=~geo_place_name,
-    frame=~ time_period,
-    hoverinfo= "text",
-    type="scatter",
-    mode="markers"
-  )
-
-plot_borough_hospitalization
-
-plot_UHF_hospitalization=
-  tidy_asthma %>% 
-  drop_na(asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
-  filter(geo_type_name == "UHF42")  %>% 
+  mutate(
+    geo_join_id=as.character(geo_join_id),
+   time_period = as.numeric(levels(time_period)) [time_period]
+  ) %>% 
   arrange(geo_join_id) %>% 
   plot_ly(
     x=~geo_join_id, 
     y=~asthma_hospitalizations_children_5_to_17_yrs_old,
-    color=~geo_place_name,
-    text=~geo_place_name,
+    color=~geo_join_id,
     frame=~ time_period,
     hoverinfo= "text",
     type="scatter",
     mode="markers"
   )
 
-plot_UHF_hospitalization
-
-
-```
-
-
-## regression model:
-```{r}
-#set seed for reproducibility
-set.seed(10)
-#fitting the full model
-test=
-  tidy_asthma %>% 
-  mutate(
-    public_school_children_5_14_yrs_old_with_asthma=as.numeric(public_school_children_5_14_yrs_old_with_asthma),
-    time_period=as.factor(time_period),
-    time_period=relevel(time_period, ref="2011"),
-    homes_with_cockroaches=as.numeric(homes_with_cockroaches),
-    poverty=as.numeric(poverty),
-    geo_join_id=as.numeric(geo_join_id)
-  )
-
-## Model 1
-model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id, data=test)
-
-model1_fit
-
-## Model 2
-model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id, data=test)
-
-##Model 3
-model3_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id*time_period, data=test)
-
-# Looking at residuals 
-residual_1=
-  modelr::add_residuals(tidy_asthma, model1_fit) %>% 
-  ggplot(aes(x = time_period, y = resid)) + geom_point()
-
-residual_2=
-  modelr::add_residuals(tidy_asthma, model2_fit) %>% 
-  ggplot(aes(x = time_period, y = resid)) + geom_point()
-
-residual_3=
-  modelr::add_residuals(tidy_asthma, model3_fit) %>% 
-  ggplot(aes(x = time_period, y = resid)) + geom_point()
-
+test_prev
 ```
