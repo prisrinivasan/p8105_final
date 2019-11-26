@@ -312,20 +312,90 @@ $(document).ready(function () {
 </div>
 
 
-<div id="crude-asthma-rate-analysis-with-neighborhood-poverty-and-pest-predictors" class="section level1">
-<h1>Crude Asthma Rate Analysis with Neighborhood, Poverty, and Pest Predictors</h1>
-<p>Method The dataset we used was compiled using the Environmental and Health Dataset from the NYC Health Department. We selected variables based on our preliminary hypothesis regarding asthma, poverty, neighborhood, cockroaches, and school children</p>
+<div id="method" class="section level2">
+<h2><em>Method</em></h2>
+<p>The dataset we used was compiled using the Environmental and Health Dataset from the NYC Health Department. We selected variables based on our preliminary hypothesis regarding asthma, poverty, neighborhood, cockroaches, and school children. These analyses are exploring the correlations and relationships. The correlation matrix displays associations between all of our predictors and outcome to indicate any multicollinearity. The crude analysis shows the crude relationship between cockroach presence and childhood asthma. Finally, the linear model demonstrates the model with all of our predictors against our outcome.</p>
 </div>
-<div id="correlation-matrix" class="section level1">
-<h1>Correlation Matrix</h1>
-<p><img src="regression_files/figure-html/unnamed-chunk-1-1.png" width="672" /> The correlation matrix displays the baseline relationship between each variable. All of the correlations are above 0.51 which indicates strong correlation. As we model build we will be aware of any multicollinearity.</p>
+<div id="correlation-matrix" class="section level2">
+<h2><em>Correlation Matrix</em></h2>
+<p><img src="regression_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>The correlation matrix displays the baseline relationship between each variable. All of the correlations are above 0.53 which indicates strong correlation. As we model build we will be aware of any multicollinearity.</p>
 </div>
-<div id="cockroach-distribution-by-boro" class="section level1">
-<h1>Cockroach Distribution by Boro</h1>
-<p><img src="regression_files/figure-html/unnamed-chunk-2-1.png" width="672" /> Our crude relationship between childhood asthma and cockroaches in the home is demonstrated here. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation.</p>
+<div id="crude-association-between-childhood-asthma-and-cockroaches-in-the-home" class="section level2">
+<h2><em>Crude Association between Childhood Asthma and Cockroaches in the Home</em></h2>
+<p><img src="regression_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Our crude relationship between childhood asthma and cockroaches in the home is demonstrated here. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation.</p>
 </div>
-<div id="linear-model-of-cockroach-presence-poverty-and-neighobrhood-on-asthma" class="section level1">
-<h1>Linear Model of Cockroach Presence, Poverty, and Neighobrhood on Asthma</h1>
+<div id="linear-model-of-cockroach-presence-poverty-and-neighobrhood-on-asthma" class="section level2">
+<h2><em>Linear Model of Cockroach Presence, Poverty, and Neighobrhood on Asthma</em></h2>
+<pre><code>## Warning: Removed 94 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 94 rows containing missing values (geom_point).</code></pre>
+<p><img src="regression_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="table-of-the-values-in-linear-model" class="section level2">
+<h2><em>Table of the Values in Linear Model</em></h2>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="center">term</th>
+<th align="center">estimate</th>
+<th align="center">std.error</th>
+<th align="center">statistic</th>
+<th align="center">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td align="center">Length:4</td>
+<td align="center">Min. :-0.12146</td>
+<td align="center">Min. :0.01712</td>
+<td align="center">Min. :-0.1720</td>
+<td align="center">Min. :0.0000648</td>
+</tr>
+<tr class="even">
+<td></td>
+<td align="center">Class :character</td>
+<td align="center">1st Qu.:-0.01555</td>
+<td align="center">1st Qu.:0.37269</td>
+<td align="center">1st Qu.: 0.1203</td>
+<td align="center">1st Qu.:0.1913682</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td align="center">Mode :character</td>
+<td align="center">Median : 0.06335</td>
+<td align="center">Median :0.59864</td>
+<td align="center">Median : 0.6855</td>
+<td align="center">Median :0.5419088</td>
+</tr>
+<tr class="even">
+<td></td>
+<td align="center">NA</td>
+<td align="center">Mean :10.91469</td>
+<td align="center">Mean :2.76970</td>
+<td align="center">Mean : 1.4061</td>
+<td align="center">Mean :0.4870285</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td align="center">NA</td>
+<td align="center">3rd Qu.:10.99359</td>
+<td align="center">3rd Qu.:2.99566</td>
+<td align="center">3rd Qu.: 1.9714</td>
+<td align="center">3rd Qu.:0.8375692</td>
+</tr>
+<tr class="even">
+<td></td>
+<td align="center">NA</td>
+<td align="center">Max. :43.65353</td>
+<td align="center">Max. :9.86440</td>
+<td align="center">Max. : 4.4254</td>
+<td align="center">Max. :0.8642316</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 

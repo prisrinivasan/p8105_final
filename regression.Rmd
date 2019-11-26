@@ -8,73 +8,25 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(PerformanceAnalytics)
-
-all_data = 
-read.csv(file = "./final_data/all_available_data.csv") %>% 
-  janitor::clean_names() %>% 
-  filter(name %in% c("Homes with Cockroaches", 
-                     "Poverty", 
-                     "Public School Children (5-14 Yrs Old) with Asthma", 
-                     "Public School Children (5-14 Yrs Old) with Persistent Asthma"),
-        geo_type_name == "UHF42", 
-        measure %in% c("Percent", "Rate")
-         ) %>% 
-  pivot_wider(
-    names_from = name, 
-    values_from = data_value
-    ) %>% 
-    janitor::clean_names() %>% 
-  dplyr::select(geo_join_id, poverty, time_period, measure, indicator_id,homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma) %>% 
-  dplyr::mutate(time_period = recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-14" = "2011")) %>%
-  filter(time_period %in% c("2011", "2012", "2013", "2014")) %>% 
-  dplyr::select(geo_join_id, time_period, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma)
-
-df1 = 
-  all_data %>% 
-  select(geo_join_id, time_period, measure, indicator_id, homes_with_cockroaches) %>% 
-  drop_na()
-
-
-df2 = 
-all_data %>% 
-  select(geo_join_id, time_period, measure, indicator_id, poverty) %>% 
-  drop_na()
-df2
-
-df3 = 
-  all_data %>% 
-  select(geo_join_id, time_period, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %>% 
-  drop_na()
-df3
-
-df4 = 
-  all_data %>% 
-  select(geo_join_id, time_period, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %>% 
-  drop_na()
-df4
-
-## Joining
-tidy_asthma = 
-  full_join(df1, df2, by = c("geo_join_id", "time_period")) %>% 
-  full_join(df3, by = c("geo_join_id", "time_period")) %>% 
-  full_join(df4, by = c("geo_join_id", "time_period")) %>% 
-  select(geo_join_id, time_period, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma) %>% 
-  view()
   
+tidy_asthma = 
+  read_csv(file = "./final_data/tidy_asthma.csv")
+
+tidy_asthma 
 ```
-# Crude Asthma Rate Analysis with Neighborhood, Poverty, and Pest Predictors
 
-Method
-The dataset we used was compiled using the Environmental and Health Dataset from the NYC Health Department. We selected variables based on our preliminary hypothesis regarding asthma, poverty, neighborhood, cockroaches, and school children 
+## _Method_
+The dataset we used was compiled using the Environmental and Health Dataset from the NYC Health Department. We selected variables based on our preliminary hypothesis regarding asthma, poverty, neighborhood, cockroaches, and school children. These analyses are exploring the correlations and relationships. The correlation matrix displays associations between all of our predictors and outcome to indicate any multicollinearity. The crude analysis shows the crude relationship between cockroach presence and childhood asthma. Finally, the linear model demonstrates the model with all of our predictors against our outcome. 
 
-# Correlation Matrix
+## _Correlation Matrix_
 ```{r, echo = FALSE}
 
-chart.Correlation(tidy_asthma[,3:6], histogram = TRUE, method = c("pearson", "kendall", "spearman"))
+chart.Correlation(tidy_asthma[,5:9], histogram = TRUE, method = c("pearson", "kendall", "spearman"))
 ```
-The correlation matrix displays the baseline relationship between each variable. All of the correlations are above 0.51 which indicates strong correlation. As we model build we will be aware of any multicollinearity.
 
-# Cockroach Distribution by Boro
+The correlation matrix displays the baseline relationship between each variable. All of the correlations are above 0.53 which indicates strong correlation. As we model build we will be aware of any multicollinearity.
+
+## _Crude Association between Childhood Asthma and Cockroaches in the Home_
 ```{r, echo = FALSE}
 
 crude_roaches = 
@@ -95,10 +47,32 @@ crude_roaches =
 
 crude_roaches
 ```
+
 Our crude relationship between childhood asthma and cockroaches in the home is demonstrated here. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation. 
 
-# Linear Model of Cockroach Presence, Poverty, and Neighobrhood on Asthma
-```{r}
+## _Linear Model of Cockroach Presence, Poverty, and Neighobrhood on Asthma_
+```{r, echo = FALSE}
 
+set.seed(10)
+library(ggplot2)
+  
+linear_model = 
+  lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty, data = tidy_asthma) %>%
+  broom::tidy()
+
+ggplot(tidy_asthma, aes(x = homes_with_cockroaches, y = public_school_children_5_14_yrs_old_with_asthma, color = poverty)) +
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  labs(x = "Percent of Homes with Cockroaches",
+       y = "Percent of School Children with Asthma",
+       title = "Effect of Homes with Cockroaches on Childhood Asthma adjusting for Poverty") +
+  viridis::scale_color_viridis(aes(color = poverty))
+
+```
+
+## _Table of the Values in Linear Model_
+```{r, echo = FALSE}
+summary(linear_model) %>%
+  knitr::kable()
 ```
 
