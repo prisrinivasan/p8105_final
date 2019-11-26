@@ -13,6 +13,7 @@ library(patchwork)
 library(plotly)
 library(ggplot2)
 library(gganimate)
+
 ```
 
 ```{r}
@@ -53,7 +54,7 @@ pp = tidy_asthma %>%
 pp
 
 # gganimate parts
-pp + transition_time(time_period) + labs(title="Year : {frame_time}")
+pp + transition_time(time_period) + labs(title="Year:{frame_time}")
 
 animate(pp, fps = 2, height = 600, width = 1000)
 ```
