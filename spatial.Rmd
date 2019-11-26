@@ -1,0 +1,104 @@
+---
+title: "Spatial"
+author: "Alice Tivarovsky"
+date: "11/25/2019"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(plotly)
+library(tmap)
+library(sf)
+library(maptools)
+library(viridis)
+library(leaflet)
+library(RColorBrewer)
+
+```
+
+Get data: 
+```{r}
+prev_data = 
+  read_csv("./final_data/tidy_asthma.csv") 
+```
+
+## Cockroach Maps
+
+Cockroach prevalence by UHF: 
+
+```{r}
+roach_prev = 
+  prev_data %>% 
+  filter(
+    geo_type_name == "UHF42", 
+    time_period == 2011) %>% 
+  select(geo_join_id, homes_with_cockroaches)
+```
+
+Reading in shape files: 
+
+```{r}
+uhf_map = 
+  st_read("./final_data/shapefiles/") %>% 
+  rename(geo_join_id = UHFCODE) %>% 
+  filter()
+
+str(uhf_map)
+```
+
+```{r}
+roaches_map = left_join(uhf_map, roach_prev, by = "geo_join_id")
+```
+
+```{r}
+pal = brewer.pal(6,"BuGn")
+pal
+
+tm_shape(roaches_map) + 
+  tm_polygons("homes_with_cockroaches", id = "geo_join_id", palette = "BuGn")
+
+tmap_mode("view")
+tmap_last
+```
+
+## Asthma Maps
+
+Asthma prevalence by UHF
+
+```{r}
+asthma_prev = 
+  prev_data %>% 
+  filter(
+    geo_type_name == "UHF42", 
+    time_period == 2011) %>% 
+  select(geo_join_id, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma)
+
+```
+
+
+```{r}
+asthma_map = left_join(uhf_map, asthma_prev, by = "geo_join_id")
+```
+
+```{r}
+tm_shape(asthma_map) + 
+  tm_polygons("public_school_children_5_14_yrs_old_with_asthma", id = "geo_join_id", palette = "BuGn")
+
+tmap_mode("view")
+tmap_last
+```
+
+
+```{r}
+tm_shape(asthma_map) + 
+  tm_polygons("public_school_children_5_14_yrs_old_with_persistent_asthma", id = c("geo_join_id"), palette = "BuGn")
+
+tmap_mode("view")
+tmap_last
+```
+

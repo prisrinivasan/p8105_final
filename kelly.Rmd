@@ -13,6 +13,7 @@ library(patchwork)
 library(plotly)
 library(ggplot2)
 library(gganimate)
+
 ```
 
 ```{r}
@@ -36,7 +37,7 @@ all_available_data %>%
   filter(Name= "Public_School_Children_ ())
 ```
 
-```{r}
+```{r, error = TRUE}
 pp = tidy_asthma %>%
   drop_na(homes_with_cockroaches) %>% 
   mutate(
@@ -50,7 +51,7 @@ pp = tidy_asthma %>%
 pp
 
 # gganimate parts
-pp + transition_time(time_period) + labs(title="Year : {frame_time}")
+pp + transition_time(time_period) + labs(title="Year:{frame_time}")
 
 animate(pp, fps = 2, height = 600, width = 1000)
 ```
@@ -82,7 +83,7 @@ test_prev
 
 
 ## regression model:
-```{r}
+```{r, error = TRUE}
 #set seed for reproducibility
 set.seed(10)
 #fit the full model
@@ -97,13 +98,13 @@ test=
     geo_join_id=as.numeric(geo_join_id)
   )
 
-fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ time_period + homes_with_cockroaches + poverty + geo_join_id, data=test)
+fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id, data=test)
 
 fit
 
 test=
   modelr::add_residuals(fit) %>% 
-  ggplot(aes(x = time_period, y = resid)) + geom_point()
+  ggplot(aes(x = geo_join_id, y = resid)) + geom_point()
 
 ```
 ## attempting to look at hospitalizations and Using Alice's Code
@@ -117,7 +118,7 @@ read.csv(file = "./final_data/all_available_data.csv") %>%
                      "Public School Children (5-14 Yrs Old) with Persistent Asthma",
                      "Asthma Hospitalizations (Children 5 to 17 Yrs Old)"),
         geo_type_name == "UHF42", 
-        measure %in% c("Percent", "Rate").
+        measure %in% c("Percent", "Rate"),
         geo_place_name
          ) %>% 
   pivot_wider(
