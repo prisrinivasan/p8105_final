@@ -4,7 +4,6 @@ output:
   html_document:
     toc: true
     toc_float: true
-    theme: flatly
 ---
 
 <img align="center" img src="images/allergies.jpg" style="width:75%"/>  
