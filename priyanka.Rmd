@@ -13,6 +13,7 @@ library(sp)
 library(rvest)
 library(tigris)
 library(maptools)
+library(leaflet)
 library(ggmap)
 library(broom)
 library(httr)
@@ -108,6 +109,17 @@ shape = st_read("./final_data/shapefiles/", quiet = TRUE)
 
 #plot just geometry column
 plot(st_geometry(shape))
+
+tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id") %>% 
+  janitor::clean_names() %>% 
+  mutate(uhfcode = as.character(uhfcode),
+         time_period = as.character(time_period),
+         homes_with_cockroaches = as.numeric(homes_with_cockroaches))
+
+#changing geometry to latitude and longitude
+tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
+
+pal = colorQuantile("Blues", tidy_asthma_sf_ll$homes_with_cockroaches, n = 7)
 ```
 
 Checking the `shape` tibble, it looks like the values we need are stored properly. Merging with the `tidy_asthma`
@@ -145,4 +157,19 @@ tm_shape(asthma_2011) +
               title = "Poverty Levels in NYC Neighborhoods")
 ```
 
+
+Leaflet:
+
+```{r}
+tidy_asthma_sf_ll %>%
+    mutate(roach_label = str_c("Homes with Cockroaches", homes_with_cockroaches, "\n , Neighborhood: ", uhf_neigh)) %>% 
+    filter(time_period == 2011) %>% 
+    leaflet() %>%
+    addProviderTiles("CartoDB.Positron") %>%
+    addPolygons(stroke = FALSE,
+                color = ~pal(homes_with_cockroaches),
+                fillOpacity = 0.7,
+                smoothFactor = 0.2,
+                label = ~roach_label)
+```
 
