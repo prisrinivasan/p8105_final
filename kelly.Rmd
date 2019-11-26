@@ -13,6 +13,8 @@ library(patchwork)
 library(plotly)
 library(ggplot2)
 library(gganimate)
+library(modelr)
+library(mgcv)
 
 ```
 
@@ -214,27 +216,62 @@ test=
   )
 
 ## Model 1
-model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id, data=test)
+model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id, data=test) %>% broom::tidy()
 
 model1_fit
 
 ## Model 2
-model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id, data=test)
+model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id, data=test) %>% broom::tidy()
 
+###### Time_Period doesn't work
 ##Model 3
-model3_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id*time_period, data=test)
+model3_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id*time_period, data=test) %>% broom::tidy()
+
+##Model4
+model4_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches*poverty*time_period, data=test) %>% broom::tidy()
+
+## Model 5
+model5_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id * asthma_hospitalizations_children_5_to_17_yrs_old, data=test) %>% broom::tidy()
 
 # Looking at residuals 
 residual_1=
   modelr::add_residuals(tidy_asthma, model1_fit) %>% 
-  ggplot(aes(x = time_period, y = resid)) + geom_point()
+  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma, y = resid)) + geom_point()
 
 residual_2=
   modelr::add_residuals(tidy_asthma, model2_fit) %>% 
-  ggplot(aes(x = time_period, y = resid)) + geom_point()
+  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma, y = resid)) + geom_point()
 
 residual_3=
   modelr::add_residuals(tidy_asthma, model3_fit) %>% 
-  ggplot(aes(x = time_period, y = resid)) + geom_point()
+  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma, y = resid)) + geom_point()
+
+residual_5=
+  modelr::add_residuals(tidy_asthma, model5_fit) %>% 
+  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma, y = resid)) + geom_point()
 
 ```
+
+## Cross Validation
+```{r}
+cv_df=
+  crossv_mc(tidy_asthma, 100) %>% 
+  mutate(
+    train=map(train, as_tibble),
+    test = map(test, as_tibble)
+  )
+
+cv_df=
+  cv_df %>% 
+  mutate(fit = map(train, ~lm(public_school_children_5_14_yrs_old_with_asthma ~ ., data=.x)),
+        model1_lm= map(train, ~lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id, data=.x)),
+        model2_lm=map(train, ~lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id, data=.x)),
+        model5_lm=map(train, ~lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id * asthma_hospitalizations_children_5_to_17_yrs_old, data=.x))) %>% 
+  mutate(rmse_fit = map2_dbl(fit, test, ~rmse(model=.x, data=.y)),
+         rmse_model1= map2_dbl(model1_lm, test, ~rmse(model=.x, data=.y)),
+         rmse_model2= map2_dbl(model2_lm, test, ~rmse(model=.x, data=.y)),
+         rmse_model5=map2_dbl(model5_lm, test, ~rmse(model=.x, data=.y)))
+```
+
+```
+
