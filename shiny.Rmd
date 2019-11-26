@@ -25,7 +25,7 @@ library(rsconnect)
 
 ```{r}
 all_data = 
-read.csv(file = "./attempt/final_data/all_available_data.csv") %>% 
+read.csv(file = "./final_data/all_available_data.csv") %>% 
   janitor::clean_names() %>% 
   filter(name %in% c("Homes with Cockroaches", 
                      "Poverty", 
@@ -76,9 +76,7 @@ tidy_asthma =
   select(geo_type_name, geo_join_id, time_period, geo_place_name, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
   view()
 
-#shp = st_read("./attempt/final_data/shapefiles/", quiet = TRUE)
-write.table(shp, "./attempt/final_data/shape1.txt", sep = "\t")
-shape = read.table(file = "./attempt/final_data/shape.txt", sep = "@", fill = TRUE, header = TRUE)
+shape = st_read("./final_data/shapefiles/", quiet = TRUE)
 
 tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id") %>% 
   janitor::clean_names() %>% 
