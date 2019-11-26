@@ -162,7 +162,7 @@ Leaflet:
 
 ```{r}
 tidy_asthma_sf_ll %>%
-    mutate(roach_label = str_c("Homes with Cockroaches", homes_with_cockroaches, "\n , Neighborhood: ", uhf_neigh)) %>% 
+    mutate(roach_label = str_c("Homes with Cockroaches: ", homes_with_cockroaches, "\n , Neighborhood: ", uhf_neigh)) %>% 
     filter(time_period == 2011) %>% 
     leaflet() %>%
     addProviderTiles("CartoDB.Positron") %>%
