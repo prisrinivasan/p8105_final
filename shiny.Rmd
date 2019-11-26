@@ -1,13 +1,13 @@
 ---
-title: "Shiny Dashboard"
+title: "Cockroach Dashboard"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
-    vertical_layout: fill
+    source_code: embed
 runtime: shiny
 ---
 
-```{r setup, include=FALSE, echo=FALSE}
+```{r, include=FALSE, echo=FALSE}
 library(flexdashboard)
 library(tidyverse)
 library(viridis)
@@ -16,6 +16,9 @@ library(plotly)
 library(shiny)
 library(sf)
 library(tmap)
+library(devtools)
+library(rsconnect)
+
 ```
 
 Column {.sidebar}
@@ -32,23 +35,31 @@ tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id
          time_period = as.character(time_period))
 
 year = as.character(c("2011", "2012", "2013", "2014"))
-# selectInput widget to sidebar
+
+#selectInput for year choices
 selectInput(
   "year", 
   label = h3("Select Year"),
   choices = year,
   selected = "2011")
 
-#I (priyanka) didn't put the neighborhood names in yet, but we can replace the geo_join_id with those once we do
-neighborhood = tidy_asthma_sf %>% distinct(uhfcode) %>% pull(uhfcode)
-neighborhood = as.character(neighborhood)
+#creating vector with borough names for choices
+borough = c("Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island")
 
-# radioButtons widget
-radioButtons(
-  "neighborhood", 
-  label = h3("Choose neighborhood"),
-  choices = neighborhood,
-  selected = "501")
+#function for borough choices
+func = function(element, borough) {
+  if(element %in% borough) {
+    TRUE} else{
+    FALSE
+  }
+}
+
+#checkboxes
+checkboxGroupInput(
+  "borough", 
+  label = h3("Choose borough"),
+  choices = borough,
+  selected = "Manhattan")
 
 ```
 
@@ -56,20 +67,37 @@ Column {data-width=650}
 -----------------------------------------------------------------------
 
 ### Chart A
-### This produces a map, but not one that tells anything interesting yet
-```{r map}
+```{r}
+#
+tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
+
 #what I would put in UI file
-leafletOutput("tmap")
+leaf_input = reactive({
+  tidy_asthma_sf_ll %>%
+    mutate(borough = map(borough, func, input$borough)) %>% 
+    filter(borough == TRUE,
+           time_period == input$year)
+})
+
+renderLeaflet({ 
+  leaf_input() %>% 
+    leaflet() %>%
+    addPolygons() %>%
+    addTiles()
+  })
+
 
 #what I would put in server file
-renderLeaflet({
+#renderLeaflet({
   
-  tmap = tm_shape(tidy_asthma_sf %>%
-                    filter(uhfcode == input$neighborhood,
-                           time_period == input$year)) +
-    tm_polygons("homes_with_cockroaches",
-                legend.title = "Roach Levels in NYC Neighborhoods")
+  #tmap = tm_shape(tidy_asthma_sf %>%
+                    #mutate(borough = map(borough, func, input$borough)) %>% 
+                    #filter(borough == TRUE,
+                           #time_period == input$year)) +
+    #tm_polygons("homes_with_cockroaches",
+                #text = "uhf_neigh",
+                #legend.title = "Roach Levels in NYC Neighborhoods")
   
-  tmap_leaflet(tmap)
-})
+  #tmap_leaflet(tmap)
+#})
 ```
