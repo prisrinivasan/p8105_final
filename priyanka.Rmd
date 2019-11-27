@@ -131,6 +131,23 @@ merged <- merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id")
 ```
 
 
+**Leaflet:**
+The code chunk is modified into the [shiny app](https://prisrinivasan.shinyapps.io/roach_shiny/).
+
+```{r}
+tidy_asthma_sf_ll %>%
+    mutate(roach_label = str_c("Homes with Cockroaches: ", homes_with_cockroaches, "\n, Neighborhood: ", uhf_neigh)) %>% 
+    filter(time_period == 2011) %>% 
+    leaflet() %>%
+    addProviderTiles("CartoDB.Positron") %>%
+    addPolygons(stroke = FALSE,
+                color = ~pal(homes_with_cockroaches),
+                fillOpacity = 0.7,
+                smoothFactor = 0.2,
+                label = ~roach_label)
+```
+
+
 Below is a plot filtered for 2011 poverty values. 
 
 ```{r sick plot, message=FALSE, warning=FALSE}
@@ -156,22 +173,6 @@ tm_shape(asthma_2011) +
   tm_polygons("homes_with_cockroaches", 
               style = "quantile",
               title = "Poverty Levels in NYC Neighborhoods")
-```
-
-
-Leaflet:
-
-```{r}
-tidy_asthma_sf_ll %>%
-    mutate(roach_label = str_c("Homes with Cockroaches: ", homes_with_cockroaches, "\n, Neighborhood: ", uhf_neigh)) %>% 
-    filter(time_period == 2011) %>% 
-    leaflet() %>%
-    addProviderTiles("CartoDB.Positron") %>%
-    addPolygons(stroke = FALSE,
-                color = ~pal(homes_with_cockroaches),
-                fillOpacity = 0.7,
-                smoothFactor = 0.2,
-                label = ~roach_label)
 ```
 
 
