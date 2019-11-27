@@ -25,6 +25,43 @@ Through these analyses we hope to identify and analyze risk factors for childhoo
 
 ## Exploratory analysis
 
+## Cockroach Distribution by Borough
+
+```{r, echo = FALSE}
+library(tidyverse)
+library(PerformanceAnalytics)
+library(sf)
+library(sp)
+library(tmap)
+tidy_asthma = 
+  read_csv(file = "./final_data/tidy_asthma.csv")
+
+tidy_asthma 
+
+shape = st_read("./final_data/shapefiles/", quiet = TRUE)
+
+tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id") %>% 
+  janitor::clean_names() %>% 
+  mutate(uhfcode = as.character(uhfcode),
+         time_period = as.character(time_period),
+         homes_with_cockroaches = as.numeric(homes_with_cockroaches))
+
+tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
+
+density_roaches = 
+  tidy_asthma_sf_ll %>%
+  ggplot(aes(x = homes_with_cockroaches)) + 
+  geom_density() +
+  facet_grid(~borough) +
+  labs(
+    x = "Percent of Homes with Cockroaches",
+    y = "Frequency",
+    title = "Distribution of Cockroaches by Borough from 2011-2014"
+  ) 
+
+density_roaches
+```
+
 ## Discussion
 
 
