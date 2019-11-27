@@ -11,6 +11,10 @@ navbar:
       href: Overview.html
     - text: "Find Your Neighborhood"
       href: https://prisrinivasan.shinyapps.io/roach_shiny/
+    - icon: fa-envelope fa-lg
+      href: mailto:<bowlin.hannah@columbia.edu>
+    - icon: fa-github fa-lg
+      href: https://github.com/prisrinivasan/p8105_final/
 
 output:
   html_document:
