@@ -173,6 +173,44 @@ testing different types of plots for asthma variables
 BAR CHARTS
 
 ```{r}
+bar_uhf_asthma =
+  tidy_asthma %>%
+  filter(geo_type_name == "UHF42") %>%
+  arrange(geo_join_id) %>%
+    plot_ly(
+    x = ~geo_join_id, 
+    y = ~public_school_children_5_14_yrs_old_with_asthma, 
+    color = ~geo_place_name,
+    text = ~geo_place_name,
+    frame = ~time_period,
+    hoverinfo = "text",
+    type = 'bar'
+  )
+  
+bar_uhf_asthma
+```
+
+```{r}
+bar_uhf_persistent =
+  tidy_asthma %>%
+  filter(geo_type_name == "UHF42") %>%
+  arrange(geo_join_id) %>%
+  plot_ly(
+    x = ~geo_join_id, 
+    y = ~public_school_children_5_14_yrs_old_with_persistent_asthma, 
+    color = ~geo_place_name,
+    text = ~geo_place_name,
+    frame = ~time_period,
+    hovertemplate = paste(
+      "<b>%{text}</b><br>",
+      "<i>Rate</i>: %{y:.2f}"),
+    type = 'bar'
+  )
+
+bar_uhf_persistent
+```
+
+```{r}
 plot_borough_asthma =
   tidy_asthma %>%
   filter(geo_type_name == "Borough") %>%
@@ -183,8 +221,9 @@ plot_borough_asthma =
     color = ~geo_place_name,
     text = ~geo_place_name,
     frame = ~time_period,
-    hovertemplate = paste("<b>%{x}</b><br>",
-                          "<i>Rate</i>: %{y:.2f}"),
+    hovertemplate = paste(
+      "<b>%{x}</b><br>",
+      "<i>Rate</i>: %{y:.2f}"),
     type = 'bar'
   )
 
@@ -202,8 +241,9 @@ plot_borough_persistent =
     color = ~geo_place_name,
     text = ~geo_place_name,
     frame = ~time_period,
-    hovertemplate = paste("<b>%{x}</b><br>",
-                          "<i>Rate</i>: %{y:.2f}"),
+    hovertemplate = paste(
+      "<b>%{x}</b><br>",
+      "<i>Rate</i>: %{y:.2f}"),
     type = 'bar'
   )
 
