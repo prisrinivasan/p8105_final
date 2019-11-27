@@ -27,30 +27,7 @@ chart.Correlation(tidy_asthma[,5:9], histogram = TRUE, method = c("pearson", "ke
 The correlation matrix displays the baseline relationship between each variable. All of the correlations are above 0.53 which indicates strong correlation. As we model build we will be aware of any multicollinearity.
 
 ## _Crude Association between Childhood Asthma and Cockroaches in the Home_
-```{r, echo = FALSE}
 
-crude_roaches = 
-  tidy_asthma %>%
-  filter(time_period == c("2011", "2014")) %>%
-  ggplot(aes(x = homes_with_cockroaches, 
-             y = public_school_children_5_14_yrs_old_with_asthma, 
-             color = homes_with_cockroaches)) + 
-  geom_point(aes(alpha = 0.5)) +
-  geom_line() +
-  viridis::scale_color_viridis(aes(x = homes_with_cockroaches)) +
-  facet_grid(~time_period) +
-  labs(
-    x = "Percent of Homes with Cockroaches",
-    y = "Percent of Public School Children with Asthma",
-    title = "Percent of School Children with Asthma and Cockroaches in Home per Year"
-  )
-
-crude_roaches
-```
-
-Our crude relationship between childhood asthma and cockroaches in the home is demonstrated here. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation. 
-
-## _Linear Model of Cockroach Presence, Poverty, and Neighobrhood on Asthma_
 ```{r, echo = FALSE}
 
 set.seed(10)
@@ -65,22 +42,19 @@ linear_model =
   broom::tidy() 
 
 plot_tidy = 
-ggplot(ggplot_data, aes(x = homes_with_cockroaches, y = public_school_children_5_14_yrs_old_with_asthma, color = geo_join_id)) +
+ggplot(ggplot_data, aes(x = homes_with_cockroaches, y = public_school_children_5_14_yrs_old_with_asthma, color = homes_with_cockroaches)) +
   geom_point() + 
   geom_smooth(method = "lm") +
   facet_grid(~time_period) +
   labs(x = "Percent of Homes with Cockroaches",
        y = "Percent of School Children with Asthma",
-       title = "Effect of Homes with Cockroaches on Childhood Asthma adjusting for Neighborhood") +
-  viridis::scale_color_viridis(aes(color = geo_join_id), discrete = FALSE)
+       title = "Crude Association Homes with Cockroaches and Childhood Asthma") +
+  viridis::scale_color_viridis(aes(color = homes_with_cockroaches), discrete = FALSE)
 
 plot_tidy
 
 ```
 
-## _Table of the Values in Linear Model_
-```{r, echo = FALSE}
-summary(linear_model) %>%
-  knitr::kable()
-```
+Our crude relationship between childhood asthma and cockroaches in the home is demonstrated here. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation. 
+
 

@@ -18,7 +18,7 @@ library(mgcv)
 
 ```
 
-```{r}
+```{r, error = TRUE}
 all_available_data=
   read_csv(file="./final_data/all_available_data.csv")
 
@@ -59,7 +59,7 @@ animate(pp, fps = 2, height = 600, width = 1000)
 ```
 
 ## using lorraine's code as a guide
-```{r}
+```{r, error = TRUE}
 test_prev=
   tidy_asthma %>% 
   drop_na(homes_with_cockroaches) %>% 
@@ -84,7 +84,7 @@ test_prev
 ```
 
 ## attempting to look at hospitalizations and Using Alice's Code
-```{r}
+```{r, error = TRUE}
 all_data = 
 read.csv(file = "./final_data/all_available_data.csv") %>% 
   janitor::clean_names() %>% 
@@ -153,7 +153,7 @@ tidy_asthma_hospitalization =
   view()
 ```
 
-```{r}
+```{r, error = TRUE}
 ## see changes with Hospitalzation by time
 
 test_prev=
@@ -180,7 +180,7 @@ test_prev
 
 
 ## regression model:
-```{r}
+```{r, error = TRUE}
 #set seed for reproducibility
 set.seed(10)
 #fitting the full model
@@ -257,7 +257,7 @@ plot_tidy
 ```
 
 ## Cross Validation
-```{r}
+```{r, error = TRUE}
 cv_df=
   crossv_mc(tidy_asthma, 100) %>% 
   mutate(
