@@ -366,6 +366,9 @@ div.tocify {
     <li>
       <a href="regression.html">Exploratory Analyses</a>
     </li>
+    <li>
+      <a href="https://prisrinivasan.shinyapps.io/roach_shiny/">Shiny Map</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -392,14 +395,17 @@ div.tocify {
 <li>Insert Map Here</li>
 </ul>
 </div>
-<div id="asthma-hospitalization-by-borough-graph" class="section level2">
-<h2>Asthma Hospitalization by Borough Graph</h2>
+<div id="cockroach-and-asthma-distributions-by-borough" class="section level2">
+<h2>Cockroach and Asthma Distributions by Borough</h2>
+<p><img src="Overview_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 </div>
 <div id="cockroach-prevalence-by-borough-graph" class="section level2">
 <h2>Cockroach Prevalence by Borough Graph</h2>
+<pre><code>## Warning: Removed 84 rows containing non-finite values (stat_density).</code></pre>
+<p><img src="Overview_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div id="related-work" class="section level3">
+<h3>Related work</h3>
 </div>
-<div id="related-work" class="section level2">
-<h2>Related work</h2>
 </div>
 <div id="initial-questions" class="section level2">
 <h2>Initial Questions</h2>
@@ -407,8 +413,24 @@ div.tocify {
 <div id="data" class="section level2">
 <h2>Data</h2>
 </div>
+</div>
+<div id="data-1" class="section level1">
+<h1>Data</h1>
+<ul>
+<li><p>We built our dataset using the <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx">NYC Gov Environmental &amp; Health Data Portal</a>. The map was built with the UHF code key from <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf">NYC Health</a>. The asthma CSV file we used is linked (here)[asthma_data.csv]. We selected all variables relating to asthma, cockroaches, and poverty through string detection.</p></li>
+<li><p>Our github repository is linked <a href="https://github.com/prisrinivasan/p8105_final">here</a></p></li>
+</ul>
 <div id="exploratory-analysis" class="section level2">
 <h2>Exploratory analysis</h2>
+<ul>
+<li>The graphs and analyses can be found <a href="regression.Rmd">here</a>.</li>
+<li>We started by creating a correlation matrix to assess multicollinearity and baseline correlations</li>
+<li>We then assessed the crude relationship between exposure, cockroach presence in the home and the outcome, childhood asthma</li>
+<li></li>
+</ul>
+</div>
+<div id="discussion" class="section level2">
+<h2>Discussion</h2>
 </div>
 </div>
 

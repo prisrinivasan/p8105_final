@@ -43,7 +43,7 @@ tidy_asthma %>%
   
 linear_model = 
   lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * time_period * geo_join_id, data = ggplot_data) %>%
-  broom::tidy() 
+  broom::glance()
 
 plot_tidy = 
 ggplot(ggplot_data, aes(x = homes_with_cockroaches, y = public_school_children_5_14_yrs_old_with_asthma, color = homes_with_cockroaches)) +

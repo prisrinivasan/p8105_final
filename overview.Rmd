@@ -14,16 +14,80 @@ Because of this, we want to take a life course perspective and look at how hospi
 
 * Insert Map Here 
 
-## Asthma Hospitalization by Borough Graph
+## Cockroach and Asthma Distributions by Borough
+
+```{r, echo = FALSE, include = FALSE}
+library(tidyverse)
+library(PerformanceAnalytics)
+library(sf)
+library(sp)
+library(tmap)
+library(patchwork)
+
+tidy_asthma = 
+  read_csv(file = "./final_data/tidy_asthma.csv")
+
+tidy_asthma 
+
+shape = st_read("./final_data/shapefiles/", quiet = TRUE)
+
+tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id") %>% 
+  janitor::clean_names() %>% 
+  mutate(uhfcode = as.character(uhfcode),
+         time_period = as.character(time_period),
+         homes_with_cockroaches = as.numeric(homes_with_cockroaches))
+
+tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
+```
+```{r, echo = FALSE}
+
+p2 = 
+  tidy_asthma_sf_ll %>%
+  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma)) + 
+  geom_density() +
+  facet_grid(~borough) +
+  labs(
+    x = "Percent of Public School Children with Asthma",
+    y = "Frequency",
+    title = "Distribution of Childhood Asthma by Borough")
+p2
+```
 
 ## Cockroach Prevalence by Borough Graph 
+```{r, echo = FALSE}
+p1 = 
+  tidy_asthma_sf_ll %>%
+  ggplot(aes(x = homes_with_cockroaches)) + 
+  geom_density() +
+  facet_grid(~borough) +
+  labs(
+    x = "Percent of Homes with Cockroaches",
+    y = "Frequency",
+    title = "Distribution of Cockroaches by Borough"
+  ) 
+
+p1
+```
 
 
-## Related work 
+### Related work 
 
 ## Initial Questions 
 
 ## Data 
 
+# Data
+
+* We built our dataset using the [NYC Gov Environmental & Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx). The map was built with the UHF code key from [NYC Health](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf). The asthma CSV file we used is linked (here)[asthma_data.csv]. We selected all variables relating to asthma, cockroaches, and poverty through string detection. 
+
+* Our github repository is linked [here](https://github.com/prisrinivasan/p8105_final)
+
 ## Exploratory analysis
+
+* The graphs and analyses can be found [here](regression.Rmd).
+* We started by creating a correlation matrix to assess multicollinearity and baseline correlations
+* We then assessed the crude relationship between exposure, cockroach presence in the home and the outcome, childhood asthma
+* 
+
+## Discussion
 
