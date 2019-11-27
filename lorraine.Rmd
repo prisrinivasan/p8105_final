@@ -99,32 +99,7 @@ tidy_asthma =
 
 PLOTS FOR PUBLIC SCHOOL CHILDREN VARIABLES
 
-```{r}
-p1 = 
-  tidy_asthma %>%
-  filter(time_period == "2011") %>%
-  ggplot(aes(x = geo_join_id, y = public_school_children_5_14_yrs_old_with_asthma, color = geo_join_id)) + 
-  geom_point()
-
-p2 = 
-  tidy_asthma %>%
-  filter(time_period == "2012") %>%
-  ggplot(aes(x = geo_join_id, y = public_school_children_5_14_yrs_old_with_asthma, color = geo_join_id)) + 
-  geom_point()
-
-p3 = 
-  p1 = 
-  tidy_asthma %>%
-  filter(time_period == "2013") %>%
-  ggplot(aes(x = geo_join_id, y = public_school_children_5_14_yrs_old_with_asthma, color = geo_join_id)) + 
-  geom_point()
-
-p4 = 
-  tidy_asthma %>%
-  filter(time_period == "2014") %>%
-  ggplot(aes(x = geo_join_id, y = public_school_children_5_14_yrs_old_with_asthma, color = geo_join_id)) + 
-  geom_point()
-```
+SCATTERPLOTS
 
 ```{r}
 plot_uhf_asthma =
