@@ -23,6 +23,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -278,28 +280,25 @@ $(document).ready(function () {
   <a href="about.html">About</a>
 </li>
 <li>
-  <a href="Overview.html">Overview</a>
+  <a href="regression.html">Preliminary Analyses</a>
 </li>
 <li>
-  <a href="data_sources.html">Data Sources</a>
+  <a href="Overview.html">Report</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Dashboard
+<li>
+  <a href="https://prisrinivasan.shinyapps.io/roach_shiny/">Find Your Neighborhood</a>
+</li>
+<li>
+  <a href="mailto:&lt;bowlin.hannah@columbia.edu&gt;">
+    <span class="fa fa-envelope fa-lg"></span>
      
-    <span class="caret"></span>
   </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="priyanka.html">Maps</a>
-    </li>
-    <li>
-      <a href="regression.html">Exploratory Analyses</a>
-    </li>
-    <li>
-      <a href="https://prisrinivasan.shinyapps.io/roach_shiny/">Shiny Map</a>
-    </li>
-  </ul>
+</li>
+<li>
+  <a href="https://github.com/prisrinivasan/p8105_final/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -329,10 +328,40 @@ $(document).ready(function () {
 <p><img src="regression_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>Our crude relationship between childhood asthma and cockroaches in the home is demonstrated here. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation.</p>
 </div>
-<div id="cockroach-distribution-by-borough" class="section level2">
-<h2>Cockroach Distribution by Borough</h2>
-<pre><code>## Warning: Removed 84 rows containing non-finite values (stat_density).</code></pre>
-<p><img src="regression_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div id="tables" class="section level2">
+<h2><em>Tables</em></h2>
+<table>
+<thead>
+<tr class="header">
+<th align="right">r.squared</th>
+<th align="right">adj.r.squared</th>
+<th align="right">sigma</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+<th align="right">df</th>
+<th align="right">logLik</th>
+<th align="right">AIC</th>
+<th align="right">BIC</th>
+<th align="right">deviance</th>
+<th align="right">df.residual</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.5885523</td>
+<td align="right">0.408544</td>
+<td align="right">14.12675</td>
+<td align="right">3.269584</td>
+<td align="right">0.0235532</td>
+<td align="right">8</td>
+<td align="right">-92.74262</td>
+<td align="right">203.4852</td>
+<td align="right">214.0877</td>
+<td align="right">3193.039</td>
+<td align="right">16</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
