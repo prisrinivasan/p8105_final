@@ -1,15 +1,10 @@
 ---
-<<<<<<< HEAD
 title: "Overview"
 output: 
   html_document:
     toc: true
     toc_float: true
     code_folding: hide
-=======
-title: "Report"
-output: html_document
->>>>>>> 8330da41c5f115dc3a3e4db2a45576f34a1fd7e8
 ---
 
 ## Cockroach and Asthma Distributions by Borough
@@ -37,6 +32,7 @@ tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id
 
 tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
 ```
+
 ```{r, echo = FALSE}
 
 p2 = 
