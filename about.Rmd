@@ -3,7 +3,7 @@ title: "About"
 output: html_document
 ---
 
-# Why cockroaches?
+## _Why Asthma?_
 
 Asthma is one of the most common chronic illnesses for young children living in NYC according to the [NY State Department of Health](https://www.health.ny.gov/prevention/prevention_agenda/chronic_disease/). Ranging from mild to severe, asthma affects children's ability to breathe, exercise, and sleep and can severely affect children well into adulthood. 
 

@@ -7,16 +7,10 @@ navbar:
       href: about.html
     - text: "Overview"
       href: Overview.html
-    - text: "Data Sources"
-      href: data_sources.html
-    - text: "Dashboard"
-      menu: 
-      - text: "Maps"
-        href: priyanka.html
-      - text: "Exploratory Analyses"
-        href: regression.html
-      - text: "Shiny Map"
-        href: https://prisrinivasan.shinyapps.io/roach_shiny/
+    - text: "Preliminary Analyses"
+      href: regression.html
+    - text: "Find Your Neighborhood"
+      href: https://prisrinivasan.shinyapps.io/roach_shiny/
 
 output:
   html_document:
