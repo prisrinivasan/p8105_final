@@ -416,8 +416,15 @@ div.tocify {
 </div>
 <div id="data-1" class="section level1">
 <h1>Data</h1>
+<p>We built our dataset using the <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx">NYC Gov Environmental &amp; Health Data Portal</a>. The Environmental &amp; Health Data Portal houses data from a variety of data sources such as the New York City Automated School Health Records, American Community Survey and New York City Housing and Vacancy Survey (HVS). Data from this portal are used to study how the environment affects health. The map was built with the United Hospital Fund (UHF) neighborhood code key from <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf">NYC Health</a>. The asthma CSV file we used is linked (here)[asthma_data.csv]. We selected all variables relating to asthma, cockroaches, and poverty through string detection:</p>
 <ul>
-<li><p>We built our dataset using the <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx">NYC Gov Environmental &amp; Health Data Portal</a>. The map was built with the UHF code key from <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf">NYC Health</a>. The asthma CSV file we used is linked (here)[asthma_data.csv]. We selected all variables relating to asthma, cockroaches, and poverty through string detection.</p></li>
+<li><p><code>geo_type_name</code>:</p></li>
+<li><p><code>geo_join_id</code>:</p></li>
+<li><p><code>geo_place_name</code>:</p></li>
+<li><p><code>time_period</code>: Year</p></li>
+<li><p><code>homes_with_cockroaches</code> (percent): Estimated number of households in an area that reported seeing at least one cockroach daily over the last month, divided by the number of households in the area.</p></li>
+<li><p><code>poverty</code>:</p></li>
+<li><p><code>public_school_children_5_14_yrs_old_with_asthma</code> (rate): Number of public school children, aged 5-14 years, with a diagnosis of asthma that has been reported to NYC DOHMH during the current or previous school year, divided by the 5-14 year old population, per 1,000.</p></li>
 <li><p>Our github repository is linked <a href="https://github.com/prisrinivasan/p8105_final">here</a></p></li>
 </ul>
 <div id="exploratory-analysis" class="section level2">
