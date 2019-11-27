@@ -81,19 +81,23 @@ We built our dataset using the [NYC Gov Environmental & Health Data Portal](http
   * `geo_place_name`:
   
   * `time_period`: Year
-  
+
+Predictor
+
   * `homes_with_cockroaches` (percent): Estimated number of households in an 
     area that reported seeing at least one cockroach daily over the last 
     month, divided by the number of households in the area.
-    
-  * `poverty`:
-  
+
+Outcome of interest 
+
   * `public_school_children_5_14_yrs_old_with_asthma` (rate): Number of 
     public school children, aged 5-14 years, with a diagnosis of asthma that 
     has been reported to NYC DOHMH during the current or previous school 
     year, divided by the 5-14 year old population, per 1,000. 
 
+Potential confounder
 
+  * `poverty`:
 
 * Our github repository is linked [here](https://github.com/prisrinivasan/p8105_final)
 
