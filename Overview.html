@@ -24,6 +24,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
@@ -248,6 +249,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -348,28 +352,13 @@ div.tocify {
   <a href="about.html">About</a>
 </li>
 <li>
-  <a href="Overview.html">Overview</a>
+  <a href="regression.html">Preliminary Analyses</a>
 </li>
 <li>
-  <a href="data_sources.html">Data Sources</a>
+  <a href="Overview.html">Report</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Dashboard
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="priyanka.html">Maps</a>
-    </li>
-    <li>
-      <a href="regression.html">Exploratory Analyses</a>
-    </li>
-    <li>
-      <a href="https://prisrinivasan.shinyapps.io/roach_shiny/">Shiny Map</a>
-    </li>
-  </ul>
+<li>
+  <a href="https://prisrinivasan.shinyapps.io/roach_shiny/">Find Your Neighborhood</a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -378,6 +367,14 @@ div.tocify {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Overview</h1>
@@ -385,16 +382,6 @@ div.tocify {
 </div>
 
 
-<div id="cockroach-prevalence-in-new-york-city" class="section level1">
-<h1>Cockroach Prevalence in New York City</h1>
-<div id="why-should-we-care" class="section level2">
-<h2>Why should we care?</h2>
-<p>In 2017, 15.6% of households <a href="http://www.sternenvironmental.com/blog/2017/04/18/nyc-breaks-the-top-ten-list-for-worst-rat-and-cockroach-problems/">reported</a> having pest infestations. One of the most common pests in NYC is cockroaches. As temperatures rise, cockroach populations are <a href="https://gothamist.com/arts-entertainment/its-summer-in-nyc-and-the-cockroaches-have-taken-flight">expected</a> to increase, posing additional public health challenges, particularly among those who have asthma or respiratory reactions to cockroaches.</p>
-<p>Because of this, we want to take a life course perspective and look at how hospitalization rates among children ages 0-4 are affected by prevalence of cockroaches in their homes.</p>
-<ul>
-<li>Insert Map Here</li>
-</ul>
-</div>
 <div id="cockroach-and-asthma-distributions-by-borough" class="section level2">
 <h2>Cockroach and Asthma Distributions by Borough</h2>
 <p><img src="Overview_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
@@ -412,7 +399,6 @@ div.tocify {
 </div>
 <div id="data" class="section level2">
 <h2>Data</h2>
-</div>
 </div>
 <div id="data-1" class="section level1">
 <h1>Data</h1>
@@ -469,6 +455,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 <script>
 $(document).ready(function ()  {
