@@ -250,6 +250,26 @@ plot_borough_persistent =
 plot_borough_persistent
 ```
 
+```{r}
+plot_borough_cockroach =
+  tidy_asthma %>%
+  filter(geo_type_name == "Borough") %>%
+  arrange(geo_join_id) %>%
+  plot_ly(
+    x = ~geo_place_name, 
+    y = ~homes_with_cockroaches, 
+    color = ~geo_place_name,
+    text = ~geo_place_name,
+    frame = ~time_period,
+    hovertemplate = paste(
+      "<b>%{x}</b><br>",
+      "<i>Percent</i>: %{y:.2f}"),
+    type = 'bar'
+  )
+
+plot_borough_cockroach
+```
+
 test_2 = 
   tidy_asthma %>%
   ggplot(aes(x = geo_join_id, y = public_school_children_5_14_yrs_old_with_asthma, frame = time_period)) +
