@@ -27,7 +27,7 @@ Through these analyses we hope to identify and analyze risk factors for childhoo
 
 ## Cockroach Distribution by Borough
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, include = FALSE}
 library(tidyverse)
 library(PerformanceAnalytics)
 library(sf)
