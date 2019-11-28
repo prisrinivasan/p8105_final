@@ -411,32 +411,29 @@ div.tocify {
 <div id="initial-questions" class="section level2">
 <h2>Initial Questions</h2>
 </div>
-<div id="data" class="section level2">
-<h2>Data</h2>
-</div>
-<div id="data-1" class="section level1">
+<div id="data" class="section level1">
 <h1>Data</h1>
 <p>We downloaded all available data from the <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx">NYC Gov Environmental &amp; Health Data Portal</a>. The Environmental &amp; Health Data Portal houses data from a variety of sources such as the New York City Automated School Health Records, American Community Survey and New York City Housing and Vacancy Survey (HVS). Data from this portal are used to study how the environment affects health. We initially filtered the dataset to include all variables related to asthma, cockroaches and poverty before finalizing the dataset to include variables only related to public school children with asthma, homes with cockroaches and poverty. The asthma CSV file we used is linked (here)[asthma_data.csv].</p>
 <ul>
-<li><p><code>geo_type_name</code>:</p></li>
-<li><p><code>geo_join_id</code>:</p></li>
-<li><p><code>geo_place_name</code>:</p></li>
+<li><p><code>geo_type_name</code>: Geographical name (i.e borough, UHF42)</p></li>
+<li><p><code>geo_join_id</code>: Numeric ID of the geographical area</p></li>
+<li><p><code>geo_place_name</code>: Name of the geographical area</p></li>
 <li><p><code>time_period</code>: Year</p></li>
 </ul>
 <p>Predictor</p>
 <ul>
-<li><code>homes_with_cockroaches</code> (percent): Estimated number of households in an area that reported seeing at least one cockroach daily over the last month, divided by the number of households in the area.</li>
+<li><code>homes_with_cockroaches</code> (Percent): Estimated number of households in an area that reported seeing at least one cockroach daily over the last month, divided by the number of households in the area.</li>
 </ul>
 <p>Outcome of interest</p>
 <ul>
-<li><code>public_school_children_5_14_yrs_old_with_asthma</code> (rate): Number of public school children, aged 5-14 years, with a diagnosis of asthma that has been reported to NYC DOHMH during the current or previous school year, divided by the 5-14 year old population, per 1,000.</li>
+<li><code>public_school_children_5_14_yrs_old_with_asthma</code> (Rate): Number of public school children, aged 5-14 years, with a diagnosis of asthma that has been reported to NYC DOHMH during the current or previous school year, divided by the 5-14 year old population, per 1,000.</li>
 </ul>
 <p>Potential confounder</p>
 <ul>
-<li><code>poverty</code>:</li>
+<li><code>poverty</code> (Percent): Estimated number of people for whom poverty status is determined, whose annual income falls below 100% of the federal poverty level, divided by the number of people for whom poverty status is determined.</li>
 </ul>
 <p>Our github repository is linked <a href="https://github.com/prisrinivasan/p8105_final">here</a></p>
-<p>The map was built with the United Hospital Fund (UHF) neighborhood code key from <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf">NYC Health</a>.</p>
+<p>The map was built using the United Hospital Fund (UHF) neighborhood code key from <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf">NYC Health</a>.</p>
 <div id="exploratory-analysis" class="section level2">
 <h2>Exploratory analysis</h2>
 <ul>
