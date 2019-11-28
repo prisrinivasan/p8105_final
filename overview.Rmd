@@ -68,7 +68,7 @@ p1
 
 ## Initial Questions 
 
-# Data
+## Data
 
 We downloaded all available data from the [NYC Gov Environmental & Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx). The Environmental & Health Data Portal houses data from a variety of sources such as the New York City Automated School Health Records, American Community Survey and New York City Housing and Vacancy Survey (HVS). Data from this portal are used to study how the environment affects health. We initially filtered the dataset to include all variables related to asthma, cockroaches and poverty before finalizing the dataset to include variables only related to public school children with asthma, homes with cockroaches and poverty. The asthma CSV file we used is linked (here)[asthma_data.csv]. 
 
@@ -106,10 +106,22 @@ The map was built using the United Hospital Fund (UHF) neighborhood code key fro
 
 ## Exploratory analysis
 
+### Loading and tidying the data 
+
+We downloaded the data as a csv file from the NYC Environmental & Health Data Portal and called the initial dataset `all_available_data`. We restricted our data to include boroughs and UHF42 neighborhoods as our geographical areas of interest and to include the indicators: `homes_with_cockroaches`, `poverty` and `public_school_children_5_14_yrs_old_with_asthma`. The data for these three indicators overlapped for the years 2011-2014 so we restricted our analysis to these four years. 
+
+Talk about recoding years, i.e. 2010-2011 --> 2011
+
+We called the tidied dataset `tidy_asthma` and exported it as a csv file for future reference.
+
+NOTE: I set up this header temporarily to separate it from the first section. Feel free to edit as needed.
+
+### Analyses of the data 
+
 * The graphs and analyses can be found [here](regression.Rmd).
 * We started by creating a correlation matrix to assess multicollinearity and baseline correlations
 * We then assessed the crude relationship between exposure, cockroach presence in the home and the outcome, childhood asthma
-* 
+
 
 ## Discussion
 

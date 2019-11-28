@@ -411,8 +411,8 @@ div.tocify {
 <div id="initial-questions" class="section level2">
 <h2>Initial Questions</h2>
 </div>
-<div id="data" class="section level1">
-<h1>Data</h1>
+<div id="data" class="section level2">
+<h2>Data</h2>
 <p>We downloaded all available data from the <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx">NYC Gov Environmental &amp; Health Data Portal</a>. The Environmental &amp; Health Data Portal houses data from a variety of sources such as the New York City Automated School Health Records, American Community Survey and New York City Housing and Vacancy Survey (HVS). Data from this portal are used to study how the environment affects health. We initially filtered the dataset to include all variables related to asthma, cockroaches and poverty before finalizing the dataset to include variables only related to public school children with asthma, homes with cockroaches and poverty. The asthma CSV file we used is linked (here)[asthma_data.csv].</p>
 <ul>
 <li><p><code>geo_type_name</code>: Geographical name (i.e borough, UHF42)</p></li>
@@ -434,18 +434,27 @@ div.tocify {
 </ul>
 <p>Our github repository is linked <a href="https://github.com/prisrinivasan/p8105_final">here</a></p>
 <p>The map was built using the United Hospital Fund (UHF) neighborhood code key from <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf">NYC Health</a>.</p>
+</div>
 <div id="exploratory-analysis" class="section level2">
 <h2>Exploratory analysis</h2>
+<div id="loading-and-tidying-the-data" class="section level3">
+<h3>Loading and tidying the data</h3>
+<p>We downloaded the data as a csv file from the NYC Environmental &amp; Health Data Portal and called the initial dataset <code>all_available_data</code>. We restricted our data to include boroughs and UHF42 neighborhoods as our geographical areas of interest and to include the indicators: <code>homes_with_cockroaches</code>, <code>poverty</code> and <code>public_school_children_5_14_yrs_old_with_asthma</code>. The data for these three indicators overlapped for the years 2011-2014 so we restricted our analysis to these four years.</p>
+<p>Talk about recoding years, i.e. 2010-2011 –&gt; 2011</p>
+<p>We called the tidied dataset <code>tidy_asthma</code> and exported it as a csv file for future reference.</p>
+<p>NOTE: I set up this header temporarily to separate it from the first section. Feel free to edit as needed.</p>
+</div>
+<div id="analyses-of-the-data" class="section level3">
+<h3>Analyses of the data</h3>
 <ul>
 <li>The graphs and analyses can be found <a href="regression.Rmd">here</a>.</li>
 <li>We started by creating a correlation matrix to assess multicollinearity and baseline correlations</li>
 <li>We then assessed the crude relationship between exposure, cockroach presence in the home and the outcome, childhood asthma</li>
-<li></li>
 </ul>
+</div>
 </div>
 <div id="discussion" class="section level2">
 <h2>Discussion</h2>
-</div>
 </div>
 
 
