@@ -416,7 +416,7 @@ div.tocify {
 </div>
 <div id="data-1" class="section level1">
 <h1>Data</h1>
-<p>We built our dataset using the <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx">NYC Gov Environmental &amp; Health Data Portal</a>. The Environmental &amp; Health Data Portal houses data from a variety of data sources such as the New York City Automated School Health Records, American Community Survey and New York City Housing and Vacancy Survey (HVS). Data from this portal are used to study how the environment affects health. The map was built with the United Hospital Fund (UHF) neighborhood code key from <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf">NYC Health</a>. The asthma CSV file we used is linked (here)[asthma_data.csv]. We selected all variables relating to asthma, cockroaches, and poverty through string detection:</p>
+<p>We downloaded all available data from the <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx">NYC Gov Environmental &amp; Health Data Portal</a>. The Environmental &amp; Health Data Portal houses data from a variety of sources such as the New York City Automated School Health Records, American Community Survey and New York City Housing and Vacancy Survey (HVS). Data from this portal are used to study how the environment affects health. We initially filtered the dataset to include all variables related to asthma, cockroaches and poverty before finalizing the dataset to include variables only related to public school children with asthma, homes with cockroaches and poverty. The asthma CSV file we used is linked (here)[asthma_data.csv].</p>
 <ul>
 <li><p><code>geo_type_name</code>:</p></li>
 <li><p><code>geo_join_id</code>:</p></li>
@@ -433,9 +433,10 @@ div.tocify {
 </ul>
 <p>Potential confounder</p>
 <ul>
-<li><p><code>poverty</code>:</p></li>
-<li><p>Our github repository is linked <a href="https://github.com/prisrinivasan/p8105_final">here</a></p></li>
+<li><code>poverty</code>:</li>
 </ul>
+<p>Our github repository is linked <a href="https://github.com/prisrinivasan/p8105_final">here</a></p>
+<p>The map was built with the United Hospital Fund (UHF) neighborhood code key from <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf">NYC Health</a>.</p>
 <div id="exploratory-analysis" class="section level2">
 <h2>Exploratory analysis</h2>
 <ul>

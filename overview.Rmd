@@ -72,7 +72,7 @@ p1
 
 # Data
 
-We built our dataset using the [NYC Gov Environmental & Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx). The Environmental & Health Data Portal houses data from a variety of data sources such as the New York City Automated School Health Records, American Community Survey and New York City Housing and Vacancy Survey (HVS). Data from this portal are used to study how the environment affects health. The map was built with the United Hospital Fund (UHF) neighborhood code key from [NYC Health](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf). The asthma CSV file we used is linked (here)[asthma_data.csv]. We selected all variables relating to asthma, cockroaches, and poverty through string detection:
+We downloaded all available data from the [NYC Gov Environmental & Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx). The Environmental & Health Data Portal houses data from a variety of sources such as the New York City Automated School Health Records, American Community Survey and New York City Housing and Vacancy Survey (HVS). Data from this portal are used to study how the environment affects health. We initially filtered the dataset to include all variables related to asthma, cockroaches and poverty before finalizing the dataset to include variables only related to public school children with asthma, homes with cockroaches and poverty. The asthma CSV file we used is linked (here)[asthma_data.csv]. 
 
   * `geo_type_name`: 
   
@@ -99,7 +99,9 @@ Potential confounder
 
   * `poverty`:
 
-* Our github repository is linked [here](https://github.com/prisrinivasan/p8105_final)
+Our github repository is linked [here](https://github.com/prisrinivasan/p8105_final)
+
+The map was built with the United Hospital Fund (UHF) neighborhood code key from [NYC Health](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf). 
 
 ## Exploratory analysis
 
