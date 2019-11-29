@@ -237,6 +237,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -265,6 +266,12 @@ $(document).ready(function () {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -392,7 +399,6 @@ div.tocify {
 <div id="why-should-we-care" class="section level3">
 <h3>Why should we care?</h3>
 <p>In 2017, 15.6% of households <a href="http://www.sternenvironmental.com/blog/2017/04/18/nyc-breaks-the-top-ten-list-for-worst-rat-and-cockroach-problems/">reported</a> having pest infestations. One of the most common pests in NYC is cockroaches. As temperatures rise, cockroach populations are <a href="https://gothamist.com/arts-entertainment/its-summer-in-nyc-and-the-cockroaches-have-taken-flight">expected</a> to increase, posing additional public health challenges, particularly among those who have asthma or respiratory reactions to cockroaches.</p>
-<p>Because of this, we want to take a life course perspective and look at how hospitalization rates among children ages 0-4 are affected by prevalence of cockroaches in their homes.</p>
 <ul>
 <li>Insert Map Here</li>
 </ul>
