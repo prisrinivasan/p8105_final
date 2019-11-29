@@ -22,6 +22,9 @@ Given the large presence of cockroaches in [NYC](https://www.ncbi.nlm.nih.gov/pm
 ## _Missed School Days Becomes a Social Justice Issue_ 
 According to the [CDC](https://www.cdc.gov/pcd/issues/2019/19_0074.htm), asthma-school-related-absenteeism is a major risk factor for poor achievement and school drop out. In addition, schools in lower-income neighborhoods struggle to provide adequate asthma care due to limited resources, resulting in further gaps in quality of care. 
 
+<img align="center" img src="images/Access_To_HealthCenters.jpg" style="width:75%"/>  
+
+Image from [Institute for Children Poverty](https://www.icphusa.org/reports/asthma-prevalence-access-to-care-among-homeless-high-school-students/)
 
 Through these analyses we hope to identify and analyze risk factors for childhood asthma to map where these risk factors may have the largest impact. The current literature focuses on IgE exposure, air pollution, and the effect of impoverished neighborhoods on [childhood asthma rates](https://www.ncbi.nlm.nih.gov/pubmed/28939248) and [childhood schooling rates](https://www.cdc.gov/pcd/issues/2019/19_0074.htm). 
 
