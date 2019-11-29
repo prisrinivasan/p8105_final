@@ -10,7 +10,7 @@ Asthma is one of the most common chronic illnesses for young children living in 
 In NYC, there are many prominent risk factors for childhood asthma including air pollution, dust mites, mice, cockroaches, and pets. 
 
 
-<img align="center" img src="images/hospitalization.jpg" style="width:85%"/>  
+<img align="center" img src="images/hospitalization.jpg" style="width:75%"/>  
 
 Image from [Center for New York City Affairs](http://www.centernyc.org/public-housing-and-asthma)
 
