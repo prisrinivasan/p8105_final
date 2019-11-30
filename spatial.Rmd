@@ -54,7 +54,11 @@ tidy_asthma_sf = merge(uhf_map, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_
 tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
 
 #creating color palette for cockroaches
-pal = colorQuantile("Reds", tidy_asthma_sf_ll$homes_with_cockroaches, n = 7)
+roach_pal = colorQuantile("Reds", tidy_asthma_sf_ll$homes_with_cockroaches, n = 7)
+
+#color palette for asthma
+asthma_pal = colorQuantile("Reds", tidy_asthma_sf_ll$public_school_children_5_14_yrs_old_with_asthma, n = 7)
+
 ```
 
 ## Cockroach maps - using leaflet
@@ -70,7 +74,7 @@ tidy_asthma_sf_ll %>%
     addPolygons(stroke = TRUE,
                 weight = 2, 
                 opacity = 1,
-                color = ~pal(homes_with_cockroaches),
+                color = ~roach_pal(homes_with_cockroaches),
                 fillOpacity = 0.8,
                 smoothFactor = 0.2,
                 highlight = highlightOptions(weight = 3,
@@ -78,7 +82,7 @@ tidy_asthma_sf_ll %>%
                                              bringToFront = TRUE),
                 label = ~roach_label) %>% 
     addLegend("bottomright",
-              pal = pal,
+              pal = roach_pal,
               values = ~homes_with_cockroaches,
               title = "% Homes with Cockroaches",
               #labFormat = labelFormat(suffix = "%"),
@@ -88,7 +92,37 @@ tidy_asthma_sf_ll %>%
 
 ## Asthma maps using leaflet
 
+```{r}
+tidy_asthma_sf_ll %>%
+  filter(time_period == 2014) %>% 
+  mutate(asthma_label = str_c("Children 5-14 with Asthma: ", public_school_children_5_14_yrs_old_with_asthma, "\n, Neighborhood: ", uhfcode)) %>% 
+    leaflet() %>%
+    addProviderTiles("CartoDB.Positron") %>%
+    addPolygons(stroke = TRUE,
+                weight = 2, 
+                opacity = 1,
+                color = ~asthma_pal(public_school_children_5_14_yrs_old_with_asthma),
+                fillOpacity = 0.8,
+                smoothFactor = 0.2,
+                highlight = highlightOptions(weight = 3,
+                                             color = "white",
+                                             bringToFront = TRUE),
+                label = ~asthma_label) %>% 
+    addLegend("bottomright",
+              pal = asthma_pal,
+              values = ~public_school_children_5_14_yrs_old_with_asthma,
+              title = "Children 5-14 with Asthma (rate per 1000)",
+              #labFormat = labelFormat(suffix = "%"),
+              opacity = 1)
+```
 
+## Variable Meaning
+
+For Homes with Cockroaches, Percent = estimated # of households in an area that reported seeing at least one cockroach daily over the last month divided by # households in the area
+
+For Poverty, Percent = estimated # of ppl for whom poverty status is determined whose annual income falls below 100% of FPL divided by # of ppl for whom poverty status is determined. 
+
+For public school children with asthma rates: # of public school children with diagnosis of asthma during current or previous school year divided by 5-14 year old population expresssed per 1000. 
 
 
 
