@@ -118,10 +118,20 @@ NOTE: I set up this header temporarily to separate it from the first section. Fe
 
 ### Analyses of the data 
 
-* The graphs and analyses can be found [here](regression.Rmd).
+* The graphs and analyses can be found [here](regression.html).
 * We started by creating a correlation matrix to assess multicollinearity and baseline correlations
 * We then assessed the crude relationship between exposure, cockroach presence in the home and the outcome, childhood asthma
 
 
 ## Discussion
+
+In the process of analyzing the association between prevalence of cockroach in homes and asthma, we gained the following insights:
+
+* In particular, the strength of association between homes with cockroaches and poverty, as well as the association between homes with cockroaches and hospitalization, are rather strong, with correlations r=0.88 and r=0.77 respectively. This aligns with previous research done by the [New York City Neighborhood Asthma and Allergy Study (NAAS)](https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pubmed/21536321/), and [other sources](http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html). Although the [NYC Department of Health](https://www1.nyc.gov/site/doh/health/health-topics/asthma.page) stated that to the best way to manage asthma is through doctor’s visits, medication, avoiding triggers, and asthma management at school, this is not feasible for many people due to lack of access to high-quality healthcare, as discussed in this [article](http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html).
+
+* In addition, the positive linear association between percent of children with asthma and percent of homes with cockroaches at home between years 2011 and 2014 provides further evidence that the percentage of school children with asthma is continuing to increase, as stated in this [article](https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pmc/articles/PMC4803579/). Visualization of asthma prevalence by neighborhood and by borough display this increase as well.
+
+* Visualization of geographic variation of cockroach and asthma prevalence can provide insight for different interventions--such as the one conducted in [New Orleans](https://www-sciencedirect-com.ezproxy.cul.columbia.edu/science/article/pii/S0091674916313495)-- in target neighborhoods such as Crotona, Tremont, Hunts Point, Mott Haven, all of which are located in the Bronx. However, it is interesting to note that Williamsburg, which is now known to be a rather affluent neighborhood, has high cockroach prevalence.
+
+*	Similar to [previous research](https://www.cdc.gov/pcd/issues/2019/19_0074.htm), there are several limitations, including not having and including all the confounding health and social risk factors. 
 
