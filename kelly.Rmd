@@ -205,12 +205,18 @@ test_prev
 #set seed for reproducibility
 set.seed(10)
 #fitting the full model
+
+
+tidy_asthma = 
+  read_csv(file = "./final_data/tidy_asthma.csv")
 test=
   tidy_asthma %>% 
   filter(time_period == c("2011", "2014"))
 
 ## Model 0 -- crude 
 model0_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches, data=test) %>% broom::tidy()
+
+
 
 
 ## Model 1
