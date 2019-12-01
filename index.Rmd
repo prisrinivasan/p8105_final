@@ -12,8 +12,7 @@ output:
 
 ## Motivation
 <br>
-Asthma is one of the most common chronic conditions in children across the United States, currently affecting more than [6 million children](https://www.aafa.org/asthma-facts/). New York City (NYC) hosts a much higher [prevalence](https://www1.nyc.gov/assets/doh/downloads/pdf/epi/databrief90.pdf) of childhood asthma (13%) than the rest of the [United States (7.5%)](https://www.cdc.gov/nchs/fastats/asthma.htm) - with children of color and low-income neighborhoods affected disproportionately: 
-
+Asthma is one of the most common chronic conditions in children across the United States, currently affecting more than [6 million children](https://www.aafa.org/asthma-facts/). New York City (NYC) hosts a much higher prevalence of childhood asthma [(13%)](https://www1.nyc.gov/assets/doh/downloads/pdf/epi/databrief90.pdf) than the rest of the United States [(7.5%)](https://www.cdc.gov/nchs/fastats/asthma.htm) - with children of color and low-income neighborhoods affected disproportionately: 
 
 
 ```{r, echo = FALSE, include = FALSE}
@@ -53,6 +52,8 @@ asthma_pal = colorQuantile("Reds", tidy_asthma_sf_ll$public_school_children_5_14
 ```
 
 ```{r, eval = TRUE}
+
+#FIX LEGEND
 asthma_map = 
 tidy_asthma_sf_ll %>%
   filter(time_period == 2014) %>% 
@@ -69,15 +70,19 @@ tidy_asthma_sf_ll %>%
                                              color = "white",
                                              bringToFront = TRUE),
                 label = ~asthma_label) %>% 
-    addLegend("bottomright",
+    addLegend("topleft",
               pal = asthma_pal,
               values = ~public_school_children_5_14_yrs_old_with_asthma,
               title = "Children 5-14 with Asthma (rate per 1000)",
-              #labFormat = labelFormat(suffix = "%"),
               opacity = 1)
 asthma_map
 ```
 
+Aside from creating a financial [burden](https://www.ajmc.com/newsroom/cdc-study-puts-economic-burden-of-asthma-at-more-than-80-billion-per-year) for the US economy and families, asthma leads to student absenteeism, further perpetuating educational gaps and socioeconomic disparities. It has been estimated that [14 - 18%](https://www.cdc.gov/pcd/issues/2019/19_0074.htm) of missed school days are explained by asthma episodes, making asthma one of the top causes of absenteeism. 
+
+The toll of asthma on children has drawn attention and resources towards mitigation. While root causes of asthma are still [unknown](https://www.webmd.com/asthma/asthma-triggers#1), common triggers - particularly those associated with allergies - have been isolated. Household pests, including cockroaches and mice, are one of the most [common indoor triggers](https://www.cdc.gov/asthma/triggers_indoor.html). 
+
+The analysis presented here explores the association between childhood asthma and another highly prevalent NYC phenomenon - cockroaches.  
 ## Data
 
 ## Findings
