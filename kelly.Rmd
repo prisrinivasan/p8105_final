@@ -155,6 +155,27 @@ tidy_asthma_hospitalization =
 
 ```{r, error = TRUE}
 ## see changes with Hospitalzation by time
+set.seed(10)
+library(ggplot2)
+
+tidy_asthma=
+  read_csv(file="./final_data/tidy_asthma.csv")
+
+ggplot_data = 
+tidy_asthma %>%
+  filter(time_period == c("2011", "2014"))
+
+plot_tidy = 
+ggplot(ggplot_data, aes(x = homes_with_cockroaches, y = asthma_hospitalizations_children_5_to_17_yrs_old, color = homes_with_cockroaches)) +
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  facet_grid(~time_period) +
+  labs(x = "Percent of Homes with Cockroaches",
+       y = "Percent of School Children Hospitalized from Asthma",
+       title = "Crude Association Homes with Cockroaches and Childhood Asthma Hospitalization") +
+  viridis::scale_color_viridis(aes(color = homes_with_cockroaches), discrete = FALSE)
+
+plot_tidy
 
 test_prev=
   tidy_asthma_hospitalization %>% 
