@@ -6,7 +6,7 @@ output:
 ---
 <font size="3"> _Hannah Bowlin, Lorraine Kwok, Priyanka Srinivasan, Alice Tivorovsky, Kelly Wang_ </font>
 <br><br>
-<img align="center" img src="images/kids.jpg" style="width:75%"/>  
+<img align="center" img src="images/kids.jpg" style="width:74%"/>  
 <font size = "0.7">Image from [Centers for Disease Control](https://www.cdc.gov/vitalsigns/childhood-asthma/index.html)</font>
 
 
@@ -80,24 +80,29 @@ asthma_map
 
 Aside from creating a financial [burden](https://www.ajmc.com/newsroom/cdc-study-puts-economic-burden-of-asthma-at-more-than-80-billion-per-year) for the US economy and families, asthma leads to student absenteeism, further perpetuating educational gaps and socioeconomic disparities. It has been estimated that [14 - 18%](https://www.cdc.gov/pcd/issues/2019/19_0074.htm) of missed school days are explained by asthma episodes, making asthma one of the top causes of absenteeism. 
 
-The toll of asthma on children has drawn attention and resources towards mitigation. While root causes of asthma are still [unknown](https://www.webmd.com/asthma/asthma-triggers#1), common triggers - particularly those associated with allergies - have been isolated. Household pests, including cockroaches and mice, are one of the most [common indoor triggers](https://www.cdc.gov/asthma/triggers_indoor.html). 
+The toll of asthma on children has drawn attention and resources towards mitigation. While root causes of asthma are still [unknown](https://www1.nyc.gov/site/doh/health/health-topics/asthma.page), common triggers - particularly those associated with allergies - have been isolated. Household pests, including cockroaches and mice, are one of the most [common indoor triggers](https://www.cdc.gov/asthma/triggers_indoor.html). 
 
-The analysis presented here explores the association between childhood asthma and another highly prevalent NYC phenomenon - cockroaches.  
+The analyses presented here explore the association between childhood asthma and another highly prevalent NYC phenomenon - cockroaches.  
+
 ## Data
+All data used for these analyses were taken from the NYC Health Department [Environment and Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx). Asthma and cockroach prevalence came from the ["All Available Data"](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTCsv/AllAvailableData.zip) dataset. Spatial data were taken from the NYC Health Department's [GIS Center](https://www1.nyc.gov/site/doh/data/health-tools/maps-gis-data-files-for-download.page). Analyses focused on asthma prevalence in public school children aged 5 - 14. 
 
 ## Findings
+Overall, a strong positive correlation was observed between asthma and cockroaches. The highest asthma rates were observed among children in the Bronx. The highest proportion of homes with cockroaches was also observed in the Bronx. Potential confounding by XX was explored and found to... 
 
-## Discussion
+Further analysis should...
 
 ## Screencast
 
 ## Got 'Roaches? 
+If you find yourself sharing space with cockroaches, the best thing you can do is to make your home as unappealing to them as possible. We recommend using humane and sustainable methods. More information can be found [here](https://www.peta.org/issues/wildlife/dealing-household-guests/cockroaches/). 
 
-Sticker: 
+<img align="center" img src="images/roach_hex.png" style="width:10%"/>  
 
+## Do we want to keep this? 
 In 2017, 15.6% of households [reported](http://www.sternenvironmental.com/blog/2017/04/18/nyc-breaks-the-top-ten-list-for-worst-rat-and-cockroach-problems/) having pest infestations. One of the most common pests in NYC is cockroaches. As temperatures rise, cockroach populations are [expected](https://gothamist.com/arts-entertainment/its-summer-in-nyc-and-the-cockroaches-have-taken-flight) to increase, posing additional public health challenges, particularly among those who have asthma or respiratory reactions to cockroaches.  
 
 
-* Insert Map Here 
+
 
 
