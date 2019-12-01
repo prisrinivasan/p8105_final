@@ -10,7 +10,7 @@ Asthma is one of the most common chronic illnesses for young children living in 
 In NYC, there are many prominent risk factors for childhood asthma including air pollution, dust mites, mice, cockroaches, and pets. 
 
 
-<img align="center" img src="images/hospitalization.jpg" style="width:75%"/>  
+<img align="center" img src="images/hospitalization.jpg" style="width:65%"/>  
 
 Image from [Center for New York City Affairs](http://www.centernyc.org/public-housing-and-asthma)
 
@@ -22,7 +22,7 @@ Given the large presence of cockroaches in [NYC](https://www.ncbi.nlm.nih.gov/pm
 ## _Missed School Days Becomes a Social Justice Issue_ 
 According to the [CDC](https://www.cdc.gov/pcd/issues/2019/19_0074.htm), asthma-school-related-absenteeism is a major risk factor for poor achievement and school drop out. In addition, schools in lower-income neighborhoods struggle to provide adequate asthma care due to limited resources, resulting in further gaps in quality of care. 
 
-<img align="center" img src="images/Access_To_HealthCenters.jpg" style="width:75%"/>  
+<img align="center" img src="images/Access_To_HealthCenters.jpg" style="width:50%"/>  
 
 Image from [Institute for Children Poverty](https://www.icphusa.org/reports/asthma-prevalence-access-to-care-among-homeless-high-school-students/)
 
