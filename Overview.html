@@ -12,7 +12,7 @@
 
 
 
-<title>Report</title>
+<title>Overview</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,7 +20,11 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -247,7 +251,67 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
 
 
 
@@ -257,6 +321,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -307,9 +381,17 @@ $(document).ready(function () {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
 
 
-<h1 class="title toc-ignore">Report</h1>
+
+<h1 class="title toc-ignore">Overview</h1>
 
 </div>
 
@@ -331,29 +413,107 @@ $(document).ready(function () {
 </div>
 <div id="data" class="section level2">
 <h2>Data</h2>
-</div>
-<div id="data-1" class="section level1">
-<h1>Data</h1>
+<p>We downloaded all available data from the <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx">NYC Gov Environmental &amp; Health Data Portal</a>. The Environmental &amp; Health Data Portal houses data from a variety of sources such as the New York City Automated School Health Records, American Community Survey and New York City Housing and Vacancy Survey (HVS). Data from this portal are used to study how the environment affects health. We initially filtered the dataset to include all variables related to asthma, cockroaches and poverty before finalizing the dataset to include variables only related to public school children with asthma, asthma hospitalizations for children ages 5-17 years old, homes with cockroaches and poverty. Definitions for the variables were taken from the “Source Information” csv file downloaded with the dataset from the Environmental &amp; Health Data Portal.</p>
 <ul>
-<li><p>We built our dataset using the <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx">NYC Gov Environmental &amp; Health Data Portal</a>. The map was built with the UHF code key from <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf">NYC Health</a>. The asthma CSV file we used is linked (here)[asthma_data.csv]. We selected all variables relating to asthma, cockroaches, and poverty through string detection.</p></li>
-<li><p>Our github repository is linked <a href="https://github.com/prisrinivasan/p8105_final">here</a></p></li>
+<li><p><code>geo_type_name</code>: Geographical name (i.e borough, UHF42)</p></li>
+<li><p><code>geo_join_id</code>: Numeric ID of the geographical area</p></li>
+<li><p><code>geo_place_name</code>: Name of the geographical area</p></li>
+<li><p><code>time_period</code>: Year for the data</p></li>
 </ul>
+<p>Predictor</p>
+<ul>
+<li><code>homes_with_cockroaches</code> (Percent): Estimated number of households in an area that reported seeing at least one cockroach daily over the last month, divided by the number of households in the area.</li>
+</ul>
+<p>Outcomes of interest</p>
+<ul>
+<li><p><code>public_school_children_5_14_yrs_old_with_asthma</code> (Rate): Number of public school children, aged 5-14 years, with a diagnosis of asthma that has been reported to NYC DOHMH during the current or previous school year, divided by the 5-14 year old population, per 1,000.</p></li>
+<li><p><code>asthma_hospitalizations_children_5_to_17_yrs_old</code> (Rate): Number of asthma-related hospitalizations among NYC resident children aged 5 to 17 years, divided by the population of children 5 to 17 years old, using NYC DOHMH intercensal estimates; expressed as cases per 10,000 residents</p></li>
+</ul>
+<p>Potential confounder</p>
+<ul>
+<li><code>poverty</code> (Percent): Estimated number of people for whom poverty status is determined, whose annual income falls below 100% of the federal poverty level, divided by the number of people for whom poverty status is determined.</li>
+</ul>
+<p>Our github repository is linked <a href="https://github.com/prisrinivasan/p8105_final">here</a>.</p>
+<p>The map was built using the United Hospital Fund (UHF) neighborhood code key from <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf">NYC Health</a>.</p>
+<div id="loading-and-tidying-the-data" class="section level3">
+<h3>Loading and tidying the data</h3>
+<p>We downloaded the data as a csv file from the NYC Environmental &amp; Health Data Portal and called the initial dataset <code>all_available_data</code>. We restricted our data to include boroughs and UHF42 neighborhoods as our geographical areas of interest and to include the indicators: <code>homes_with_cockroaches</code>, <code>poverty</code> and <code>public_school_children_5_14_yrs_old_with_asthma</code>.</p>
+<p>Data for the rate of public school children with asthma were presented for a range of years (i.e. 2010-2011, 2011-2012, etc). For our analysis, we recoded these ranges into single years in order to 2011-2014. Data on cockroaches were only available for 2011 and 2014. Data on percent poverty in NYC were also presented in ranges and we chose 2010-2014 as our reference. We recoded this into a single year for 2011. Since the data for these four variables overlapped for the years 2011-2014, we restricted our analysis to these four years. Data for the rate of asthma hospitalizations among children ages 5-17 years old were available for all four years.</p>
+<p>After recoding the years, separate dataframes were created for each of the [four/five variables] and then joined together in order to fill in the missing values (NAs) that first existed when filtering for these variables and years in the larger dataset. We called the tidied, joined dataset <code>tidy_asthma</code> and exported it as a <a href="tidy_asthma.csv">csv file</a>.</p>
+</div>
+</div>
 <div id="exploratory-analysis" class="section level2">
 <h2>Exploratory analysis</h2>
+</div>
+<div id="method" class="section level2">
+<h2><em>Method</em></h2>
+<p>The dataset we used was compiled using the Environmental and Health Dataset from the NYC Health Department. We selected variables based on our preliminary hypothesis regarding asthma, poverty, neighborhood, cockroaches, and school children. These analyses are exploring the correlations and relationships. The correlation matrix displays associations between all of our predictors and outcome to indicate any multicollinearity. The crude analysis shows the crude relationship between cockroach presence and childhood asthma. Finally, the linear model demonstrates the model with all of our predictors against our outcome.</p>
+</div>
+<div id="correlation-matrix" class="section level2">
+<h2><em>Correlation Matrix</em></h2>
+<p><img src="Overview_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>The correlation matrix displays the baseline association between each variable. All of the correlations are above 0.53 which indicates strong correlation. As we model build we will be aware of any multicollinearity from those variables with correlations larger than 0.88.</p>
+</div>
+<div id="crude-association-between-childhood-asthma-and-cockroaches-in-the-home" class="section level2">
+<h2><em>Crude Association between Childhood Asthma and Cockroaches in the Home</em></h2>
+<p><img src="Overview_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Our crude relationship between childhood asthma and cockroaches in the home is demonstrated here. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation.</p>
+</div>
+<div id="tables" class="section level2">
+<h2><em>Tables</em></h2>
+<table>
+<thead>
+<tr class="header">
+<th align="right">r.squared</th>
+<th align="right">adj.r.squared</th>
+<th align="right">sigma</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+<th align="right">df</th>
+<th align="right">logLik</th>
+<th align="right">AIC</th>
+<th align="right">BIC</th>
+<th align="right">deviance</th>
+<th align="right">df.residual</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.5885523</td>
+<td align="right">0.408544</td>
+<td align="right">14.12675</td>
+<td align="right">3.269584</td>
+<td align="right">0.0235532</td>
+<td align="right">8</td>
+<td align="right">-92.74262</td>
+<td align="right">203.4852</td>
+<td align="right">214.0877</td>
+<td align="right">3193.039</td>
+<td align="right">16</td>
+</tr>
+</tbody>
+</table>
 <ul>
-<li>The graphs and analyses can be found <a href="regression.Rmd">here</a>.</li>
+<li>The graphs and analyses can be found <a href="regression.html">here</a>.</li>
 <li>We started by creating a correlation matrix to assess multicollinearity and baseline correlations</li>
 <li>We then assessed the crude relationship between exposure, cockroach presence in the home and the outcome, childhood asthma</li>
-<li></li>
 </ul>
 </div>
 <div id="discussion" class="section level2">
 <h2>Discussion</h2>
+<p>In the process of analyzing the association between prevalence of cockroach in homes and asthma, we gained the following insights:</p>
+<ul>
+<li><p>In particular, the strength of association between homes with cockroaches and poverty, as well as the association between homes with cockroaches and hospitalization, are rather strong, with correlations r=0.88 and r=0.77 respectively. This aligns with previous research done by the <a href="https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pubmed/21536321/">New York City Neighborhood Asthma and Allergy Study (NAAS)</a>, and <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html">other sources</a>. Although the <a href="https://www1.nyc.gov/site/doh/health/health-topics/asthma.page">NYC Department of Health</a> stated that to the best way to manage asthma is through doctor’s visits, medication, avoiding triggers, and asthma management at school, this is not feasible for many people due to lack of access to high-quality healthcare, as discussed in this <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html">article</a>.</p></li>
+<li><p>In addition, the positive linear association between percent of children with asthma and percent of homes with cockroaches at home between years 2011 and 2014 provides further evidence that the percentage of school children with asthma is continuing to increase, as stated in this <a href="https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pmc/articles/PMC4803579/">article</a>. Visualization of asthma prevalence by neighborhood and by borough display this increase as well.</p></li>
+<li><p>Visualization of geographic variation of cockroach and asthma prevalence can provide insight for different interventions–such as the one conducted in <a href="https://www-sciencedirect-com.ezproxy.cul.columbia.edu/science/article/pii/S0091674916313495">New Orleans</a>– in target neighborhoods such as Crotona, Tremont, Hunts Point, Mott Haven, all of which are located in the Bronx. However, it is interesting to note that Williamsburg, which is now known to be a rather affluent neighborhood, has high cockroach prevalence.</p></li>
+<li><p>Similar to <a href="https://www.cdc.gov/pcd/issues/2019/19_0074.htm">previous research</a>, there are several limitations, including not having and including all the confounding health and social risk factors.</p></li>
+</ul>
+</div>
+
+
+
 </div>
 </div>
-
-
-
 
 </div>
 
@@ -385,7 +545,38 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
