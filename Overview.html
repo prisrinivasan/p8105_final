@@ -424,7 +424,7 @@ div.tocify {
 <ul>
 <li><code>homes_with_cockroaches</code> (Percent): Estimated number of households in an area that reported seeing at least one cockroach daily over the last month, divided by the number of households in the area.</li>
 </ul>
-<p>Outcome of interest</p>
+<p>Outcomes of interest</p>
 <ul>
 <li><p><code>public_school_children_5_14_yrs_old_with_asthma</code> (Rate): Number of public school children, aged 5-14 years, with a diagnosis of asthma that has been reported to NYC DOHMH during the current or previous school year, divided by the 5-14 year old population, per 1,000.</p></li>
 <li><p><code>asthma_hospitalizations_children_5_to_17_yrs_old</code> (Rate): Number of asthma-related hospitalizations among NYC resident children aged 5 to 17 years, divided by the population of children 5 to 17 years old, using NYC DOHMH intercensal estimates; expressed as cases per 10,000 residents</p></li>
@@ -433,14 +433,13 @@ div.tocify {
 <ul>
 <li><code>poverty</code> (Percent): Estimated number of people for whom poverty status is determined, whose annual income falls below 100% of the federal poverty level, divided by the number of people for whom poverty status is determined.</li>
 </ul>
-<p>Our github repository is linked <a href="https://github.com/prisrinivasan/p8105_final">here</a></p>
+<p>Our github repository is linked <a href="https://github.com/prisrinivasan/p8105_final">here</a>.</p>
 <p>The map was built using the United Hospital Fund (UHF) neighborhood code key from <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf">NYC Health</a>.</p>
 <div id="loading-and-tidying-the-data" class="section level3">
 <h3>Loading and tidying the data</h3>
 <p>We downloaded the data as a csv file from the NYC Environmental &amp; Health Data Portal and called the initial dataset <code>all_available_data</code>. We restricted our data to include boroughs and UHF42 neighborhoods as our geographical areas of interest and to include the indicators: <code>homes_with_cockroaches</code>, <code>poverty</code> and <code>public_school_children_5_14_yrs_old_with_asthma</code>.</p>
-<p>Data for the rate of public school children with asthma were presented for a range of years (i.e. 2010-2011, 2011-2012, etc). For our analysis, we recoded these ranges into single years in order to 2011-2014. Data on cockroaches were available for 2011 and 2014. Data on percent poverty in NYC were also presented in ranges and we chose 2010-2014 as our reference. Since the data for these three indicators overlapped for the years 2011-2014, we restricted our analysis to these four years.</p>
-<p>After recoding the years, separate dataframes needed to be created for each of the four/five variables and then joined together in order to fill in the missing values (NAs) that first existed when filtering for these variables and years.</p>
-<p>We called the tidied dataset <code>tidy_asthma</code> and exported it as a <a href="tidy_asthma.csv">csv file</a> for future reference.</p>
+<p>Data for the rate of public school children with asthma were presented for a range of years (i.e. 2010-2011, 2011-2012, etc). For our analysis, we recoded these ranges into single years in order to 2011-2014. Data on cockroaches were only available for 2011 and 2014. Data on percent poverty in NYC were also presented in ranges and we chose 2010-2014 as our reference. We recoded this into a single year for 2011. Since the data for these four variables overlapped for the years 2011-2014, we restricted our analysis to these four years. Data for the rate of asthma hospitalizations among children ages 5-17 years old were available for all four years.</p>
+<p>After recoding the years, separate dataframes were created for each of the [four/five variables] and then joined together in order to fill in the missing values (NAs) that first existed when filtering for these variables and years in the larger dataset. We called the tidied, joined dataset <code>tidy_asthma</code> and exported it as a <a href="tidy_asthma.csv">csv file</a>.</p>
 </div>
 </div>
 <div id="exploratory-analysis" class="section level2">
