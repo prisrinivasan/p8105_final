@@ -184,6 +184,10 @@ test_prev
 #set seed for reproducibility
 set.seed(10)
 #fitting the full model
+
+
+tidy_asthma = 
+  read_csv(file = "./final_data/tidy_asthma.csv")
 test=
   tidy_asthma %>% 
   mutate(
@@ -193,6 +197,8 @@ test=
     geo_join_id=as.numeric(geo_join_id),
     geo_place_name=as.factor(geo_place_name)
   )
+
+
 
 ## Model 1
 model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id, data=test) %>% broom::tidy()

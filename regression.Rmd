@@ -11,7 +11,9 @@ library(PerformanceAnalytics)
 library(sf)
 library(sp)
 library(tmap)
-  
+library(sjPlot)
+library(sjmisc)
+library(sjlabelled)
 
 tidy_asthma = 
   read_csv(file = "./final_data/tidy_asthma.csv")
@@ -64,10 +66,25 @@ tidy_asthma %>%
   filter(time_period == c("2011", "2014"))
 
 linear_model = 
-  lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * time_period * geo_join_id, data = ggplot_data) %>%
-  broom::glance()
+  lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id, data = ggplot_data)
 
-linear_model %>%
-  knitr::kable()
+## Model 1
+model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id, data=ggplot_data) 
+
+## Model 2
+model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id, data=ggplot_data)
+
+##Model4
+model4_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches*poverty*time_period, data=ggplot_data) 
+
+## Model 5
+model5_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id * asthma_hospitalizations_children_5_to_17_yrs_old, data=ggplot_data)
 ```
 
+```{r, echo = FALSE}
+
+
+tab_model(model1_fit, linear_model, model5_fit)
+```
+
+This table displays the values for each of our four potential models. The first model 
