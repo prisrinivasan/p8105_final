@@ -1,22 +1,97 @@
 ---
-title: "Allergens' effects on asthma in NYC"
+title: "Cockroaches and Asthma in New York City"
 output: 
   html_document:
-    toc: true
-    toc_float: true
+    code_folding: hide
 ---
+<font size="3"> _Hannah Bowlin, Lorraine Kwok, Priyanka Srinivasan, Alice Tivorovsky, Kelly Wang_ </font>
+<br><br>
+<img align="center" img src="images/kids.jpg" style="width:75%"/>  
+<font size = "0.7">Image from [Centers for Disease Control](https://www.cdc.gov/vitalsigns/childhood-asthma/index.html)</font>
 
-<img align="center" img src="images/allergies.jpg" style="width:75%"/>  
 
-Image from [Cleveland Clinic](https://health.clevelandclinic.org/3-reasons-why-your-indoor-allergies-are-worse-in-the-winter-and-how-to-fight-back/)
+## Motivation
+<br>
+Asthma is one of the most common chronic conditions in children across the United States, currently affecting more than [6 million children](https://www.aafa.org/asthma-facts/). New York City (NYC) hosts a much higher [prevalence](https://www1.nyc.gov/assets/doh/downloads/pdf/epi/databrief90.pdf) of childhood asthma (13%) than the rest of the [United States (7.5%)](https://www.cdc.gov/nchs/fastats/asthma.htm) - with children of color and low-income neighborhoods affected disproportionately: 
 
-_Hannah Bowlin, Lorraine Kwok, Priyanka Srinivasan, Alice Tivorovsky, Kelly Wang_
 
-## Cockroach and Asthma Prevalence in New York City
-### Why should we care? 
+
+```{r, echo = FALSE, include = FALSE}
+
+library(tidyverse)
+library(plotly)
+library(tmap)
+library(sf)
+library(maptools)
+library(viridis)
+library(leaflet)
+library(RColorBrewer)
+
+tidy_asthma = 
+  read_csv("./final_data/tidy_asthma.csv") 
+
+uhf_map = 
+  st_read("./final_data/shapefiles/")
+
+str(uhf_map)
+
+tidy_asthma_sf = merge(uhf_map, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id") %>% 
+  janitor::clean_names() %>% 
+  mutate(uhfcode = as.character(uhfcode),
+         time_period = as.character(time_period),
+         homes_with_cockroaches = as.numeric(homes_with_cockroaches))
+
+#changing geometry to latitude and longitude
+tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
+
+#creating color palette for cockroaches
+roach_pal = colorQuantile("Reds", tidy_asthma_sf_ll$homes_with_cockroaches, n = 7)
+
+#color palette for asthma
+asthma_pal = colorQuantile("Reds", tidy_asthma_sf_ll$public_school_children_5_14_yrs_old_with_asthma, n = 7)
+
+```
+
+```{r, eval = TRUE}
+asthma_map = 
+tidy_asthma_sf_ll %>%
+  filter(time_period == 2014) %>% 
+  mutate(asthma_label = str_c("Children 5-14 with Asthma: ", public_school_children_5_14_yrs_old_with_asthma, "\n, Neighborhood: ", uhfcode)) %>% 
+    leaflet() %>%
+    addProviderTiles("CartoDB.Positron") %>%
+    addPolygons(stroke = TRUE,
+                weight = 2, 
+                opacity = 1,
+                color = ~asthma_pal(public_school_children_5_14_yrs_old_with_asthma),
+                fillOpacity = 0.8,
+                smoothFactor = 0.2,
+                highlight = highlightOptions(weight = 3,
+                                             color = "white",
+                                             bringToFront = TRUE),
+                label = ~asthma_label) %>% 
+    addLegend("bottomright",
+              pal = asthma_pal,
+              values = ~public_school_children_5_14_yrs_old_with_asthma,
+              title = "Children 5-14 with Asthma (rate per 1000)",
+              #labFormat = labelFormat(suffix = "%"),
+              opacity = 1)
+asthma_map
+```
+
+## Data
+
+## Findings
+
+## Discussion
+
+## Screencast
+
+## Got 'Roaches? 
+
+Sticker: 
+
 In 2017, 15.6% of households [reported](http://www.sternenvironmental.com/blog/2017/04/18/nyc-breaks-the-top-ten-list-for-worst-rat-and-cockroach-problems/) having pest infestations. One of the most common pests in NYC is cockroaches. As temperatures rise, cockroach populations are [expected](https://gothamist.com/arts-entertainment/its-summer-in-nyc-and-the-cockroaches-have-taken-flight) to increase, posing additional public health challenges, particularly among those who have asthma or respiratory reactions to cockroaches.  
 
-Because of this, we want to take a life course perspective and look at how hospitalization rates among children ages 0-4 are affected by prevalence of cockroaches in their homes.
 
 * Insert Map Here 
 

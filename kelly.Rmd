@@ -186,73 +186,35 @@ set.seed(10)
 #fitting the full model
 test=
   tidy_asthma %>% 
-  mutate(
-    public_school_children_5_14_yrs_old_with_asthma=as.numeric(public_school_children_5_14_yrs_old_with_asthma),
-    homes_with_cockroaches=as.numeric(homes_with_cockroaches),
-    poverty=as.numeric(poverty),
-    geo_join_id=as.numeric(geo_join_id),
-    geo_place_name=as.factor(geo_place_name)
-  )
+  filter(time_period == c("2011", "2014"))
+
+## Model 0 -- crude 
+model0_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches, data=test) %>% broom::tidy()
+
 
 ## Model 1
-model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id, data=test) %>% broom::tidy()
+model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id + time_period, data=test) %>% broom::tidy()
 
 model1_fit
 
 ## Model 2
-model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id, data=test) %>% broom::tidy()
+model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id*time_period, data=test) %>% broom::tidy()
 
-###### Time_Period doesn't work
-##Model 3
-model3_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id*time_period, data=test) %>% broom::tidy()
-
-##Model4
-model4_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches*poverty*time_period, data=test) %>% broom::tidy()
-
-## Model 5
-model5_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id * asthma_hospitalizations_children_5_to_17_yrs_old, data=test) %>% broom::tidy()
 
 # Looking at residuals 
+residual_0=
+  model0_fit %>% 
+  modelr::add_residuals(test, model0_fit) %>% 
+  ggplot(aes(x=public_school_children_5_14_yrs_old_with_asthma, y=resid)) +geom_point()
+
 residual_1=
-  modelr::add_residuals(tidy_asthma, model1_fit) %>% 
+  modelr::add_residuals(test, model1_fit) %>% 
   ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma, y = resid)) + geom_point()
 
 residual_2=
   modelr::add_residuals(tidy_asthma, model2_fit) %>% 
   ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma, y = resid)) + geom_point()
 
-residual_3=
-  modelr::add_residuals(tidy_asthma, model3_fit) %>% 
-  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma, y = resid)) + geom_point()
-
-residual_4=
-  modelr::add_residuals(tidy_asthma, model4_fit) %>% 
-  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma, y = resid)) + geom_point()
-
-residual_5=
-  modelr::add_residuals(tidy_asthma, model5_fit) %>% 
-  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma, y = resid)) + geom_point()
-
-
-ggplot_data = 
-tidy_asthma %>%
-  filter(time_period == c("2011", "2014"))
-  
-linear_model = 
-  lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * time_period * geo_join_id *asthma_hospitalizations_children_5_to_17_yrs_old, data = ggplot_data) %>%
-  broom::tidy() 
-
-plot_tidy = 
-ggplot(ggplot_data, aes(x = homes_with_cockroaches, y = public_school_children_5_14_yrs_old_with_asthma, color = geo_join_id)) +
-  geom_point() + 
-  geom_smooth(method = "lm") +
-  facet_grid(~time_period) +
-  labs(x = "Percent of Homes with Cockroaches",
-       y = "Percent of School Children with Asthma",
-       title = "Effect of Homes with Cockroaches on Childhood Asthma adjusting for Neighborhood") +
-  viridis::scale_color_viridis(aes(color = geo_join_id), discrete = FALSE)
-
-plot_tidy
 
 ```
 
@@ -277,7 +239,22 @@ cv_df=
          rmse_model5=map2_dbl(model5_lm, test, ~rmse(model=.x, data=.y)))
 ```
 
+## Trying to do multi-linear modeling 
+```{r}
+library(car)
+tidy_asthma = 
+  read_csv(file = "./final_data/tidy_asthma.csv")
+
+tidy_asthma 
+
+ggplot_data = 
+tidy_asthma %>%
+  filter(time_period == c("2011", "2014"))
+
+linear_model = 
+  lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * time_period * geo_join_id, data = ggplot_data) %>%
+  broom::glance()
+layout(matrix(c(1,2,3,4),2,2))
+plot(linear_model)
 ```
 
-=======
->>>>>>> 47a2c4709bdc3516aa253444ade91a33d5b9a8a9

@@ -7,6 +7,8 @@ editor_options:
   chunk_output_type: console
 ---
 
+## Setup and Import: 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
@@ -21,84 +23,106 @@ library(RColorBrewer)
 
 ```
 
-Get data: 
+Load tidy_asthma: 
+
 ```{r}
-prev_data = 
+tidy_asthma = 
   read_csv("./final_data/tidy_asthma.csv") 
 ```
 
-## Cockroach Maps
-
-Cockroach prevalence by UHF: 
-
-```{r}
-roach_prev = 
-  prev_data %>% 
-  filter(
-    geo_type_name == "UHF42", 
-    time_period == 2011) %>% 
-  select(geo_join_id, homes_with_cockroaches)
-```
+## Shape files 
 
 Reading in shape files: 
 
 ```{r}
 uhf_map = 
-  st_read("./final_data/shapefiles/") %>% 
-  rename(geo_join_id = UHFCODE) %>% 
-  filter()
+  st_read("./final_data/shapefiles/")
 
 str(uhf_map)
 ```
 
-```{r}
-roaches_map = left_join(uhf_map, roach_prev, by = "geo_join_id")
-```
+Joining shapefiles with tidy_asthma: 
 
 ```{r}
-pal = brewer.pal(6,"BuGn")
-pal
+tidy_asthma_sf = merge(uhf_map, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id") %>% 
+  janitor::clean_names() %>% 
+  mutate(uhfcode = as.character(uhfcode),
+         time_period = as.character(time_period),
+         homes_with_cockroaches = as.numeric(homes_with_cockroaches))
 
-tm_shape(roaches_map) + 
-  tm_polygons("homes_with_cockroaches", id = "geo_join_id", palette = "BuGn")
+#changing geometry to latitude and longitude
+tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
 
-tmap_mode("view")
-tmap_last
-```
+#creating color palette for cockroaches
+roach_pal = colorQuantile("Reds", tidy_asthma_sf_ll$homes_with_cockroaches, n = 7)
 
-## Asthma Maps
-
-Asthma prevalence by UHF
-
-```{r}
-asthma_prev = 
-  prev_data %>% 
-  filter(
-    geo_type_name == "UHF42", 
-    time_period == 2011) %>% 
-  select(geo_join_id, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma)
+#color palette for asthma
+asthma_pal = colorQuantile("Reds", tidy_asthma_sf_ll$public_school_children_5_14_yrs_old_with_asthma, n = 7)
 
 ```
 
+## Cockroach maps - using leaflet
+
+Cockroach prevalence by UHF in 2014: 
 
 ```{r}
-asthma_map = left_join(uhf_map, asthma_prev, by = "geo_join_id")
+tidy_asthma_sf_ll %>%
+  filter(time_period == 2014) %>% 
+  mutate(roach_label = str_c("Homes with Cockroaches: ", homes_with_cockroaches, "\n, Neighborhood: ", uhfcode)) %>% 
+    leaflet() %>%
+    addProviderTiles("CartoDB.Positron") %>%
+    addPolygons(stroke = TRUE,
+                weight = 2, 
+                opacity = 1,
+                color = ~roach_pal(homes_with_cockroaches),
+                fillOpacity = 0.8,
+                smoothFactor = 0.2,
+                highlight = highlightOptions(weight = 3,
+                                             color = "white",
+                                             bringToFront = TRUE),
+                label = ~roach_label) %>% 
+    addLegend("bottomright",
+              pal = roach_pal,
+              values = ~homes_with_cockroaches,
+              title = "% Homes with Cockroaches",
+              #labFormat = labelFormat(suffix = "%"),
+              opacity = 1)
 ```
+
+
+## Asthma maps using leaflet
 
 ```{r}
-tm_shape(asthma_map) + 
-  tm_polygons("public_school_children_5_14_yrs_old_with_asthma", id = "geo_join_id", palette = "BuGn")
-
-tmap_mode("view")
-tmap_last
+tidy_asthma_sf_ll %>%
+  filter(time_period == 2014) %>% 
+  mutate(asthma_label = str_c("Children 5-14 with Asthma: ", public_school_children_5_14_yrs_old_with_asthma, "\n, Neighborhood: ", uhfcode)) %>% 
+    leaflet() %>%
+    addProviderTiles("CartoDB.Positron") %>%
+    addPolygons(stroke = TRUE,
+                weight = 2, 
+                opacity = 1,
+                color = ~asthma_pal(public_school_children_5_14_yrs_old_with_asthma),
+                fillOpacity = 0.8,
+                smoothFactor = 0.2,
+                highlight = highlightOptions(weight = 3,
+                                             color = "white",
+                                             bringToFront = TRUE),
+                label = ~asthma_label) %>% 
+    addLegend("bottomright",
+              pal = asthma_pal,
+              values = ~public_school_children_5_14_yrs_old_with_asthma,
+              title = "Children 5-14 with Asthma (rate per 1000)",
+              #labFormat = labelFormat(suffix = "%"),
+              opacity = 1)
 ```
 
+## Variable Meaning
 
-```{r}
-tm_shape(asthma_map) + 
-  tm_polygons("public_school_children_5_14_yrs_old_with_persistent_asthma", id = c("geo_join_id"), palette = "BuGn")
+For Homes with Cockroaches, Percent = estimated # of households in an area that reported seeing at least one cockroach daily over the last month divided by # households in the area
 
-tmap_mode("view")
-tmap_last
-```
+For Poverty, Percent = estimated # of ppl for whom poverty status is determined whose annual income falls below 100% of FPL divided by # of ppl for whom poverty status is determined. 
+
+For public school children with asthma rates: # of public school children with diagnosis of asthma during current or previous school year divided by 5-14 year old population expresssed per 1000. 
+
+
 
