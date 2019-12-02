@@ -83,8 +83,10 @@ model5_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_coc
 
 ```{r, echo = FALSE}
 
-
 tab_model(model1_fit, linear_model, model5_fit)
 ```
 
-This table displays the values for each of our four potential models. The first model 
+
+This table displays the values for each of our four potential models. The three columns of "Public School Children 5-14 Years Old With Asthma" represent the three potential models. 
+
+* The first 
