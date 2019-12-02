@@ -9,7 +9,7 @@ output:
 
 ## Cockroach and Asthma Distributions by Borough
 
-```{r, echo = FALSE, include = FALSE, eval = TRUE}
+```{r, eval = TRUE, message = FALSE}
 library(tidyverse)
 library(PerformanceAnalytics)
 library(sf)
@@ -19,8 +19,6 @@ library(patchwork)
 
 tidy_asthma = 
   read_csv(file = "./final_data/tidy_asthma.csv")
-
-tidy_asthma 
 
 shape = st_read("./final_data/shapefiles/", quiet = TRUE)
 
@@ -33,7 +31,7 @@ tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id
 tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
 ```
 
-```{r, echo = FALSE, eval = TRUE}
+```{r, eval = TRUE, message = FALSE, warning = FALSE}
 
 p2 = 
   tidy_asthma_sf_ll %>%
@@ -44,12 +42,13 @@ p2 =
     x = "Percent of Public School Children with Asthma",
     y = "Frequency",
     title = "Distribution of Childhood Asthma by Borough")
+
 p2
 ```
 
 ## Cockroach Prevalence by Borough Graph 
 
-```{r, echo = FALSE, eval = TRUE}
+```{r, eval = TRUE, message = FALSE, warning = FALSE}
 p1 = 
   tidy_asthma_sf_ll %>%
   ggplot(aes(x = homes_with_cockroaches)) + 
@@ -111,7 +110,7 @@ The map was built using the United Hospital Fund (UHF) neighborhood code key fro
 
 ### Loading and tidying the data 
 
-```{r tidying data, message = FALSE, include = FALSE, eval = TRUE}
+```{r tidying data, eval = TRUE, message = FALSE}
 all_data = 
 read.csv(file = "./final_data/all_available_data.csv") %>% 
   janitor::clean_names() %>% 
@@ -178,7 +177,7 @@ After recoding the years, separate dataframes were created for each of the [four
 
 ## Exploratory analysis
 
-```{r setup, include=FALSE, eval = TRUE}
+```{r setup, eval = TRUE, message = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
@@ -200,8 +199,8 @@ tidy_asthma
 The dataset we used was compiled using the Environmental and Health Dataset from the NYC Health Department. We selected variables based on our preliminary hypothesis regarding asthma, poverty, neighborhood, cockroaches, and school children. These analyses are exploring the correlations and relationships. The correlation matrix displays associations between all of our predictors and outcome to indicate any multicollinearity. The crude analysis shows the crude relationship between cockroach presence and childhood asthma. Finally, the linear model demonstrates the model with all of our predictors against our outcome. 
 
 ### Correlation Matrix
-```{r, echo = FALSE, eval = TRUE}
 
+```{r, eval = TRUE, message = FALSE}
 chart.Correlation(tidy_asthma[,5:9], histogram = TRUE, method = c("pearson", "kendall", "spearman"))
 ```
 
@@ -209,7 +208,7 @@ The correlation matrix displays the baseline association between each variable. 
 
 ### Crude Association between Childhood Asthma and Cockroaches in the Home
 
-```{r, echo = FALSE, eval = TRUE}
+```{r, eval = TRUE, message = FALSE}
 
 set.seed(10)
 library(ggplot2)
@@ -236,7 +235,7 @@ Our crude relationship between childhood asthma and cockroaches in the home is d
 
 ### Tables
 
-```{r, echo = FALSE, eval = TRUE}
+```{r, eval = TRUE, message = FALSE}
 ggplot_data = 
 tidy_asthma %>%
   filter(time_period == c("2011", "2014"))
@@ -257,6 +256,9 @@ model4_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_coc
 model5_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id * asthma_hospitalizations_children_5_to_17_yrs_old, data = ggplot_data)
 ```
 
+```{r, eval = TRUE, message = FALSE}
+tab_model(model1_fit, linear_model, model5_fit)
+```
 * The graphs and analyses can be found [here](regression.html).
 * We started by creating a correlation matrix to assess multicollinearity and baseline correlations.
 * We then assessed the crude relationship between cockroach presence in the home (exposure) and childhood asthma (outcome).
