@@ -109,12 +109,6 @@ linear_model =
 ## Model 1
 model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id, data=ggplot_data) 
 
-## Model 2
-model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id, data=ggplot_data)
-
-##Model4
-model4_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches*poverty*time_period, data=ggplot_data) 
-
 ## Model 5
 model5_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id * asthma_hospitalizations_children_5_to_17_yrs_old, data=ggplot_data)
 ```
@@ -125,7 +119,7 @@ tab_model(model1_fit, linear_model, model5_fit)
 ```
 
 ---
-This table displays the values for each of our four potential models. The three columns of "Public School Children 5-14 Years Old With Asthma" represent the three potential models. 
+This table displays the values for each of our four potential models. The three columns of "Public School Children 5-14 Years Old With Asthma" represent the three potential models. Geo Join ID is a proxy for neighborhood and demonstrates the relationship between neighborhood and asthma rates.
 
 * The first column shows the basic model with 3 slopes: homes with cockroaches, poverty, geo_join_id. The ${r}^2$ value is 0.436 which isn't high, but isn't super low. 
 * The second column shows one adjusted model based on our first crude model. Here we experiment with interactions terms to improve the ${r}^2$ value and find a better fit of our data. There are 7 slopes with three two-way interaction terms and one three-way interaction term between homes with cockroaches, poverty, and geo join id. The ${r}^2$ value is 0.589 which is higher than the crude model. 
