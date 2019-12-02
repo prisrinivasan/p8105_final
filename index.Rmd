@@ -125,9 +125,11 @@ Asthma and cockroaches appear correlated - are they?
 All data used for these analyses were taken from the NYC Health Department [Environment and Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx). Asthma and cockroach prevalence came from the ["All Available Data"](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTCsv/AllAvailableData.zip) dataset. Spatial geometries were taken from the NYC Health Department's [GIS Center](https://www1.nyc.gov/site/doh/data/health-tools/maps-gis-data-files-for-download.page). Analyses focused on asthma prevalence in public school children aged 5 - 14. 
 
 ## Findings
-Overall, a strong positive correlation was observed between asthma and cockroaches. The highest asthma rates were observed among children in the Bronx. The highest proportion of homes with cockroaches was also observed in the Bronx. Potential confounding by XX was explored and found to... 
+Overall, a strong positive correlation was observed between asthma and cockroaches. The highest asthma rates were observed among children in the Bronx. The highest proportion of homes with cockroaches was also observed in the Bronx. Furthermore, the strongest correlation between asthma and cockroaches was observed in the Bronx. 
 
-Further analysis should...
+Potential confounding by poverty was explored and found to... Interactions between poverty and cockroaches were also explored. 
+
+The main limitation was not including all potential confounding by sociodemographic risk factors. 
 
 ## Screencast
 
