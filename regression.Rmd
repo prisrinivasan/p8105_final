@@ -14,6 +14,10 @@ library(tmap)
 library(sjPlot)
 library(sjmisc)
 library(sjlabelled)
+library(MASS)
+library(modelr)
+library(mgcv)
+library(leaps)
 
 tidy_asthma = 
   read_csv(file = "./final_data/tidy_asthma.csv")
@@ -59,6 +63,7 @@ plot_tidy
 
 Our crude relationship between childhood asthma and cockroaches in the home is demonstrated here. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation. 
 
+
 ## _Tables_
 ```{r, echo = FALSE}
 ggplot_data = 
@@ -86,7 +91,9 @@ model5_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_coc
 tab_model(model1_fit, linear_model, model5_fit)
 ```
 
-
+---
 This table displays the values for each of our four potential models. The three columns of "Public School Children 5-14 Years Old With Asthma" represent the three potential models. 
 
-* The first 
+* The first column shows the basic model with 3 slopes: homes with cockroaches, poverty, geo_join_id. The ${r}^2$ value is 0.436 which isn't high, but isn't super low. 
+* The second column shows one adjusted model based on our first crude model. Here we experiment with interactions terms to improve the ${r}^2$ value and find a better fit of our data. There are 7 slopes with three two-way interaction terms and one three-way interaction term between homes with cockroaches, poverty, and geo join id. The ${r}^2$ value is 0.589 which is higher than the crude model. 
+* The third column shows another adjusted model. There are 15 slopes with all of the possible interactions between poverty, asthma hospitalizations, homes with cockroaches, and geo join id. The ${r}^2$ value is 0.887 which is much higher than the crude. This table demonstrates a significant interaction between our variables. 
