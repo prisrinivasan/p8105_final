@@ -40,7 +40,7 @@ theme_set(theme_minimal() + theme(legend.position = "bottom"))
 
 Most up to date tidy dataset
 
-```{r tidying data, message=FALSE, include=FALSE}
+```{r tidying data, message=FALSE, include=FALSE, error = TRUE}
 all_data = 
 read.csv(file = "./final_data/all_available_data.csv") %>% 
   janitor::clean_names() %>% 
@@ -59,7 +59,7 @@ read.csv(file = "./final_data/all_available_data.csv") %>%
     names_from = name, 
     values_from = data_value
     ) %>%
-  mutate(time_period = recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-14" = "2011")) %>%
+  mutate(time_period = recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-2014" = "2011")) %>%
   filter(time_period %in% c("2011", "2012", "2013", "2014")) %>% 
   janitor::clean_names() %>% 
   select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old)
