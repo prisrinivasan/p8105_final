@@ -9,7 +9,7 @@ output:
 
 ## Cockroach and Asthma Distributions by Borough
 
-```{r, echo = FALSE, include = FALSE}
+```{r, echo = FALSE, include = FALSE, eval = TRUE}
 library(tidyverse)
 library(PerformanceAnalytics)
 library(sf)
@@ -33,7 +33,7 @@ tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id
 tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
 ```
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, eval = TRUE}
 
 p2 = 
   tidy_asthma_sf_ll %>%
@@ -110,6 +110,65 @@ Our github repository is linked [here](https://github.com/prisrinivasan/p8105_fi
 The map was built using the United Hospital Fund (UHF) neighborhood code key from [NYC Health](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf). 
 
 ### Loading and tidying the data 
+
+```{r tidying data, message=FALSE, include=FALSE, eval = TRUE}
+all_data = 
+read.csv(file = "./final_data/all_available_data.csv") %>% 
+  janitor::clean_names() %>% 
+  filter(name %in% c("Homes with Cockroaches", 
+                     "Poverty", 
+                     "Public School Children (5-14 Yrs Old) with Asthma", 
+                     "Public School Children (5-14 Yrs Old) with Persistent Asthma", 
+                     "Asthma Hospitalizations (Children 5 to 17 Yrs Old)"),
+        geo_type_name %in% c("UHF42", "Borough"), 
+        measure %in% c("Percent", "Rate")
+         ) %>% 
+  mutate(geo_join_id = as.character(geo_join_id),
+         geo_join_id = if_else(geo_place_name == "Bensonhurst - Bay Ridge", "209", geo_join_id),
+         geo_join_id = as.factor(geo_join_id)) %>% 
+  pivot_wider(
+    names_from = name, 
+    values_from = data_value
+    ) %>%
+  mutate(time_period = recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-14" = "2011")) %>%
+  filter(time_period %in% c("2011", "2012", "2013", "2014")) %>% 
+  janitor::clean_names() %>% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old)
+
+df1 = all_data  %>% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches) %>% 
+  drop_na()
+
+df2 = all_data %>% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, poverty) %>% 
+  drop_na()
+
+df3 = all_data %>% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %>% 
+  drop_na()
+
+df4 = all_data %>% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %>% 
+  drop_na()
+
+df5 = all_data %>% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
+  drop_na()
+
+## Joining
+tidy_asthma = 
+  full_join(df1, df2, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
+  full_join(df3, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
+  full_join(df4, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
+  full_join(df5, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
+  mutate(time_period = as.numeric(levels(time_period)) [time_period],
+         geo_join_id = as.character(as.numeric(levels(geo_join_id)) [geo_join_id]),
+         geo_place_name = as.character(geo_place_name)) %>%
+  view()
+
+write.csv(tidy_asthma,"./final_data/tidy_asthma.csv", row.names = FALSE)
+```
 
 We downloaded the data as a csv file from the NYC Environmental & Health Data Portal and called the initial dataset `all_available_data`. We restricted our data to include boroughs and UHF42 neighborhoods as our geographical areas of interest and to include the indicators: `homes_with_cockroaches`, `poverty` and `public_school_children_5_14_yrs_old_with_asthma`. 
 
