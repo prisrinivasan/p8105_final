@@ -110,7 +110,7 @@ The map was built using the United Hospital Fund (UHF) neighborhood code key fro
 
 ### Loading and tidying the data 
 
-```{r tidying data, eval = TRUE, message = FALSE}
+```{r tidying data, eval = TRUE, message = FALSE, warning = FALSE}
 all_data = 
 read.csv(file = "./final_data/all_available_data.csv") %>% 
   janitor::clean_names() %>% 
