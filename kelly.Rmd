@@ -144,18 +144,18 @@ test=
   filter(time_period == c("2011", "2014"))
 
 ## Model 0 -- crude 
-model0_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches, data=test) %>% broom::tidy()
+#model0_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches, data=test) %>% broom::tidy()
 
 
 
 
 ## Model 1
-model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id + time_period, data=test) %>% broom::tidy()
+#model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id + time_period, data=test) %>% broom::tidy()
 
-model1_fit
+#model1_fit
 
 ## Model 2
-model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id*time_period, data=test) %>% broom::tidy()
+#model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id*time_period, data=test) %>% broom::tidy()
 
 
 # Looking at residuals -- FAILED
@@ -202,16 +202,16 @@ library(car)
 tidy_asthma = 
   read_csv(file = "./final_data/tidy_asthma.csv")
 
-tidy_asthma 
+#tidy_asthma 
 
-ggplot_data = 
-tidy_asthma %>%
-  filter(time_period == c("2011", "2014"))
+#ggplot_data = 
+#tidy_asthma %>%
+  #filter(time_period == c("2011", "2014"))
 
-linear_model = 
-  lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * time_period * geo_join_id, data = ggplot_data) %>%
-  broom::glance()
-layout(matrix(c(1,2,3,4),2,2))
-plot(linear_model)
+#linear_model = 
+ # lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * time_period * geo_join_id, data = ggplot_data) %>%
+ # broom::glance()
+#layout(matrix(c(1,2,3,4),2,2))
+#plot(linear_model)
 ```
 
