@@ -129,7 +129,7 @@ read.csv(file = "./final_data/all_available_data.csv") %>%
     names_from = name, 
     values_from = data_value
     ) %>%
-  mutate(time_period = recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-14" = "2011")) %>%
+  mutate(time_period = dplyr::recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-14" = "2011")) %>%
   filter(time_period %in% c("2011", "2012", "2013", "2014")) %>% 
   janitor::clean_names() %>% 
   select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old)
@@ -165,8 +165,6 @@ tidy_asthma =
          geo_join_id = as.character(as.numeric(levels(geo_join_id)) [geo_join_id]),
          geo_place_name = as.character(geo_place_name)) %>%
   view()
-
-write.csv(tidy_asthma,"./final_data/tidy_asthma.csv", row.names = FALSE)
 ```
 
 We downloaded the data as a csv file from the NYC Environmental & Health Data Portal and called the initial dataset `all_available_data`. We restricted our data to include boroughs and UHF42 neighborhoods as our geographical areas of interest and to include the indicators: `homes_with_cockroaches`, `poverty` and `public_school_children_5_14_yrs_old_with_asthma`. 
