@@ -354,9 +354,6 @@ div.tocify {
   <a href="about.html">About</a>
 </li>
 <li>
-  <a href="regression.html">Preliminary Analyses</a>
-</li>
-<li>
   <a href="Overview.html">Report</a>
 </li>
 <li>
@@ -398,11 +395,52 @@ div.tocify {
 
 <div id="cockroach-and-asthma-distributions-by-borough" class="section level2">
 <h2>Cockroach and Asthma Distributions by Borough</h2>
+<pre class="r"><code>library(tidyverse)
+library(PerformanceAnalytics)
+library(sf)
+library(sp)
+library(tmap)
+library(patchwork)
+
+tidy_asthma = 
+  read_csv(file = &quot;./final_data/tidy_asthma.csv&quot;)
+
+shape = st_read(&quot;./final_data/shapefiles/&quot;, quiet = TRUE)
+
+tidy_asthma_sf = merge(shape, tidy_asthma, by.x = &quot;UHFCODE&quot;, by.y = &quot;geo_join_id&quot;) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  mutate(uhfcode = as.character(uhfcode),
+         time_period = as.character(time_period),
+         homes_with_cockroaches = as.numeric(homes_with_cockroaches))
+
+tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, &quot;+proj=longlat +datum=WGS84&quot;)</code></pre>
+<pre class="r"><code>p2 = 
+  tidy_asthma_sf_ll %&gt;%
+  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma)) + 
+  geom_density() +
+  facet_grid(~borough) +
+  labs(
+    x = &quot;Percent of Public School Children with Asthma&quot;,
+    y = &quot;Frequency&quot;,
+    title = &quot;Distribution of Childhood Asthma by Borough&quot;)
+
+p2</code></pre>
 <p><img src="Overview_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 </div>
 <div id="cockroach-prevalence-by-borough-graph" class="section level2">
 <h2>Cockroach Prevalence by Borough Graph</h2>
-<pre><code>## Warning: Removed 84 rows containing non-finite values (stat_density).</code></pre>
+<pre class="r"><code>p1 = 
+  tidy_asthma_sf_ll %&gt;%
+  ggplot(aes(x = homes_with_cockroaches)) + 
+  geom_density() +
+  facet_grid(~borough) +
+  labs(
+    x = &quot;Percent of Homes with Cockroaches&quot;,
+    y = &quot;Frequency&quot;,
+    title = &quot;Distribution of Cockroaches by Borough&quot;
+  ) 
+
+p1</code></pre>
 <p><img src="Overview_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <div id="related-work" class="section level3">
 <h3>Related work</h3>
@@ -413,25 +451,662 @@ div.tocify {
 </div>
 <div id="data" class="section level2">
 <h2>Data</h2>
-</div>
-<div id="data-1" class="section level1">
-<h1>Data</h1>
+<p>We downloaded all available data from the <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx">NYC Gov Environmental &amp; Health Data Portal</a>. The Environmental &amp; Health Data Portal houses data from a variety of sources such as the New York City Automated School Health Records, American Community Survey and New York City Housing and Vacancy Survey (HVS). Data from this portal are used to study how the environment affects health. We initially filtered the dataset to include all variables related to asthma, cockroaches and poverty before finalizing the dataset to include variables only related to public school children with asthma, asthma hospitalizations for children ages 5-17 years old, homes with cockroaches and poverty. Definitions for the variables were taken from the “Source Information” csv file downloaded with the dataset from the Environmental &amp; Health Data Portal.</p>
 <ul>
-<li><p>We built our dataset using the <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx">NYC Gov Environmental &amp; Health Data Portal</a>. The map was built with the UHF code key from <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf">NYC Health</a>. The asthma CSV file we used is linked (here)[asthma_data.csv]. We selected all variables relating to asthma, cockroaches, and poverty through string detection.</p></li>
-<li><p>Our github repository is linked <a href="https://github.com/prisrinivasan/p8105_final">here</a></p></li>
+<li><p><code>geo_type_name</code>: Type of geographical area (i.e borough, UHF42)</p></li>
+<li><p><code>geo_join_id</code>: Numeric ID of the geographical area</p></li>
+<li><p><code>geo_place_name</code>: Name of the geographical area</p></li>
+<li><p><code>time_period</code>: Year for the data</p></li>
 </ul>
-<div id="exploratory-analysis" class="section level2">
-<h2>Exploratory analysis</h2>
+<p>Predictor</p>
 <ul>
-<li>The graphs and analyses can be found <a href="regression.Rmd">here</a>.</li>
-<li>We started by creating a correlation matrix to assess multicollinearity and baseline correlations</li>
-<li>We then assessed the crude relationship between exposure, cockroach presence in the home and the outcome, childhood asthma</li>
-<li></li>
+<li><code>homes_with_cockroaches</code> (Percent): Estimated number of households in an area that reported seeing at least one cockroach daily over the last month, divided by the number of households in the area.</li>
+</ul>
+<p>Outcomes of interest</p>
+<ul>
+<li><p><code>public_school_children_5_14_yrs_old_with_asthma</code> (Rate): Number of public school children, aged 5-14 years, with a diagnosis of asthma that has been reported to NYC DOHMH during the current or previous school year, divided by the 5-14 year old population, per 1,000.</p></li>
+<li><p><code>asthma_hospitalizations_children_5_to_17_yrs_old</code> (Rate): Number of asthma-related hospitalizations among NYC resident children aged 5 to 17 years, divided by the population of children 5 to 17 years old, using NYC DOHMH intercensal estimates; expressed as cases per 10,000 residents</p></li>
+</ul>
+<p>Potential confounder</p>
+<ul>
+<li><code>poverty</code> (Percent): Estimated number of people for whom poverty status is determined, whose annual income falls below 100% of the federal poverty level, divided by the number of people for whom poverty status is determined.</li>
+</ul>
+<p>Our github repository is linked <a href="https://github.com/prisrinivasan/p8105_final">here</a>.</p>
+<p>The map was built using the United Hospital Fund (UHF) neighborhood code key from <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf">NYC Health</a>.</p>
+<div id="loading-and-tidying-the-data" class="section level3">
+<h3>Loading and tidying the data</h3>
+<pre class="r"><code>all_data = 
+read.csv(file = &quot;./final_data/all_available_data.csv&quot;) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  filter(name %in% c(&quot;Homes with Cockroaches&quot;, 
+                     &quot;Poverty&quot;, 
+                     &quot;Public School Children (5-14 Yrs Old) with Asthma&quot;, 
+                     &quot;Public School Children (5-14 Yrs Old) with Persistent Asthma&quot;, 
+                     &quot;Asthma Hospitalizations (Children 5 to 17 Yrs Old)&quot;),
+        geo_type_name %in% c(&quot;UHF42&quot;, &quot;Borough&quot;), 
+        measure %in% c(&quot;Percent&quot;, &quot;Rate&quot;)
+         ) %&gt;% 
+  mutate(geo_join_id = as.character(geo_join_id),
+         geo_join_id = if_else(geo_place_name == &quot;Bensonhurst - Bay Ridge&quot;, &quot;209&quot;, geo_join_id),
+         geo_join_id = as.factor(geo_join_id)) %&gt;% 
+  pivot_wider(
+    names_from = name, 
+    values_from = data_value
+    ) %&gt;%
+  mutate(time_period = recode(time_period, &quot;2010-2011&quot; = &quot;2011&quot;, &quot;2011-2012&quot; = &quot;2012&quot;, &quot;2012-2013&quot; = &quot;2013&quot;, &quot;2013-2014&quot; = &quot;2014&quot;, &quot;2010-14&quot; = &quot;2011&quot;)) %&gt;%
+  filter(time_period %in% c(&quot;2011&quot;, &quot;2012&quot;, &quot;2013&quot;, &quot;2014&quot;)) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old)
+
+df1 = all_data  %&gt;% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches) %&gt;% 
+  drop_na()
+
+df2 = all_data %&gt;% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, poverty) %&gt;% 
+  drop_na()
+
+df3 = all_data %&gt;% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %&gt;% 
+  drop_na()
+
+df4 = all_data %&gt;% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %&gt;% 
+  drop_na()
+
+df5 = all_data %&gt;% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, asthma_hospitalizations_children_5_to_17_yrs_old) %&gt;% 
+  drop_na()
+
+## Joining
+tidy_asthma = 
+  full_join(df1, df2, by = c(&quot;geo_type_name&quot;, &quot;geo_join_id&quot;, &quot;time_period&quot;, &quot;geo_place_name&quot;)) %&gt;% 
+  full_join(df3, by = c(&quot;geo_type_name&quot;, &quot;geo_join_id&quot;, &quot;time_period&quot;, &quot;geo_place_name&quot;)) %&gt;% 
+  full_join(df4, by = c(&quot;geo_type_name&quot;, &quot;geo_join_id&quot;, &quot;time_period&quot;, &quot;geo_place_name&quot;)) %&gt;% 
+  full_join(df5, by = c(&quot;geo_type_name&quot;, &quot;geo_join_id&quot;, &quot;time_period&quot;, &quot;geo_place_name&quot;)) %&gt;% 
+  select(geo_type_name, geo_join_id, time_period, geo_place_name, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %&gt;% 
+  mutate(time_period = as.numeric(levels(time_period)) [time_period],
+         geo_join_id = as.character(as.numeric(levels(geo_join_id)) [geo_join_id]),
+         geo_place_name = as.character(geo_place_name)) %&gt;%
+  view()
+
+write.csv(tidy_asthma,&quot;./final_data/tidy_asthma.csv&quot;, row.names = FALSE)</code></pre>
+<p>We downloaded the data as a csv file from the NYC Environmental &amp; Health Data Portal and called the initial dataset <code>all_available_data</code>. We restricted our data to include boroughs and UHF42 neighborhoods as our geographical areas of interest and to include the indicators: <code>homes_with_cockroaches</code>, <code>poverty</code> and <code>public_school_children_5_14_yrs_old_with_asthma</code>.</p>
+<p>Data for the rate of public school children with asthma were presented for a range of years (i.e. 2010-2011, 2011-2012, etc). For our analysis, we recoded these ranges into single years in order to 2011-2014. Data on cockroaches were only available for 2011 and 2014. Data on percent poverty in NYC were also presented in ranges and we chose 2010-2014 as our reference. We recoded this into a single year for 2011. Since the data for these four variables overlapped for the years 2011-2014, we restricted our analysis to these four years. Data for the rate of asthma hospitalizations among children ages 5-17 years old were available for all four years.</p>
+<p>After recoding the years, separate dataframes were created for each of the [four/five variables] and then joined together in order to fill in the missing values (NAs) that first existed when filtering for these variables and years in the larger dataset. We called the tidied, joined dataset <code>tidy_asthma</code> and exported it as a <a href="tidy_asthma.csv">csv file</a>.</p>
+</div>
+</div>
+<div id="preliminary-analysis" class="section level2">
+<h2>Preliminary Analysis</h2>
+<hr />
+</div>
+<div id="method" class="section level2">
+<h2><em>Method</em></h2>
+<p>The dataset we used was compiled using the Environmental and Health Dataset from the NYC Health Department. We selected variables based on our preliminary hypothesis regarding asthma, poverty, neighborhood, cockroaches, and school children. These analyses are exploring the correlations and relationships. The correlation matrix displays associations between all of our predictors and outcome to indicate any multicollinearity. The crude analysis shows the crude relationship between cockroach presence and childhood asthma. Finally, the linear model demonstrates the model with all of our predictors against our outcome.</p>
+<p>The code for this page can be found <a href="https://github.com/prisrinivasan/p8105_final/blob/master/regression.Rmd">here</a>.</p>
+</div>
+<div id="cockroaches-and-asthma-by-borough" class="section level2">
+<h2><em>Cockroaches and Asthma by Borough</em></h2>
+<p><img src="Overview_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>To first assess if this issue was one worth looking into, we analyzed the cockroach and asthma relationship by borough. Our prediction was that boroughs with higher cockroach distributions would have higher asthma rates. These violin plots support our initial hypothesis with the Bronx having both the highest cockroach distribution and asthma rates.</p>
+</div>
+<div id="correlation-matrix" class="section level2">
+<h2><em>Correlation Matrix</em></h2>
+<p><img src="Overview_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>A correlation matrix was then compiled to analyze our other predictors. The correlation matrix displays the baseline association between each variable. All of the correlations are above 0.53 which indicates fairly strong correlation. As we model build we will be aware of any multicollinearity from those variables with large correlations.</p>
+</div>
+<div id="crude-association-between-childhood-asthma-and-cockroaches-in-the-home" class="section level2">
+<h2><em>Crude Association between Childhood Asthma and Cockroaches in the Home</em></h2>
+<p><img src="Overview_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Our crude relationship between childhood asthma and cockroaches in the home is demonstrated here. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation.</p>
+</div>
+<div id="table" class="section level2">
+<h2><em>Table</em></h2>
+<table style="border-collapse:collapse; border:none;">
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+public school children 5<br>14 yrs old with asthma
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+public school children 5<br>14 yrs old with asthma
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+public school children 5<br>14 yrs old with asthma
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  col7">
+p
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  col8">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  col9">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  0">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+26.58
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+2.94 – 50.23
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>0.029</strong>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+96.86
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+16.44 – 177.29
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
+<strong>0.021</strong>
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
+16.33
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
+-204.43 – 237.08
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.869
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+homes_with_cockroaches
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.38
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.73 – 1.50
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.482
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.11
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-2.61 – 2.39
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
+0.929
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
+-7.11
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
+-16.52 – 2.30
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.119
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+poverty
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.82
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.51 – 2.15
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.214
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-5.25
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-11.16 – 0.66
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
+0.078
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
+1.49
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
+-21.33 – 24.31
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.884
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+geo_join_id
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.02
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.03 – 0.06
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.502
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.15
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.37 – 0.07
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
+0.175
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
+0.03
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
+-0.63 – 0.70
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.908
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+homes_with_cockroaches * poverty
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.12
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.01 – 0.24
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
+0.061
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
+0.17
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
+-0.21 – 0.54
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.342
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+homes_with_cockroaches * geo_join_id
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.01 – 0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
+0.918
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
+0.02
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
+-0.03 – 0.08
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.351
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+poverty * geo_join_id
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.02
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.00 – 0.03
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
+0.052
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
+-0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
+-0.11 – 0.09
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.783
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(homes_with_cockroaches * poverty) * geo_join_id
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.00 – 0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
+0.182
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
+-0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
+-0.00 – 0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.782
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+asthma_hospitalizations_children_5_to_17_yrs_old
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
+9.03
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
+-1.82 – 19.88
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.091
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+homes_with_cockroaches * asthma_hospitalizations_children_5_to_17_yrs_old
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
+0.12
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
+-0.22 – 0.47
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.433
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+poverty * asthma_hospitalizations_children_5_to_17_yrs_old
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
+-0.55
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
+-1.47 – 0.36
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.199
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+geo_join_id * asthma_hospitalizations_children_5_to_17_yrs_old
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
+-0.02
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
+-0.05 – 0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.241
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(homes_with_cockroaches * poverty) * asthma_hospitalizations_children_5_to_17_yrs_old
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
+-0.00 – 0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.302
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(homes_with_cockroaches * geo_join_id) * asthma_hospitalizations_children_5_to_17_yrs_old
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
+-0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
+-0.00 – 0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.494
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(poverty * geo_join_id) * asthma_hospitalizations_children_5_to_17_yrs_old
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
+0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
+-0.00 – 0.01
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.388
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(homes_with_cockroaches * poverty * geo_join_id) * asthma_hospitalizations_children_5_to_17_yrs_old
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
+-0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
+-0.00 – 0.00
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.714
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+24
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+24
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+24
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+R<sup>2</sup> / R<sup>2</sup> adjusted
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.436 / 0.351
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.589 / 0.409
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.887 / 0.676
+</td>
+</tr>
+</table>
+<hr />
+<p>This table displays the values for each of our three potential models. The three columns of “Public School Children 5-14 Years Old With Asthma” show the intercept and slope values for each model. Geo Join ID is a proxy for neighborhood and demonstrates the relationship between neighborhood and asthma rates.</p>
+<ul>
+<li>The first column shows the basic model with 3 slopes: homes with cockroaches, poverty, geo_join_id. The <span class="math inline">\({r}^2\)</span> value is 0.436, which is a moderate positive relationship.</li>
+<li>The second column shows one adjusted model based on our first crude model. Here we experiment with interactions terms to improve the <span class="math inline">\({r}^2\)</span> value and find a better fit of our data. There are 7 slopes with three two-way interaction terms and one three-way interaction term between homes with cockroaches, poverty, and geo join id. The <span class="math inline">\({r}^2\)</span> value is 0.589 which is higher than the crude model.</li>
+<li>The third column shows another adjusted model with asthma hospitalizations added in as a predictor of asthma. There are 15 slopes with all of the possible interactions between poverty, asthma hospitalizations, homes with cockroaches, and geo join id. The <span class="math inline">\({r}^2\)</span> value is 0.887 which is much higher than the crude. This table demonstrates a significant interaction between our variables.</li>
 </ul>
 </div>
 <div id="discussion" class="section level2">
 <h2>Discussion</h2>
-</div>
+<p>In the process of analyzing the association between prevalence of cockroach in homes and asthma, we gained the following insights:</p>
+<ul>
+<li><p>In particular, the strength of association between homes with cockroaches and poverty, as well as the association between homes with cockroaches and hospitalization, are rather strong, with correlations r=0.88 and r=0.77 respectively. This aligns with previous research done by the <a href="https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pubmed/21536321/">New York City Neighborhood Asthma and Allergy Study (NAAS)</a>, and <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html">other sources</a>. Although the <a href="https://www1.nyc.gov/site/doh/health/health-topics/asthma.page">NYC Department of Health</a> stated that the best way to manage asthma is through doctor’s visits, medication, avoiding triggers, and asthma management at school, this is not feasible for many people due to lack of access to high-quality healthcare, as discussed in this <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html">article</a>.</p></li>
+<li><p>In addition, the positive linear association between percent of children with asthma and percent of homes with cockroaches at home between years 2011 and 2014 provides further evidence that the percentage of school children with asthma is continuing to increase, as stated in this <a href="https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pmc/articles/PMC4803579/">article</a>. Visualization of asthma prevalence by neighborhood and by borough display this increase as well.</p></li>
+<li><p>Visualization of geographic variation of cockroach and asthma prevalence can provide insight for different interventions–such as the one conducted in <a href="https://www-sciencedirect-com.ezproxy.cul.columbia.edu/science/article/pii/S0091674916313495">New Orleans</a>– in target neighborhoods such as Crotona, Tremont, Hunts Point, and Mott Haven– all of which are located in the Bronx. However, it is interesting to note that Williamsburg, which is now known to be a rather affluent neighborhood, has high cockroach prevalence. This could point out to the fact that it is difficult to decrease number of cockroaches in an area, and thus other types of interventions need to be done to decrease number of children developing asthma.</p></li>
+<li><p>Similar to <a href="https://www.cdc.gov/pcd/issues/2019/19_0074.htm">previous research</a>, there are several limitations, including not having and including all the confounding health and social risk factors.</p></li>
+</ul>
 </div>
 
 

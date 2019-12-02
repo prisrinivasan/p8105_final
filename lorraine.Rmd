@@ -95,6 +95,8 @@ tidy_asthma =
          geo_join_id = as.character(as.numeric(levels(geo_join_id)) [geo_join_id]),
          geo_place_name = as.character(geo_place_name)) %>%
   view()
+
+write.csv(tidy_asthma,"./final_data/tidy_asthma.csv", row.names = FALSE)
 ```
 
 PLOTS FOR PUBLIC SCHOOL CHILDREN VARIABLES
