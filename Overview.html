@@ -354,9 +354,6 @@ div.tocify {
   <a href="about.html">About</a>
 </li>
 <li>
-  <a href="regression.html">Preliminary Analyses</a>
-</li>
-<li>
   <a href="Overview.html">Report</a>
 </li>
 <li>
@@ -539,94 +536,32 @@ write.csv(tidy_asthma,&quot;./final_data/tidy_asthma.csv&quot;, row.names = FALS
 <p>After recoding the years, separate dataframes were created for each of the [four/five variables] and then joined together in order to fill in the missing values (NAs) that first existed when filtering for these variables and years in the larger dataset. We called the tidied, joined dataset <code>tidy_asthma</code> and exported it as a <a href="tidy_asthma.csv">csv file</a>.</p>
 </div>
 </div>
-<div id="exploratory-analysis" class="section level2">
-<h2>Exploratory analysis</h2>
-<pre class="r"><code>knitr::opts_chunk$set(echo = TRUE)
-
-library(tidyverse)
-library(PerformanceAnalytics)
-library(sf)
-library(sp)
-library(tmap)
-library(sjPlot)
-library(sjmisc)
-library(sjlabelled)
-
-tidy_asthma = 
-  read_csv(file = &quot;./final_data/tidy_asthma.csv&quot;)
-
-tidy_asthma </code></pre>
-<pre><code>## # A tibble: 188 x 9
-##    geo_type_name geo_join_id time_period geo_place_name homes_with_cock…
-##    &lt;chr&gt;               &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;                     &lt;dbl&gt;
-##  1 Borough                 1        2011 Bronx                      37.7
-##  2 Borough                 2        2011 Brooklyn                   26.6
-##  3 Borough                 3        2011 Manhattan                  20.6
-##  4 Borough                 4        2011 Queens                     19.7
-##  5 Borough                 5        2011 Staten Island               5.2
-##  6 Borough                 1        2014 Bronx                      35  
-##  7 Borough                 2        2014 Brooklyn                   26.4
-##  8 Borough                 3        2014 Manhattan                  19.7
-##  9 Borough                 4        2014 Queens                     19.3
-## 10 Borough                 5        2014 Staten Island               4.8
-## # … with 178 more rows, and 4 more variables: poverty &lt;dbl&gt;,
-## #   public_school_children_5_14_yrs_old_with_asthma &lt;dbl&gt;,
-## #   public_school_children_5_14_yrs_old_with_persistent_asthma &lt;dbl&gt;,
-## #   asthma_hospitalizations_children_5_to_17_yrs_old &lt;dbl&gt;</code></pre>
-<div id="method" class="section level3">
-<h3>Method</h3>
+<div id="preliminary-analysis" class="section level2">
+<h2>Preliminary Analysis</h2>
+<hr />
+</div>
+<div id="method" class="section level2">
+<h2><em>Method</em></h2>
 <p>The dataset we used was compiled using the Environmental and Health Dataset from the NYC Health Department. We selected variables based on our preliminary hypothesis regarding asthma, poverty, neighborhood, cockroaches, and school children. These analyses are exploring the correlations and relationships. The correlation matrix displays associations between all of our predictors and outcome to indicate any multicollinearity. The crude analysis shows the crude relationship between cockroach presence and childhood asthma. Finally, the linear model demonstrates the model with all of our predictors against our outcome.</p>
+<p>The code for this page can be found <a href="https://github.com/prisrinivasan/p8105_final/blob/master/regression.Rmd">here</a>.</p>
 </div>
-<div id="correlation-matrix" class="section level3">
-<h3>Correlation Matrix</h3>
-<pre class="r"><code>chart.Correlation(tidy_asthma[,5:9], histogram = TRUE, method = c(&quot;pearson&quot;, &quot;kendall&quot;, &quot;spearman&quot;))</code></pre>
+<div id="cockroaches-and-asthma-by-borough" class="section level2">
+<h2><em>Cockroaches and Asthma by Borough</em></h2>
 <p><img src="Overview_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<p>The correlation matrix displays the baseline association between each variable. All of the correlations are above 0.53 which indicates strong correlation. As we model build we will be aware of any multicollinearity from those variables with correlations larger than 0.88.</p>
+<p>To first assess if this issue was one worth looking into, we analyzed the cockroach and asthma relationship by borough. Our prediction was that boroughs with higher cockroach distributions would have higher asthma rates. These violin plots support our initial hypothesis with the Bronx having both the highest cockroach distribution and asthma rates.</p>
 </div>
-<div id="crude-association-between-childhood-asthma-and-cockroaches-in-the-home" class="section level3">
-<h3>Crude Association between Childhood Asthma and Cockroaches in the Home</h3>
-<pre class="r"><code>set.seed(10)
-library(ggplot2)
-
-ggplot_data = 
-tidy_asthma %&gt;%
-  filter(time_period == c(&quot;2011&quot;, &quot;2014&quot;))
-
-plot_tidy = 
-ggplot(ggplot_data, aes(x = homes_with_cockroaches, y = public_school_children_5_14_yrs_old_with_asthma, color = homes_with_cockroaches)) +
-  geom_point() + 
-  geom_smooth(method = &quot;lm&quot;) +
-  facet_grid(~time_period) +
-  labs(x = &quot;Percent of Homes with Cockroaches&quot;,
-       y = &quot;Percent of School Children with Asthma&quot;,
-       title = &quot;Crude Association Homes with Cockroaches and Childhood Asthma&quot;) +
-  viridis::scale_color_viridis(aes(color = homes_with_cockroaches), discrete = FALSE)
-
-plot_tidy</code></pre>
+<div id="correlation-matrix" class="section level2">
+<h2><em>Correlation Matrix</em></h2>
 <p><img src="Overview_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>A correlation matrix was then compiled to analyze our other predictors. The correlation matrix displays the baseline association between each variable. All of the correlations are above 0.53 which indicates fairly strong correlation. As we model build we will be aware of any multicollinearity from those variables with large correlations.</p>
+</div>
+<div id="crude-association-between-childhood-asthma-and-cockroaches-in-the-home" class="section level2">
+<h2><em>Crude Association between Childhood Asthma and Cockroaches in the Home</em></h2>
+<p><img src="Overview_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p>Our crude relationship between childhood asthma and cockroaches in the home is demonstrated here. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation.</p>
 </div>
-<div id="tables" class="section level3">
-<h3>Tables</h3>
-<pre class="r"><code>ggplot_data = 
-tidy_asthma %&gt;%
-  filter(time_period == c(&quot;2011&quot;, &quot;2014&quot;))
-
-linear_model = 
-  lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id, data = ggplot_data)
-
-## Model 1
-model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id, data = ggplot_data) 
-
-## Model 2
-model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id, data = ggplot_data)
-
-##Model4
-model4_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches*poverty*time_period, data = ggplot_data) 
-
-## Model 5
-model5_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id * asthma_hospitalizations_children_5_to_17_yrs_old, data = ggplot_data)</code></pre>
-<pre class="r"><code>tab_model(model1_fit, linear_model, model5_fit)</code></pre>
+<div id="table" class="section level2">
+<h2><em>Table</em></h2>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
@@ -1155,12 +1090,13 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 </td>
 </tr>
 </table>
+<hr />
+<p>This table displays the values for each of our three potential models. The three columns of “Public School Children 5-14 Years Old With Asthma” show the intercept and slope values for each model. Geo Join ID is a proxy for neighborhood and demonstrates the relationship between neighborhood and asthma rates.</p>
 <ul>
-<li>The graphs and analyses can be found <a href="regression.html">here</a>.</li>
-<li>We started by creating a correlation matrix to assess multicollinearity and baseline correlations.</li>
-<li>We then assessed the crude relationship between cockroach presence in the home (exposure) and childhood asthma (outcome).</li>
+<li>The first column shows the basic model with 3 slopes: homes with cockroaches, poverty, geo_join_id. The <span class="math inline">\({r}^2\)</span> value is 0.436, which is a moderate positive relationship.</li>
+<li>The second column shows one adjusted model based on our first crude model. Here we experiment with interactions terms to improve the <span class="math inline">\({r}^2\)</span> value and find a better fit of our data. There are 7 slopes with three two-way interaction terms and one three-way interaction term between homes with cockroaches, poverty, and geo join id. The <span class="math inline">\({r}^2\)</span> value is 0.589 which is higher than the crude model.</li>
+<li>The third column shows another adjusted model with asthma hospitalizations added in as a predictor of asthma. There are 15 slopes with all of the possible interactions between poverty, asthma hospitalizations, homes with cockroaches, and geo join id. The <span class="math inline">\({r}^2\)</span> value is 0.887 which is much higher than the crude. This table demonstrates a significant interaction between our variables.</li>
 </ul>
-</div>
 </div>
 <div id="discussion" class="section level2">
 <h2>Discussion</h2>
