@@ -98,7 +98,7 @@ plot_tidy
 Our crude relationship between childhood asthma and cockroaches in the home is demonstrated here. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation. 
 
 
-## _Tables_
+## _Table_
 ```{r, echo = FALSE}
 ggplot_data = 
 tidy_asthma %>%
