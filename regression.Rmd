@@ -60,6 +60,7 @@ roach_asth_borough =
 roach_asth_borough
 
 ```
+
 To first assess if this issue was one worth looking into, we analyzed the cockroach and asthma relationship by borough. Our prediction was that boroughs with higher cockroach distributions would have higher asthma rates. These violin plots support our initial hypothesis with the Bronx having both the highest cockroach distribution and asthma rates.
 
 ## _Correlation Matrix_
