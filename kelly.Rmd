@@ -32,30 +32,28 @@ mold_data=
 ### Kelly vision: X : borough name , Y: Cockroach Rate, by different boroughs 
 #### Trying to include Borough's in here--using Alice's Method to include Borough name
 
-#### Vision did not work because did not really have enough time lapse for others. 
-```{r, error = TRUE}
-overview_plot=
-all_available_data %>% 
-  filter(Name= "Public_School_Children_ ())
-```
 
 ```{r, error = TRUE}
-pp = tidy_asthma %>%
-  drop_na(homes_with_cockroaches) %>% 
+library(car)
+tidy_asthma = 
+  read_csv(file = "./final_data/tidy_asthma.csv")
+
+tidy_asthma 
+pp = tidy_asthma %>% 
   mutate(
-    geo_join_id=as.numeric(geo_join_id) ) %>% 
+    geo_join_id = as.numeric(geo_join_id) ) %>% 
   ggplot(aes(x = geo_join_id, y = homes_with_cockroaches)) + 
   geom_point(aes(colour = time_period), alpha = 0.5) +
   labs(title = "Prevalence of Cockroaches in Different Neighborhoods",
      x = 'Geo_ID', 
      y = 'Rate of Homes with Cockroaches(%)'
 )
-pp
+#pp
 
 # gganimate parts
-pp + transition_time(time_period) + labs(title="Year:{frame_time}")
+#pp + transition_time(time_period) + labs(title="Year:{frame_time}")
 
-animate(pp, fps = 2, height = 600, width = 1000)
+#animate(pp, fps = 2, height = 600, width = 1000)
 ```
 
 ## using lorraine's code as a guide
@@ -83,75 +81,7 @@ test_prev
   
 ```
 
-## attempting to look at hospitalizations and Using Alice's Code
-```{r, error = TRUE}
-all_data = 
-read.csv(file = "./final_data/all_available_data.csv") %>% 
-  janitor::clean_names() %>% 
-  filter(name %in% c("Homes with Cockroaches", 
-                     "Poverty", 
-                     "Public School Children (5-14 Yrs Old) with Asthma", 
-                     "Public School Children (5-14 Yrs Old) with Persistent Asthma",
-                     "Asthma Hospitalizations (Children 5 to 17 Yrs Old)"),
-        geo_type_name == "UHF42", 
-        measure %in% c("Percent", "Rate"),
-        geo_place_name
-         ) %>% 
-  pivot_wider(
-    names_from = name, 
-    values_from = data_value
-    ) %>% 
-  view()
 
-all_data=
-  all_data %>% 
-  mutate(
-    time_period = recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-14" = "2011")) %>%
-  filter(time_period %in% c("2011", "2012", "2013", "2014")) %>% 
-  janitor::clean_names() %>% 
-  select(geo_join_id, time_period, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma,asthma_hospitalizations_children_5_to_17_yrs_old, geo_place_name )
-````
-```{r}
-## merging using Alice's method
-df1 = 
-  all_data  %>% 
-  select(geo_join_id, time_period, measure, indicator_id, homes_with_cockroaches) %>% 
-  drop_na()
-
-
-df2 = 
-all_data %>% 
-  select(geo_join_id, time_period, measure, indicator_id, poverty) %>% 
-  drop_na()
-df2
-
-df3 = 
-  all_data %>% 
-  select(geo_join_id, time_period, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %>% 
-  drop_na()
-df3
-
-df4 = 
-  all_data %>% 
-  select(geo_join_id, time_period, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %>% 
-  drop_na()
-df4
-df5 = 
-  all_data %>% 
-  select(geo_join_id, time_period, measure, indicator_id, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
-  drop_na()
-df5
-
-
-## Joining
-tidy_asthma_hospitalization = 
-  full_join(df1, df2, by = c("geo_join_id", "time_period")) %>% 
-  full_join(df3, by = c("geo_join_id", "time_period")) %>% 
-  full_join(df4, by = c("geo_join_id", "time_period")) %>% 
-  full_join(df5, by= c("geo_join_id", "time_period")) %>% 
-  select(geo_join_id, time_period, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
-  view()
-```
 
 ```{r, error = TRUE}
 ## see changes with Hospitalzation by time
@@ -178,7 +108,7 @@ ggplot(ggplot_data, aes(x = homes_with_cockroaches, y = asthma_hospitalizations_
 plot_tidy
 
 test_prev=
-  tidy_asthma_hospitalization %>% 
+  tidy_asthma %>% 
   drop_na(asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
   mutate(
     geo_join_id=as.character(geo_join_id),
@@ -228,19 +158,19 @@ model1_fit
 model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id*time_period, data=test) %>% broom::tidy()
 
 
-# Looking at residuals 
-residual_0=
-  model0_fit %>% 
-  modelr::add_residuals(test, model0_fit) %>% 
-  ggplot(aes(x=public_school_children_5_14_yrs_old_with_asthma, y=resid)) +geom_point()
+# Looking at residuals -- FAILED
+#residual_0=
+  #model0_fit %>% 
+  #modelr::add_residuals(test, model0_fit) %>% 
+  #ggplot(aes(x=public_school_children_5_14_yrs_old_with_asthma, y=resid)) +geom_point()
 
-residual_1=
-  modelr::add_residuals(test, model1_fit) %>% 
-  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma, y = resid)) + geom_point()
+#residual_1=
+  #modelr::add_residuals(test, model1_fit) %>% 
+  #ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma, y = resid)) + geom_point()
 
-residual_2=
-  modelr::add_residuals(tidy_asthma, model2_fit) %>% 
-  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma, y = resid)) + geom_point()
+#residual_2=
+  #modelr::add_residuals(tidy_asthma, model2_fit) %>% 
+  #ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma, y = resid)) + geom_point()
 
 
 ```
@@ -254,16 +184,16 @@ cv_df=
     test = map(test, as_tibble)
   )
 
-cv_df=
-  cv_df %>% 
-  mutate(fit = map(train, ~lm(public_school_children_5_14_yrs_old_with_asthma ~ ., data=.x)),
-        model1_lm= map(train, ~lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id, data=.x)),
-        model2_lm=map(train, ~lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id, data=.x)),
-        model5_lm=map(train, ~lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id * asthma_hospitalizations_children_5_to_17_yrs_old, data=.x))) %>% 
-  mutate(rmse_fit = map2_dbl(fit, test, ~rmse(model=.x, data=.y)),
-         rmse_model1= map2_dbl(model1_lm, test, ~rmse(model=.x, data=.y)),
-         rmse_model2= map2_dbl(model2_lm, test, ~rmse(model=.x, data=.y)),
-         rmse_model5=map2_dbl(model5_lm, test, ~rmse(model=.x, data=.y)))
+#cv_df=
+ # cv_df %>% 
+  #mutate(fit = map(train, ~lm(public_school_children_5_14_yrs_old_with_asthma ~ ., data=.x)),
+    #    model1_lm= map(train, ~lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id, data=.x)),
+     #   model2_lm=map(train, ~lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id, data=.x)),
+      #  model5_lm=map(train, ~lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id * asthma_hospitalizations_children_5_to_17_yrs_old, data=.x))) %>% 
+  # mutate(rmse_fit = map2_dbl(fit, test, ~rmse(model=.x, data=.y)),
+    #     rmse_model1= map2_dbl(model1_lm, test, ~rmse(model=.x, data=.y)),
+     #    rmse_model2= map2_dbl(model2_lm, test, ~rmse(model=.x, data=.y)),
+      #   rmse_model5=map2_dbl(model5_lm, test, ~rmse(model=.x, data=.y)))
 ```
 
 ## Trying to do multi-linear modeling 
