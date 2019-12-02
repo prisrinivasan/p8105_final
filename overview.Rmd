@@ -71,7 +71,7 @@ p1
 
 We downloaded all available data from the [NYC Gov Environmental & Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx). The Environmental & Health Data Portal houses data from a variety of sources such as the New York City Automated School Health Records, American Community Survey and New York City Housing and Vacancy Survey (HVS). Data from this portal are used to study how the environment affects health. We initially filtered the dataset to include all variables related to asthma, cockroaches and poverty before finalizing the dataset to include variables only related to public school children with asthma, asthma hospitalizations for children ages 5-17 years old, homes with cockroaches and poverty. Definitions for the variables were taken from the "Source Information" csv file downloaded with the dataset from the Environmental & Health Data Portal. 
 
-  * `geo_type_name`: Geographical name (i.e borough, UHF42)
+  * `geo_type_name`: Type of geographical area (i.e borough, UHF42)
   
   * `geo_join_id`: Numeric ID of the geographical area 
   
@@ -110,7 +110,7 @@ The map was built using the United Hospital Fund (UHF) neighborhood code key fro
 
 ### Loading and tidying the data 
 
-```{r tidying data, eval = TRUE, message = FALSE}
+```{r tidying data, eval = TRUE, message = FALSE, warning = FALSE}
 all_data = 
 read.csv(file = "./final_data/all_available_data.csv") %>% 
   janitor::clean_names() %>% 
