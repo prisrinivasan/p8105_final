@@ -40,7 +40,7 @@ theme_set(theme_minimal() + theme(legend.position = "bottom"))
 
 Most up to date tidy dataset
 
-```{r tidying data, message=FALSE, include=FALSE}
+```{r tidying data, message=FALSE, include=FALSE, error = TRUE}
 all_data = 
 read.csv(file = "./final_data/all_available_data.csv") %>% 
   janitor::clean_names() %>% 
