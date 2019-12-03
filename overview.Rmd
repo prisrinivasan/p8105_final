@@ -251,7 +251,7 @@ As we model build we will be aware of any multicollinearity from those variables
 
 ### _Crude Association between Childhood Asthma and Cockroaches in the Home_
 
-```{r, warning = FALSE}
+```{r, warning = FALSE, error = FALSE}
 set.seed(10)
 library(ggplot2)
 
