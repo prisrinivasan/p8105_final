@@ -238,7 +238,6 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
-  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -270,12 +269,6 @@ $(document).ready(function () {
 }
 }
 
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
 
 .toc-content {
   padding-left: 30px;
@@ -479,7 +472,10 @@ tidy_asthma =
   mutate(time_period = as.numeric(levels(time_period)) [time_period],
          geo_join_id = as.character(as.numeric(levels(geo_join_id)) [geo_join_id]),
          geo_place_name = as.character(geo_place_name)) %&gt;%
-  view()</code></pre>
+  view()
+
+## Saving CSV file
+write.csv(tidy_asthma,&quot;./final_data/tidy_asthma.csv&quot;, row.names = FALSE)</code></pre>
 <p>We downloaded the data as a csv file from the NYC Environmental &amp; Health Data Portal and called the initial dataset <code>all_available_data</code>. We restricted our data to include boroughs and UHF42 neighborhoods as our geographical areas of interest and to include the indicators: <code>homes_with_cockroaches</code>, <code>poverty</code> <code>public_school_children_5_14_yrs_old_with_asthma</code> and <code>asthma_hospitalizations_children_5_to_17_yrs_old</code>.</p>
 <p>Data for the rate of public school children with asthma were presented for a range of years (i.e. 2010-2011, 2011-2012, etc). For our analysis, we recoded these ranges into single years in order from 2011 to 2014. Data on cockroaches were only available for 2011 and 2014. Data on percent poverty in NYC were also presented in ranges and we chose 2010-2014 as our reference. We recoded this into a single year for 2011. Since the data for these four variables overlapped for the years 2011-2014, we restricted our analysis to these four years. Data for the rate of asthma hospitalizations among children ages 5-17 years old were available for all four years.</p>
 <p>After recoding the years, separate dataframes were created for each of the four variables and then joined together in order to fill in the missing values (NAs) that first existed when filtering for these variables and years in the larger dataset. We called the tidied, joined dataset <code>tidy_asthma</code>, which can be found <a href="./final_data/tidy_asthma.csv">here</a>.</p>
@@ -492,7 +488,6 @@ tidy_asthma =
 </div>
 <div id="preliminary-analysis" class="section level2">
 <h2>Preliminary Analysis</h2>
-<hr />
 <div id="cockroach-and-asthma-distributions-by-borough" class="section level3">
 <h3><em>Cockroach and Asthma Distributions by Borough</em></h3>
 <p>Using our tidied dataset, we first looked at the distribution of homes with cockroaches and distribution of public school children, ages 5-14 years old, with asthma by NYC borough. These frequency distributions give insight into how these two might be related.</p>
@@ -774,7 +769,7 @@ poverty
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-homes_with_cockroaches *<br>poverty
+homes_with_cockroaches * poverty
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 </td>
