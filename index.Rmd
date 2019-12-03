@@ -102,6 +102,9 @@ The toll of asthma on children has drawn attention and resources towards mitigat
 
 The analyses presented here explore the association between childhood asthma and another highly prevalent NYC phenomenon - cockroaches. In 2017, 15.6% of households [reported](http://www.sternenvironmental.com/blog/2017/04/18/nyc-breaks-the-top-ten-list-for-worst-rat-and-cockroach-problems/) having pest infestations. As temperatures rise, cockroach populations are [expected](https://gothamist.com/arts-entertainment/its-summer-in-nyc-and-the-cockroaches-have-taken-flight) to increase, posing additional public health challenges, particularly among those who have asthma or respiratory reactions to cockroaches. The prevalence of homes with cockroaches, measured as number of households in an area that reported seeing at least one cockroach daily over the last month divided by number households in the area, is shown below. 
 
+<center>
+</font>
+<br><br>
 ```{r, eval = TRUE}
 
 #FIX LEGEND
@@ -128,6 +131,10 @@ tidy_asthma_sf_ll %>%
               opacity = 1)
 roach_map
 ```
+
+</center>
+</font>
+<br><br>
 
 Asthma and cockroaches appear correlated - are they? 
 
