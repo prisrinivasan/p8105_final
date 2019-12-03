@@ -3,41 +3,118 @@ title: "About"
 output: html_document
 ---
 
-## _Why Asthma?_
+Asthma is one of the most common chronic conditions in children across the United States, currently affecting more than [6 million children](https://www.aafa.org/asthma-facts/). Ranging from mild to severe, asthma affects children's ability to breathe, exercise, and sleep and can severely affect children well into adulthood. New York City (NYC) hosts a much higher prevalence of childhood asthma [(13%)](https://www1.nyc.gov/assets/doh/downloads/pdf/epi/databrief90.pdf) than the rest of the United States [(7.5%)](https://www.cdc.gov/nchs/fastats/asthma.htm) - with children of color and low-income neighborhoods affected disproportionately: 
 
-Asthma is one of the most common chronic illnesses for young children living in NYC according to the [NY State Department of Health](https://www.health.ny.gov/prevention/prevention_agenda/chronic_disease/). Ranging from mild to severe, asthma affects children's ability to breathe, exercise, and sleep and can severely affect children well into adulthood. 
 
-In NYC, there are many prominent risk factors for childhood asthma including air pollution, dust mites, mice, cockroaches, and pets. 
+```{r, echo = FALSE, include = FALSE}
 
-<center>
-</font>
-<br><br>
+library(tidyverse)
+library(plotly)
+library(tmap)
+library(sf)
+library(maptools)
+library(leaflet)
+library(RColorBrewer)
 
-<img align="center" img src="images/hospitalization.jpg" style="width:65%"/>  
+# reading in dataset
+tidy_asthma = 
+  read_csv("./final_data/tidy_asthma.csv") 
 
-<font size="0.7">Image from [Center for New York City Affairs](http://www.centernyc.org/public-housing-and-asthma)
+# reading in shapefiles
+uhf_map = 
+  st_read("./final_data/shapefiles/")
+str(uhf_map)
 
-</center>
-</font>
+# modifying vector types for mapping
+tidy_asthma_sf = merge(uhf_map, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id") %>% 
+  janitor::clean_names() %>% 
+  mutate(uhfcode = as.character(uhfcode),
+         time_period = as.character(time_period),
+         homes_with_cockroaches = as.numeric(homes_with_cockroaches))
 
-## _Why Cockroaches?_
-According to the [New York City Department of Health](https://www1.nyc.gov/site/doh/health/health-topics/asthma.page), in most cases we do not know what causes asthma. Due to the increase in asthma hospitalizations and asthma prevalence, over the past few decades there has been more research done on the association between exposure to cockroach allergens and the development of asthma.  Given the large presence of cockroaches in [NYC](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3271316/), children living in high-cockroach dense neighborhoods are more likely to develop asthma than children living in lower-cockroach dense neighborhoods. 
+#changing geometry to latitude and longitude
+tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
 
-It should also be noted that exposure to cockroach allergens have a [greater effect on asthma morbidity](https://rdcu.be/bX3KA) among inner-city children with asthma than dust mite or pet allergies. In fact, in the [United States](https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pmc/articles/PMC3261483/), the rate of hospitalization for asthma among children living in inner-cities homes with cockroach allergens is 3.4 times higher than non-sensitized/non-exposed children, resulting in children with more wheezing and missed school days.
+# natural breaks for cockroaches
+cut(tidy_asthma$homes_with_cockroaches, 6) 
+roach_bins = c(0, 5, 15, 25, 35, 40, 50)
 
-According to the [CDC](https://www.cdc.gov/pcd/issues/2019/19_0074.htm), asthma-school-related-absenteeism is a major risk factor for poor achievement and school drop out. In addition, schools in lower-income neighborhoods struggle to provide adequate asthma care due to limited resources, resulting in further gaps in quality of care. 
+#creating color palette for cockroaches
+roach_pal = colorBin("Reds", bins = roach_bins)
 
-<center>
-</font>
-<br><br>
+# natural breaks for asthma
+cut(tidy_asthma$public_school_children_5_14_yrs_old_with_asthma, 6) 
+asthma_bins = c(0, 35, 55, 75, 95, 115, 150)
 
-<img align="center" img src="images/Access_To_HealthCenters.jpg" style="width:65%"/>  
+#color palette for asthma
+asthma_pal = colorBin("Reds", bins = asthma_bins)
 
-<font size="0.7">Image from [Institute for Children Poverty](https://www.icphusa.org/reports/asthma-prevalence-access-to-care-among-homeless-high-school-students/)
+```
 
-</center>
-</font>
+```{r, eval = TRUE}
 
+#FIX LEGEND
+asthma_map = 
+tidy_asthma_sf_ll %>%
+  filter(time_period == 2014) %>% 
+  mutate(asthma_label = str_c("Children 5-14 with Asthma: ", public_school_children_5_14_yrs_old_with_asthma, "\n, Neighborhood: ", uhf_neigh)) %>% 
+    leaflet() %>%
+    addProviderTiles("CartoDB.Positron") %>%
+    addPolygons(stroke = TRUE,
+                weight = 2, 
+                opacity = 1,
+                color = ~asthma_pal(public_school_children_5_14_yrs_old_with_asthma),
+                fillOpacity = 0.8,
+                smoothFactor = 0.2,
+                highlight = highlightOptions(weight = 3,
+                                             color = "white",
+                                             bringToFront = TRUE),
+                label = ~asthma_label) %>% 
+    addLegend("topleft",
+              pal = asthma_pal,
+              values = ~public_school_children_5_14_yrs_old_with_asthma,
+              title = "Children 5-14 with Asthma (rate per 1000)",
+              opacity = 1)
+asthma_map
+```
+
+Aside from creating a financial [burden](https://www.ajmc.com/newsroom/cdc-study-puts-economic-burden-of-asthma-at-more-than-80-billion-per-year) for the US economy and families, asthma leads to student absenteeism, further perpetuating educational gaps and socioeconomic disparities. It has been estimated that [14 - 18%](https://www.cdc.gov/pcd/issues/2019/19_0074.htm) of missed school days are explained by asthma episodes, making asthma one of the top causes of absenteeism. 
+
+The toll of asthma on children has drawn attention and resources towards mitigation. While root causes of asthma are still [unknown](https://www1.nyc.gov/site/doh/health/health-topics/asthma.page), common triggers - particularly those associated with allergens - have been isolated. Household pests, including cockroaches and mice, are one of the most [common indoor triggers](https://www.cdc.gov/asthma/triggers_indoor.html). It should also be noted that exposure to cockroach allergens have a [greater effect on asthma morbidity](https://rdcu.be/bX3KA) among inner-city children with asthma than dust mite or pet allergies. In fact, in the [United States](https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pmc/articles/PMC3261483/), the rate of hospitalization for asthma among children living in inner-cities homes with cockroach allergens is 3.4 times higher than non-sensitized/non-exposed children, resulting in children with more wheezing and missed school days.
+
+The analyses presented here explore the association between childhood asthma and another highly prevalent NYC phenomenon - cockroaches. In 2017, 15.6% of households [reported](http://www.sternenvironmental.com/blog/2017/04/18/nyc-breaks-the-top-ten-list-for-worst-rat-and-cockroach-problems/) having pest infestations. As temperatures rise, cockroach populations are [expected](https://gothamist.com/arts-entertainment/its-summer-in-nyc-and-the-cockroaches-have-taken-flight) to increase, posing additional public health challenges, particularly among those who have asthma or respiratory reactions to cockroaches. The prevalence of homes with cockroaches, measured as number of households in an area that reported seeing at least one cockroach daily over the last month divided by number households in the area, is shown below. 
+
+
+```{r, eval = TRUE}
+
+#FIX LEGEND
+roach_map = 
+tidy_asthma_sf_ll %>%
+  filter(time_period == 2014) %>% 
+  mutate(roach_label = str_c("Homes with Cockroaches: ", homes_with_cockroaches, "\n, Neighborhood: ", uhf_neigh)) %>% 
+    leaflet() %>%
+    addProviderTiles("CartoDB.Positron") %>%
+    addPolygons(stroke = TRUE,
+                weight = 2, 
+                opacity = 1,
+                color = ~roach_pal(homes_with_cockroaches),
+                fillOpacity = 0.8,
+                smoothFactor = 0.2,
+                highlight = highlightOptions(weight = 3,
+                                             color = "white",
+                                             bringToFront = TRUE),
+                label = ~roach_label) %>% 
+    addLegend("topleft",
+              pal = roach_pal,
+              values = ~homes_with_cockroaches,
+              title = "Homes with Cockroaches",
+              opacity = 1, 
+              labFormat = function(type, cuts, p) {
+                n = length(cuts)
+                paste0(round(cuts, 1)[-n], " &ndash; ", round(cuts, 1)[-1], "%")
+                })
+roach_map
+```
 
 
 
