@@ -393,9 +393,6 @@ div.tocify {
 </div>
 
 
-<div id="related-work" class="section level3">
-<h3>Related work</h3>
-</div>
 <div id="initial-questions" class="section level2">
 <h2>Initial Questions</h2>
 <p>Based on existing literature discussed in our <a href="about.html">about</a> page, we can see that cockroaches and related allergens could be correlated with prevalence of asthma in New York City. For example, the charts below show the distributions of cockroaches (left) and childhood asthma (right) by NYC borough. We are interested in exploring the <strong>relationship between cockroaches and asthma prevalence</strong> in New York City. To do so, we wanted to <strong>visualize the prevalence of roaches and asthma in New York as well as their correlations</strong> using what we have learned in the course so far. Using our tidied dataset described below, we explored these interests.</p>
@@ -485,11 +482,16 @@ tidy_asthma =
 <p>Our github repository is linked <a href="https://github.com/prisrinivasan/p8105_final">here</a>.</p>
 </div>
 </div>
+<div id="methods" class="section level2">
+<h2>Methods</h2>
+<p>The dataset we used was compiled using the Environmental and Health Dataset from the NYC Health Department. We selected variables based on our preliminary hypothesis regarding asthma, poverty, neighborhood, cockroaches, and school children. These analyses are exploring the correlations and relationships. The correlation matrix displays associations between all of our predictors and outcome to indicate any multicollinearity. The crude analysis shows the crude relationship between cockroach presence and childhood asthma. Finally, the linear model demonstrates the model with all of our predictors against our outcome.</p>
+<p>The code for this page can be found <a href="https://github.com/prisrinivasan/p8105_final/blob/master/regression.Rmd">here</a>.</p>
+</div>
 <div id="preliminary-analysis" class="section level2">
 <h2>Preliminary Analysis</h2>
 <hr />
 <div id="cockroach-and-asthma-distributions-by-borough" class="section level3">
-<h3>Cockroach and Asthma Distributions by Borough</h3>
+<h3><em>Cockroach and Asthma Distributions by Borough</em></h3>
 <p>Using our tidied dataset, we first looked at the distribution of homes with cockroaches and distribution of public school children, ages 5-14 years old, with asthma by NYC borough.</p>
 <pre class="r"><code>p1 = 
   tidy_asthma_sf_ll %&gt;%
@@ -516,19 +518,13 @@ p1</code></pre>
 <pre class="r"><code>p2</code></pre>
 <p><img src="Overview_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
 </div>
-</div>
-<div id="method" class="section level2">
-<h2><em>Method</em></h2>
-<p>The dataset we used was compiled using the Environmental and Health Dataset from the NYC Health Department. We selected variables based on our preliminary hypothesis regarding asthma, poverty, neighborhood, cockroaches, and school children. These analyses are exploring the correlations and relationships. The correlation matrix displays associations between all of our predictors and outcome to indicate any multicollinearity. The crude analysis shows the crude relationship between cockroach presence and childhood asthma. Finally, the linear model demonstrates the model with all of our predictors against our outcome.</p>
-<p>The code for this page can be found <a href="https://github.com/prisrinivasan/p8105_final/blob/master/regression.Rmd">here</a>.</p>
-</div>
-<div id="cockroaches-and-asthma-by-borough" class="section level2">
-<h2><em>Cockroaches and Asthma by Borough</em></h2>
+<div id="cockroaches-and-asthma-by-borough" class="section level3">
+<h3><em>Cockroaches and Asthma by Borough</em></h3>
 <p><img src="Overview_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>To first assess if this issue was one worth looking into, we analyzed the cockroach and asthma relationship by borough. Our prediction was that boroughs with higher cockroach distributions would have higher asthma rates. These violin plots support our initial hypothesis with the Bronx having both the highest cockroach distribution and asthma rates.</p>
 </div>
-<div id="correlation-matrix" class="section level2">
-<h2><em>Correlation Matrix</em></h2>
+<div id="correlation-matrix" class="section level3">
+<h3><em>Correlation Matrix</em></h3>
 <p><img src="Overview_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>A correlation matrix was then compiled to analyze our other predictors. The correlation matrix displays the baseline association between each variable. All of the correlations between predictors and <code>homes_with_cockroaches</code> are above 0.53 which indicates a fairly strong positive correlation. Pearson <em>r</em> values between predictors and <code>homes_with_cockroaches</code>:</p>
 <ul>
@@ -539,15 +535,18 @@ p1</code></pre>
 </ul>
 <p>As we model build we will be aware of any multicollinearity from those variables with large correlations.</p>
 </div>
-<div id="crude-association-between-childhood-asthma-and-cockroaches-in-the-home" class="section level2">
-<h2><em>Crude Association between Childhood Asthma and Cockroaches in the Home</em></h2>
+<div id="crude-association-between-childhood-asthma-and-cockroaches-in-the-home" class="section level3">
+<h3><em>Crude Association between Childhood Asthma and Cockroaches in the Home</em></h3>
 <pre><code>## Warning in time_period == c(&quot;2011&quot;, &quot;2014&quot;): longer object length is not a
 ## multiple of shorter object length</code></pre>
 <p><img src="Overview_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>The crude relationship between childhood asthma and cockroaches in the home is demonstrated above across 2011 and 2014. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation.</p>
 </div>
-<div id="table" class="section level2">
-<h2><em>Table</em></h2>
+</div>
+<div id="additional-analysis" class="section level2">
+<h2>Additional Analysis</h2>
+<div id="table" class="section level3">
+<h3><em>Table</em></h3>
 <pre><code>## Warning in time_period == c(&quot;2011&quot;, &quot;2014&quot;): longer object length is not a
 ## multiple of shorter object length</code></pre>
 <table style="border-collapse:collapse; border:none;">
@@ -810,6 +809,7 @@ AIC
 <li>Future analyses should include demographic variables and their interactions to improve significance, the <span class="math inline">\({r}^2\)</span> value, and further decrease the AIC.</li>
 </ul>
 </div>
+</div>
 <div id="discussion" class="section level2">
 <h2>Discussion</h2>
 <p>In the process of analyzing the association between prevalence of cockroach in homes and asthma, we gained the following insights:</p>
@@ -817,13 +817,16 @@ AIC
 <li><p>In particular, the strength of association between homes with cockroaches and poverty, as well as the association between homes with cockroaches and hospitalization, are rather strong, with correlations r=0.88 and r=0.77 respectively. This aligns with previous research done by the <a href="https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pubmed/21536321/">New York City Neighborhood Asthma and Allergy Study (NAAS)</a>, and <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html">other sources</a>. Although the <a href="https://www1.nyc.gov/site/doh/health/health-topics/asthma.page">NYC Department of Health</a> stated that the best way to manage asthma is through doctor’s visits, medication, avoiding triggers, and asthma management at school, this is not feasible for many people due to lack of access to high-quality healthcare, as discussed in this <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html">article</a>.</p></li>
 <li><p>In addition, the positive linear association between percent of children with asthma and percent of homes with cockroaches at home between years 2011 and 2014 provides further evidence that the percentage of school children with asthma is continuing to increase, as stated in this <a href="https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pmc/articles/PMC4803579/">article</a>. Visualization of asthma prevalence by neighborhood and by borough display this increase as well.</p></li>
 <li><p>Visualization of geographic variation of cockroach and asthma prevalence can provide insight for different interventions–such as the one conducted in <a href="https://www-sciencedirect-com.ezproxy.cul.columbia.edu/science/article/pii/S0091674916313495">New Orleans</a>– in target neighborhoods such as Crotona, Tremont, Hunts Point, and Mott Haven– all of which are located in the Bronx. However, it is interesting to note that Williamsburg, which is now known to be a rather affluent neighborhood, has high cockroach prevalence. This could point out to the fact that it is difficult to decrease number of cockroaches in an area, and thus other types of interventions need to be done to decrease number of children developing asthma.</p></li>
-<li><p>Similar to <a href="https://www.cdc.gov/pcd/issues/2019/19_0074.htm">previous research</a>, there are several limitations, including not having and including all the confounding health and social risk factors.</p></li>
+<li><p>Similar to <a href="https://www.cdc.gov/pcd/issues/2019/19_0074.htm">previous research</a>, there are several limitations, including not having and including all the confounding health and sociodemographic factors that were not accounted for, such as immigration status, race, gender, etc.</p></li>
 </ul>
 </div>
 <div id="additional-observations" class="section level2">
 <h2>Additional Observations</h2>
 <p>Using the <code>shiny</code> and <code>leaflet</code> packages, we created a <a href="https://prisrinivasan.shinyapps.io/roach_shiny/">visualization</a> of homes with cockroaches in New York City neighborhood. By inputting boroughs and years, the map shows the percentage of homes that have reported seeing a cockroach every day for one month within neighborhoods. Based on this map, most cockroaches are seen in the Bronx, Queens, and Brooklyn, while neighborhoods in lower Manhattan, Staten Island, and closer to Long Island see a relatively lower percent of cockroaches. Switching between 2011 and 2014 (the years for which cockroach data was collected), we can see that the percentage of homes that see cockroaches have generally increased in Brooklyn and Queens.</p>
 <p>The dashboard includes <code>plotly</code> bar charts showing asthma prevalence in boroughs and neighborhood among public school children aged 5 - 14 years old over a four-year period. Playing these graphs, we can see that asthma prevalence has generally increased each year from 2011 to 2014.</p>
+</div>
+<div id="related-work" class="section level2">
+<h2>Related work</h2>
 </div>
 
 
