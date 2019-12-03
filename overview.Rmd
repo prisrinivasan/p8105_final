@@ -174,7 +174,7 @@ tidy_asthma
 
 ### _Cockroach and Asthma Distributions by Borough_
 
-Using our tidied dataset, we first looked at the distribution of homes with cockroaches and distribution of public school children, ages 5-14 years old, with asthma by NYC borough. 
+Using our tidied dataset, we first looked at the distribution of homes with cockroaches and distribution of public school children, ages 5-14 years old, with asthma by NYC borough. These frequency distributions give insight into how these two might be related. 
 
 ```{r, eval = TRUE, message = FALSE, warning = FALSE}
 p1 = 
@@ -231,7 +231,7 @@ roach_asth_borough
 
 ```
 
-To first assess if this issue was one worth looking into, we analyzed the cockroach and asthma relationship by borough. Our prediction was that boroughs with higher cockroach distributions would have higher asthma rates. These violin plots support our initial hypothesis with the Bronx having both the highest cockroach distribution and asthma rates.
+To assess the crude relationship between these two variables, we analyzed the cockroach and asthma relationship by borough. Our prediction was that boroughs with higher cockroach distributions would have higher asthma rates. These violin plots support our initial hypothesis with the Bronx having both the highest cockroach distribution and asthma rates.
 
 ### _Correlation Matrix_
 
