@@ -21,7 +21,7 @@ library(devtools)
 library(rgdal)
 library(magick)
 
-load("./p8105_final/tidy_asthma_2.Rda")
+load("./tidy_asthma_2.Rda")
 ```
 
 Column {.sidebar}
