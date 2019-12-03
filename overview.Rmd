@@ -315,7 +315,7 @@ In the process of analyzing the association between prevalence of cockroach in h
 
 * Visualization of geographic variation of cockroach and asthma prevalence can provide insight for different interventions--such as the one conducted in [New Orleans](https://www-sciencedirect-com.ezproxy.cul.columbia.edu/science/article/pii/S0091674916313495)-- in target neighborhoods such as Crotona, Tremont, Hunts Point, and Mott Haven-- all of which are located in the Bronx. However, it is interesting to note that Williamsburg, which is now known to be a rather affluent neighborhood, has high cockroach prevalence. This could point out to the fact that it is difficult to decrease number of cockroaches in an area, and thus other types of interventions need to be done to decrease number of children developing asthma. 
 
-*	Similar to [previous research](https://www.cdc.gov/pcd/issues/2019/19_0074.htm), there are several limitations, including not having and including all the confounding health and social risk factors. 
+*	Similar to [previous research](https://www.cdc.gov/pcd/issues/2019/19_0074.htm), there are several limitations, including not having and including all the confounding health and sociodemographic factors that were not accounted for, such as immigration status, race, gender, etc. 
 
 
 ## Additional Observations
