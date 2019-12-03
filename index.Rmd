@@ -90,15 +90,9 @@ tidy_asthma_sf_ll %>%
               values = ~public_school_children_5_14_yrs_old_with_asthma,
               title = "Children 5-14 with Asthma (rate per 1000)",
               opacity = 1)
-```
 
-<center>
-<br><br>
-```{r}
 asthma_map
 ```
-</center>
-<br><br>
 
 Aside from creating a financial [burden](https://www.ajmc.com/newsroom/cdc-study-puts-economic-burden-of-asthma-at-more-than-80-billion-per-year) for the US economy and families, asthma leads to student absenteeism, further perpetuating educational gaps and socioeconomic disparities. It has been estimated that [14 - 18%](https://www.cdc.gov/pcd/issues/2019/19_0074.htm) of missed school days are explained by asthma episodes, making asthma one of the top causes of absenteeism. 
 
@@ -106,9 +100,7 @@ The toll of asthma on children has drawn attention and resources towards mitigat
 
 The analyses presented here explore the association between childhood asthma and another highly prevalent NYC phenomenon - cockroaches. In 2017, 15.6% of households [reported](http://www.sternenvironmental.com/blog/2017/04/18/nyc-breaks-the-top-ten-list-for-worst-rat-and-cockroach-problems/) having pest infestations. As temperatures rise, cockroach populations are [expected](https://gothamist.com/arts-entertainment/its-summer-in-nyc-and-the-cockroaches-have-taken-flight) to increase, posing additional public health challenges, particularly among those who have asthma or respiratory reactions to cockroaches. The prevalence of homes with cockroaches, measured as number of households in an area that reported seeing at least one cockroach daily over the last month divided by number households in the area, is shown below. 
 
-<center>
-</font>
-<br><br>
+
 ```{r, eval = TRUE}
 
 #FIX LEGEND
@@ -136,9 +128,6 @@ tidy_asthma_sf_ll %>%
 roach_map
 ```
 
-</center>
-</font>
-<br><br>
 
 Asthma and cockroaches appear correlated - are they? 
 
