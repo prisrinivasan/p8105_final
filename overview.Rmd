@@ -79,7 +79,8 @@ Predictor
 
   * `homes_with_cockroaches` (Percent): Estimated number of households in an 
     area that reported seeing at least one cockroach daily over the last 
-    month, divided by the number of households in the area.
+    month, divided by the number of households in the area, expressed as a 
+    percent.
 
 Outcomes of interest 
 
@@ -98,11 +99,9 @@ Potential confounder
   * `poverty` (Percent): Estimated number of people for whom poverty status 
     is determined, whose annual income falls below 100% of the federal 
     poverty level, divided by the number of people for whom poverty status is
-    determined.
+    determined, expressed as a percent.
 
-Our github repository is linked [here](https://github.com/prisrinivasan/p8105_final).
-
-The map was built using the United Hospital Fund (UHF) neighborhood code key from [NYC Health](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf). 
+Spatial geometries were taken from the NYC Health Department's [GIS Center](https://www1.nyc.gov/site/doh/data/health-tools/maps-gis-data-files-for-download.page). The map was built using the United Hospital Fund (UHF) neighborhood code key from [NYC Health](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf). 
 
 ### Loading and tidying the data 
 
@@ -167,7 +166,9 @@ We downloaded the data as a csv file from the NYC Environmental & Health Data Po
 
 Data for the rate of public school children with asthma were presented for a range of years (i.e. 2010-2011, 2011-2012, etc). For our analysis, we recoded these ranges into single years in order to  2011-2014. Data on cockroaches were only available for 2011 and 2014. Data on percent poverty in NYC were also presented in ranges and we chose 2010-2014 as our reference. We recoded this into a single year for 2011. Since the data for these four variables overlapped for the years 2011-2014, we restricted our analysis to these four years. Data for the rate of asthma hospitalizations among children ages 5-17 years old were available for all four years. 
 
-After recoding the years, separate dataframes were created for each of the [four/five variables] and then joined together in order to fill in the missing values (NAs) that first existed when filtering for these variables and years in the larger dataset. We called the tidied, joined dataset `tidy_asthma` and exported it as a [csv file](tidy_asthma.csv). 
+After recoding the years, separate dataframes were created for each of the four variables and then joined together in order to fill in the missing values (NAs) that first existed when filtering for these variables and years in the larger dataset. We called the tidied, joined dataset `tidy_asthma` and exported it as a [csv file](tidy_asthma.csv). 
+
+Our github repository is linked [here](https://github.com/prisrinivasan/p8105_final).
 
 ## Preliminary Analysis
 
