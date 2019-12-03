@@ -124,6 +124,9 @@ tidy_asthma =
          geo_join_id = as.character(as.numeric(levels(geo_join_id)) [geo_join_id]),
          geo_place_name = as.character(geo_place_name)) %>%
   view()
+
+## Saving CSV file
+write.csv(tidy_asthma,"./final_data/tidy_asthma.csv", row.names = FALSE)
 ```
 
 We downloaded the data as a csv file from the NYC Environmental & Health Data Portal and called the initial dataset `all_available_data`. We restricted our data to include boroughs and UHF42 neighborhoods as our geographical areas of interest and to include the indicators: `homes_with_cockroaches`, `poverty` `public_school_children_5_14_yrs_old_with_asthma` and `asthma_hospitalizations_children_5_to_17_yrs_old`. 
@@ -139,8 +142,6 @@ Our github repository is linked [here](https://github.com/prisrinivasan/p8105_fi
 The dataset we used was compiled using the Environmental and Health Dataset from the NYC Health Department. We selected variables based on our preliminary hypothesis regarding asthma, poverty, neighborhood, cockroaches, and school children. These analyses are exploring the correlations and relationships. The correlation matrix displays associations between all of our predictors and outcome to indicate any multicollinearity. The crude analysis shows the crude relationship between cockroach presence and childhood asthma. Finally, the linear model demonstrates the model with all of our predictors against our outcome. 
 
 ## Preliminary Analysis
-
----
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
