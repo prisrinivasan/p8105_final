@@ -396,6 +396,10 @@ div.tocify {
 </div>
 
 
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Asthma is one of the most common chronic conditions in children across the United States, currently affecting more than <a href="https://www.aafa.org/asthma-facts/">6 million children</a>. New York City (NYC) hosts a much higher prevalence of childhood asthma <a href="https://www1.nyc.gov/assets/doh/downloads/pdf/epi/databrief90.pdf">(13%)</a> than the rest of the United States <a href="https://www.cdc.gov/nchs/fastats/asthma.htm">(7.5%)</a></p>
+</div>
 <div id="initial-questions" class="section level2">
 <h2>Initial Questions</h2>
 <p>Based on existing literature discussed in our <a href="about.html">about</a> page, we can see that cockroaches and related allergens could be correlated with prevalence of asthma in New York City. For example, the charts below show the distributions of cockroaches (left) and childhood asthma (right) by NYC borough. We are interested in exploring the <strong>relationship between cockroaches and asthma prevalence</strong> in New York City. To do so, we wanted to <strong>visualize the prevalence of roaches and asthma in New York as well as their correlations</strong> using what we have learned in the course so far. Using our tidied dataset described below, we explored these interests.</p>
@@ -409,16 +413,16 @@ div.tocify {
 <li><p><code>geo_place_name</code>: Name of the geographical area</p></li>
 <li><p><code>time_period</code>: Year for the data</p></li>
 </ul>
-<p>Predictor</p>
+<p><strong>Predictor</strong></p>
 <ul>
 <li><code>homes_with_cockroaches</code> (Percent): Estimated number of households in an area that reported seeing at least one cockroach daily over the last month, divided by the number of households in the area, expressed as a percent.</li>
 </ul>
-<p>Outcomes of interest</p>
+<p><strong>Outcomes of interest</strong></p>
 <ul>
 <li><p><code>public_school_children_5_14_yrs_old_with_asthma</code> (Rate): Number of public school children, aged 5-14 years, with a diagnosis of asthma that has been reported to NYC DOHMH during the current or previous school year, divided by the 5-14 year old population, per 1,000.</p></li>
 <li><p><code>asthma_hospitalizations_children_5_to_17_yrs_old</code> (Rate): Number of asthma-related hospitalizations among NYC resident children aged 5 to 17 years, divided by the population of children 5 to 17 years old, using NYC DOHMH intercensal estimates; expressed as cases per 10,000 residents.</p></li>
 </ul>
-<p>Potential confounder</p>
+<p><strong>Potential confounder</strong></p>
 <ul>
 <li><code>poverty</code> (Percent): Estimated number of people for whom poverty status is determined, whose annual income falls below 100% of the federal poverty level, divided by the number of people for whom poverty status is determined, expressed as a percent.</li>
 </ul>
@@ -552,7 +556,6 @@ roach_asth_borough</code></pre>
 <ul>
 <li>Poverty: 0.88</li>
 <li>Public school children (5-14 years old) with asthma: 0.53</li>
-<li>Public school children (5-14 years old) with persistent asthma: 0.67</li>
 <li>Asthma hospitalizations of children (5-17 years old): 0.77</li>
 </ul>
 <p>As we model build we will be aware of any multicollinearity from those variables with large correlations.</p>
@@ -583,12 +586,15 @@ plot_tidy</code></pre>
 </div>
 <div id="additional-analysis" class="section level2">
 <h2>Additional Analysis</h2>
-<p>Table 1 below displays the estimates, confidence intervals, test statistics, and p-values for each of our three potential models. The three columns of “Public School Children 5-14 Years Old With Asthma” show the intercept and slope values for each model</p>
-<p><strong>Crude Cockroach Model</strong> * The first column shows the basic model with cockroaches against public school children with asthma. The <span class="math inline">\({r}^2\)</span> value is 0.293, which is a weak positive relationship. The beta for cockroaches is significant with a p-value less than 0.001.</p>
+<p>Table 1 below displays the estimates, confidence intervals, test statistics, and p-values for each of our three potential models. The three columns titled “Public School Children 5-14 Years Old With Asthma”, delineated as <span class="math inline">\(y_i\)</span> in the equations below, show the intercept and slope values for each model.</p>
+<p><strong>Crude Cockroach Model</strong></p>
+<p>The first column shows the basic model with cockroaches against public school children with asthma. The <span class="math inline">\({r}^2\)</span> value is 0.279, which is a weak positive relationship. The beta for cockroaches is significant with a p-value less than 0.001.</p>
 <p><span class="math display">\[ y_i = \beta_0 + \beta_1*homes\_with\_cockroaches + \epsilon_{i} \]</span></p>
-<p><strong>Adjusted for Poverty</strong> * The second column shows one adjusted model based on our first crude model. Here we experiment with a potential confounder, poverty, to improve the <span class="math inline">\({r}^2\)</span> value and find a better fit of our data. There are 2 slopes, cockroaches and poverty. The <span class="math inline">\({r}^2\)</span> value is 0.422 which is higher than the crude model. The betas here are not significant, but the AIC is much lower than the first model.</p>
+<p><strong>Adjusted for Poverty</strong></p>
+<p>The second column shows one adjusted model based on our first crude model. Here we experiment with a potential confounder, poverty, to improve the <span class="math inline">\({r}^2\)</span> value and find a better fit of our data. There are 2 slopes, cockroaches and poverty. The <span class="math inline">\({r}^2\)</span> value is 0.337 which is higher than the crude model. The betas here are not significant, but the AIC is much lower than the first model and the lowest of all the models.</p>
 <p><span class="math display">\[ y_i = \beta_0 + \beta_1*homes\_with\_cockroaches + \beta_2*poverty + \epsilon_{i} \]</span></p>
-<p><strong>Adjusted for Poverty with Interaction Term</strong> * The third column shows the adjusted model with an interaction term. There are 3 slopes and none of the betas are significant. The <span class="math inline">\({r}^2\)</span> value is 0.443 which is higher than the previous model, but the AIC went up slightly.</p>
+<p><strong>Adjusted for Poverty with Interaction Term</strong></p>
+<p>The third column shows the adjusted model with an interaction term. There are 3 slopes and none of the betas are significant. The <span class="math inline">\({r}^2\)</span> value is 0.357 which is slightly higher than the previous model. Including the interaction term slightly increases AIC as well, but the value is still similar to the poverty-adjusted model without the interaction term.</p>
 <p><span class="math display">\[ y_i = \beta_0 + \beta_1*homes\_with\_cockroaches + \beta_2*poverty + \beta_3*homes\_with\_cockroaches*poverty + \epsilon_{i} \]</span></p>
 <div id="table-1" class="section level3">
 <h3><em>Table 1</em></h3>
@@ -598,7 +604,7 @@ model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_coc
 
 model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty, data = tidy_asthma) 
 
-tab_model(crude_model, model1_fit, model2_fit, show.stat = TRUE, show.aic = TRUE)</code></pre>
+tab_model(crude_model, model2_fit, model1_fit, show.stat = TRUE, show.aic = TRUE)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
@@ -672,25 +678,25 @@ p
 <strong>&lt;0.001
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-43.65
+33.80
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
-23.76 – 63.55
+23.83 – 43.77
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
-4.43
+6.83
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
 <strong>&lt;0.001
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
-33.80
+43.65
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
-23.83 – 43.77
+23.76 – 63.55
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
-6.83
+4.43
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3">
 <strong>&lt;0.001
@@ -713,28 +719,28 @@ homes_with_cockroaches
 <strong>&lt;0.001
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.11
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
--0.88 – 1.10
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
-0.22
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
-0.829
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
 0.48
 </td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
 -0.28 – 1.23
 </td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
 1.28
 </td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3">
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
 0.209
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.11
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
+-0.88 – 1.10
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
+0.22
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3">
+0.829
 </td>
 </tr>
 <tr>
@@ -750,28 +756,28 @@ poverty
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
--0.12
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
--1.55 – 1.30
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
--0.17
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
-0.864
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
 0.49
 </td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
 -0.44 – 1.43
 </td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
 1.06
 </td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3">
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
 0.294
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+-0.12
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
+-1.55 – 1.30
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
+-0.17
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3">
+0.864
 </td>
 </tr>
 <tr>
@@ -787,24 +793,24 @@ homes_with_cockroaches * poverty
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
--0.01 – 0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
-1.15
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
-0.255
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+0.02
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
+-0.01 – 0.05
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
+1.15
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3">
+0.255
 </td>
 </tr>
 <tr>
@@ -829,10 +835,10 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 0.279 / 0.271
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
-0.357 / 0.312
+0.337 / 0.307
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
-0.337 / 0.307
+0.357 / 0.312
 </td>
 </tr>
 <tr>
@@ -843,15 +849,17 @@ AIC
 821.102
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
-388.539
+387.971
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
-387.971
+388.539
 </td>
 </tr>
 </table>
 <hr />
-<p>Future analyses should include demographic variables and their interactions to improve significance, the <span class="math inline">\({r}^2\)</span> value, and further decrease the AIC.</p>
+<p>We chose the crude model in the end because poverty may be a large confounder of the relationship between homes with cockroaches and rate of asthma. Our final estimated model based on the first column is below:</p>
+<p><span class="math display">\[ y_i = 43.65 + 0.11*homes\_with\_cockroaches + \epsilon_{i} \]</span></p>
+<p>Future exploration could include analysis on poverty as a confounder or effect measure modifier. Further analysis should also include demographic variables and their interactions to improve significance, the <span class="math inline">\({r}^2\)</span> value, and further decrease the AIC.</p>
 </div>
 </div>
 <div id="discussion" class="section level2">
@@ -859,7 +867,7 @@ AIC
 <p>In the process of analyzing the association between prevalence of cockroach in homes and asthma, we gained the following insights:</p>
 <ul>
 <li><p>Overall, a strong positive correlation was observed between asthma and cockroaches. The highest asthma rates were observed among children in the Bronx. The highest proportion of homes with cockroaches was also observed in the Bronx. Furthermore, the strongest correlation between asthma and cockroaches was observed in the Bronx.</p></li>
-<li><p>In particular, the strength of association between homes with cockroaches and poverty, as well as the association between homes with cockroaches and hospitalization, are rather strong, with correlations <em>r</em>=0.88 and <em>r</em>=0.77 respectively. This aligns with previous research done by the <a href="https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pubmed/21536321/">New York City Neighborhood Asthma and Allergy Study (NAAS)</a>, and <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html">other sources</a>. Although the <a href="https://www1.nyc.gov/site/doh/health/health-topics/asthma.page">NYC Department of Health</a> stated that the best way to manage asthma is through doctor’s visits, medication, avoiding triggers, and asthma management at school, this is not feasible for many people due to lack of access to high-quality healthcare, as discussed in this <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html">article</a>.</p></li>
+<li><p>In particular, the strength of association between homes with cockroaches and poverty, as well as the association between homes with cockroaches and hospitalization, are rather strong, with correlations <em>r</em> = 0.88 and <em>r</em> = 0.77 respectively. This aligns with previous research done by the <a href="https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pubmed/21536321/">New York City Neighborhood Asthma and Allergy Study (NAAS)</a>, and <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html">other sources</a>. Although the <a href="https://www1.nyc.gov/site/doh/health/health-topics/asthma.page">NYC Department of Health</a> stated that the best way to manage asthma is through doctor’s visits, medication, avoiding triggers, and asthma management at school, this is not feasible for many people due to lack of access to high-quality healthcare, as discussed in this <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html">article</a>.</p></li>
 <li><p>Based on our table, we can see that in the crude model, predictor <code>homes_with_cockroaches</code> has a <span class="math inline">\(\hat{\beta}\)</span> coefficient of 1.03. However, when we add poverty into the model, we see that the <span class="math inline">\(\hat{\beta}\)</span> coefficient of <code>homes_with_cockroaches</code> changes to 0.11, suggesting that poverty confounds the association between homes with cockroaches and number of public school children ages 5 to 14 with asthma. It would be interesting to explore poverty as a predictor in the model for future analyses.</p></li>
 <li><p>In addition, the positive linear association between percent of children with asthma and percent of homes with cockroaches at home between years 2011 and 2014 provides further evidence that the percentage of school children with asthma is continuing to increase, as stated in this <a href="https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pmc/articles/PMC4803579/">article</a>. Visualization of asthma prevalence by neighborhood and by borough display this increase as well.</p></li>
 <li><p>Visualization of geographic variation of cockroach and asthma prevalence can provide insight for different interventions–such as the one conducted in <a href="https://www-sciencedirect-com.ezproxy.cul.columbia.edu/science/article/pii/S0091674916313495">New Orleans</a>– in target neighborhoods such as Crotona, Tremont, Hunts Point, and Mott Haven– all of which are located in the Bronx. However, it is interesting to note that Williamsburg, which is now known to be a rather affluent neighborhood, has high cockroach prevalence. This could point out to the fact that it is difficult to decrease number of cockroaches in an area, and thus other types of interventions need to be done to decrease number of children developing asthma. Also, based off of our coding, it is interesting to note that Rikers Island is coded as part of the neighborhood “West Queens,” displaying a asthma rate of 54.6 per 1000 in 2011, and 77.3 per 1000 in 2014. Future studies could explore the relationship between cockroach prevalence and environmental habitats.</p></li>

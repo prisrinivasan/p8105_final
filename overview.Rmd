@@ -29,6 +29,9 @@ tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id
 tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
 ```
 
+## Introduction
+Asthma is one of the most common chronic conditions in children across the United States, currently affecting more than [6 million children](https://www.aafa.org/asthma-facts/). New York City (NYC) hosts a much higher prevalence of childhood asthma [(13%)](https://www1.nyc.gov/assets/doh/downloads/pdf/epi/databrief90.pdf) than the rest of the United States [(7.5%)](https://www.cdc.gov/nchs/fastats/asthma.htm).
+
 ## Initial Questions 
 
 Based on existing literature discussed in our [about](about.html) page, we can see that cockroaches and related allergens could be correlated with prevalence of asthma in New York City. For example, the charts below show the distributions of cockroaches (left) and childhood asthma (right) by NYC borough. We are interested in exploring the **relationship between cockroaches and asthma prevalence** in New York City. To do so, we wanted to **visualize the prevalence of roaches and asthma in New York as well as their correlations** using what we have learned in the course so far. Using our tidied dataset described below, we explored these interests.
@@ -45,14 +48,14 @@ We downloaded all available data from the [NYC Gov Environmental & Health Data P
   
   * `time_period`: Year for the data
 
-Predictor
+**Predictor**
 
   * `homes_with_cockroaches` (Percent): Estimated number of households in an 
     area that reported seeing at least one cockroach daily over the last 
     month, divided by the number of households in the area, expressed as a 
     percent.
 
-Outcomes of interest 
+**Outcomes of interest**
 
   * `public_school_children_5_14_yrs_old_with_asthma` (Rate): Number of 
     public school children, aged 5-14 years, with a diagnosis of asthma that 
@@ -64,7 +67,7 @@ Outcomes of interest
     years, divided by the population of children 5 to 17 years old, using NYC
     DOHMH intercensal estimates; expressed as cases per 10,000 residents.
 
-Potential confounder
+**Potential confounder**
 
   * `poverty` (Percent): Estimated number of people for whom poverty status 
     is determined, whose annual income falls below 100% of the federal 
@@ -237,7 +240,6 @@ A correlation matrix was then compiled to analyze our other predictors. The corr
 
   * Poverty: 0.88
   * Public school children (5-14 years old) with asthma: 0.53
-  * Public school children (5-14 years old) with persistent asthma: 0.67
   * Asthma hospitalizations of children (5-17 years old): 0.77
 
 As we model build we will be aware of any multicollinearity from those variables with large correlations. 
@@ -270,20 +272,23 @@ The crude relationship between childhood asthma and cockroaches in the home is d
 
 ## Additional Analysis
 
-Table 1 below displays the estimates, confidence intervals, test statistics, and p-values for each of our three potential models. The three columns of "Public School Children 5-14 Years Old With Asthma" show the intercept and slope values for each model
+Table 1 below displays the estimates, confidence intervals, test statistics, and p-values for each of our three potential models. The three columns titled "Public School Children 5-14 Years Old With Asthma", delineated as $y_i$ in the equations below, show the intercept and slope values for each model.
 
 **Crude Cockroach Model**
-* The first column shows the basic model with cockroaches against public school children with asthma. The ${r}^2$ value is 0.293, which is a weak positive relationship. The beta for cockroaches is significant with a p-value less than 0.001.
+
+The first column shows the basic model with cockroaches against public school children with asthma. The ${r}^2$ value is 0.279, which is a weak positive relationship. The beta for cockroaches is significant with a p-value less than 0.001.
 
 $$ y_i = \beta_0 + \beta_1*homes\_with\_cockroaches + \epsilon_{i} $$
 
 **Adjusted for Poverty**
-* The second column shows one adjusted model based on our first crude model. Here we experiment with a potential confounder, poverty, to improve the ${r}^2$ value and find a better fit of our data. There are 2 slopes, cockroaches and poverty. The ${r}^2$ value is 0.422 which is higher than the crude model. The betas here are not significant, but the AIC is much lower than the first model.
+
+The second column shows one adjusted model based on our first crude model. Here we experiment with a potential confounder, poverty, to improve the ${r}^2$ value and find a better fit of our data. There are 2 slopes, cockroaches and poverty. The ${r}^2$ value is 0.337 which is higher than the crude model. The betas here are not significant, but the AIC is much lower than the first model and the lowest of all the models. 
 
 $$ y_i = \beta_0 + \beta_1*homes\_with\_cockroaches + \beta_2*poverty + \epsilon_{i} $$
 
 **Adjusted for Poverty with Interaction Term**
-* The third column shows the adjusted model with an interaction term. There are 3 slopes and none of the betas are significant. The ${r}^2$ value is 0.443 which is higher than the previous model, but the AIC went up slightly.
+
+The third column shows the adjusted model with an interaction term. There are 3 slopes and none of the betas are significant. The ${r}^2$ value is 0.357 which is slightly higher than the previous model. Including the interaction term slightly increases AIC as well, but the value is still similar to the poverty-adjusted model without the interaction term.
 
 $$ y_i = \beta_0 + \beta_1*homes\_with\_cockroaches + \beta_2*poverty + \beta_3*homes\_with\_cockroaches*poverty + \epsilon_{i} $$
 
@@ -293,9 +298,9 @@ $$ y_i = \beta_0 + \beta_1*homes\_with\_cockroaches + \beta_2*poverty + \beta_3*
 
 crude_model = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches, data = tidy_asthma)
 
-model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty, data = tidy_asthma)
+model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty, data = tidy_asthma) 
 
-model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty, data = tidy_asthma) 
+model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty, data = tidy_asthma)
 
 tab_model(crude_model, model1_fit, model2_fit, show.stat = TRUE, show.aic = TRUE)
 
@@ -303,7 +308,11 @@ tab_model(crude_model, model1_fit, model2_fit, show.stat = TRUE, show.aic = TRUE
 
 ---
 
-Future analyses should include demographic variables and their interactions to improve significance, the ${r}^2$ value, and further decrease the AIC.
+We chose the crude model in the end because poverty may be a large confounder of the relationship between homes with cockroaches and rate of asthma. Our final estimated model based on the first column is below:
+
+$$ y_i = 43.65 + 0.11*homes\_with\_cockroaches + \epsilon_{i} $$
+
+Future exploration could include analysis on poverty as a confounder or effect measure modifier. Further analysis should also include demographic variables and their interactions to improve significance, the ${r}^2$ value, and further decrease the AIC.
 
 
 ## Discussion
@@ -312,7 +321,7 @@ In the process of analyzing the association between prevalence of cockroach in h
 
 * Overall, a strong positive correlation was observed between asthma and cockroaches. The highest asthma rates were observed among children in the Bronx. The highest proportion of homes with cockroaches was also observed in the Bronx. Furthermore, the strongest correlation between asthma and cockroaches was observed in the Bronx. 
 
-* In particular, the strength of association between homes with cockroaches and poverty, as well as the association between homes with cockroaches and hospitalization, are rather strong, with correlations _r_=0.88 and _r_=0.77 respectively. This aligns with previous research done by the [New York City Neighborhood Asthma and Allergy Study (NAAS)](https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pubmed/21536321/), and [other sources](http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html). Although the [NYC Department of Health](https://www1.nyc.gov/site/doh/health/health-topics/asthma.page) stated that the best way to manage asthma is through doctor’s visits, medication, avoiding triggers, and asthma management at school, this is not feasible for many people due to lack of access to high-quality healthcare, as discussed in this [article](http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html).
+* In particular, the strength of association between homes with cockroaches and poverty, as well as the association between homes with cockroaches and hospitalization, are rather strong, with correlations _r_ = 0.88 and _r_ = 0.77 respectively. This aligns with previous research done by the [New York City Neighborhood Asthma and Allergy Study (NAAS)](https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pubmed/21536321/), and [other sources](http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html). Although the [NYC Department of Health](https://www1.nyc.gov/site/doh/health/health-topics/asthma.page) stated that the best way to manage asthma is through doctor’s visits, medication, avoiding triggers, and asthma management at school, this is not feasible for many people due to lack of access to high-quality healthcare, as discussed in this [article](http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html).
 
 * Based on our table, we can see that in the crude model, predictor `homes_with_cockroaches` has a $\hat{\beta}$ coefficient of 1.03. However, when we add poverty into the model, we see that the $\hat{\beta}$ coefficient of `homes_with_cockroaches` changes to 0.11, suggesting that poverty confounds the association between homes with cockroaches and number of public school children ages 5 to 14 with asthma. It would be interesting to explore poverty as a predictor in the model for future analyses. 
 
