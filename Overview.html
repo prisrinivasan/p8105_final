@@ -520,11 +520,35 @@ p1</code></pre>
 </div>
 <div id="cockroaches-and-asthma-by-borough" class="section level3">
 <h3><em>Cockroaches and Asthma by Borough</em></h3>
+<pre class="r"><code>shape = st_read(&quot;./final_data/shapefiles/&quot;, quiet = TRUE)
+
+tidy_asthma_sf = merge(shape, tidy_asthma, by.x = &quot;UHFCODE&quot;, by.y = &quot;geo_join_id&quot;) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  mutate(uhfcode = as.character(uhfcode),
+         time_period = as.character(time_period),
+         homes_with_cockroaches = as.numeric(homes_with_cockroaches))
+
+roach_asth_borough = 
+  tidy_asthma_sf %&gt;%
+  filter(time_period == c(&quot;2011&quot;, &quot;2014&quot;)) %&gt;%
+  mutate(borough = forcats::fct_reorder(borough, public_school_children_5_14_yrs_old_with_asthma, na.rm = TRUE)) %&gt;%
+  ggplot(aes(x = homes_with_cockroaches, 
+             y = public_school_children_5_14_yrs_old_with_asthma,
+             color = homes_with_cockroaches)) +
+  geom_violin(aes(color = homes_with_cockroaches)) +
+  viridis::scale_color_viridis(discrete = TRUE) +
+  facet_grid(~borough) +
+  labs(title = &quot;Cockroach and Asthma Distribution by Borough&quot;,
+       x = &quot;Cockroach Distribution&quot;,
+       y = &quot;Asthma Among School Children Ages 5-14 years old&quot;)
+
+roach_asth_borough</code></pre>
 <p><img src="Overview_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>To first assess if this issue was one worth looking into, we analyzed the cockroach and asthma relationship by borough. Our prediction was that boroughs with higher cockroach distributions would have higher asthma rates. These violin plots support our initial hypothesis with the Bronx having both the highest cockroach distribution and asthma rates.</p>
 </div>
 <div id="correlation-matrix" class="section level3">
 <h3><em>Correlation Matrix</em></h3>
+<pre class="r"><code>chart.Correlation(tidy_asthma[,5:9], histogram = TRUE, method = c(&quot;pearson&quot;, &quot;kendall&quot;, &quot;spearman&quot;))</code></pre>
 <p><img src="Overview_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>A correlation matrix was then compiled to analyze our other predictors. The correlation matrix displays the baseline association between each variable. All of the correlations between predictors and <code>homes_with_cockroaches</code> are above 0.53 which indicates a fairly strong positive correlation. Pearson <em>r</em> values between predictors and <code>homes_with_cockroaches</code>:</p>
 <ul>
@@ -537,8 +561,25 @@ p1</code></pre>
 </div>
 <div id="crude-association-between-childhood-asthma-and-cockroaches-in-the-home" class="section level3">
 <h3><em>Crude Association between Childhood Asthma and Cockroaches in the Home</em></h3>
+<pre class="r"><code>set.seed(10)
+library(ggplot2)
+
+ggplot_data = 
+tidy_asthma %&gt;%
+  filter(time_period == c(&quot;2011&quot;, &quot;2014&quot;))</code></pre>
 <pre><code>## Warning in time_period == c(&quot;2011&quot;, &quot;2014&quot;): longer object length is not a
 ## multiple of shorter object length</code></pre>
+<pre class="r"><code>plot_tidy = 
+ggplot(ggplot_data, aes(x = homes_with_cockroaches, y = public_school_children_5_14_yrs_old_with_asthma, color = homes_with_cockroaches)) +
+  geom_point() + 
+  geom_smooth(method = &quot;lm&quot;) +
+  facet_grid(~time_period) +
+  labs(x = &quot;Percent of Homes with Cockroaches&quot;,
+       y = &quot;Percent of School Children with Asthma&quot;,
+       title = &quot;Crude Association Homes with Cockroaches and Childhood Asthma&quot;) +
+  viridis::scale_color_viridis(aes(color = homes_with_cockroaches), discrete = FALSE)
+
+plot_tidy</code></pre>
 <p><img src="Overview_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>The crude relationship between childhood asthma and cockroaches in the home is demonstrated above across 2011 and 2014. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation.</p>
 </div>
@@ -547,8 +588,13 @@ p1</code></pre>
 <h2>Additional Analysis</h2>
 <div id="table" class="section level3">
 <h3><em>Table</em></h3>
-<pre><code>## Warning in time_period == c(&quot;2011&quot;, &quot;2014&quot;): longer object length is not a
-## multiple of shorter object length</code></pre>
+<pre class="r"><code>crude_model = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches, data = tidy_asthma)
+
+
+model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty, data = tidy_asthma)
+
+model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty, data = tidy_asthma) </code></pre>
+<pre class="r"><code>tab_model(crude_model, model1_fit, model2_fit, show.stat = TRUE, show.aic = TRUE)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
@@ -613,37 +659,37 @@ p
 39.51
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-30.85 – 48.17
+33.46 – 45.56
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-9.06
+12.89
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-32.72
+43.65
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
-18.54 – 46.90
+23.76 – 63.55
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
-4.80
+4.43
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
 <strong>&lt;0.001
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
-43.81
+33.80
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
-13.08 – 74.55
+23.83 – 43.77
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
-2.97
+6.83
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3">
-<strong>0.008</strong>
+<strong>&lt;0.001
 </td>
 </tr>
 <tr>
@@ -654,37 +700,37 @@ homes_with_cockroaches
 1.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.69 – 1.38
+0.79 – 1.27
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-5.96
+8.48
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.30
+0.11
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
--0.77 – 1.37
+-0.88 – 1.10
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
-0.59
+0.22
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
-0.563
+0.829
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
--0.11
+0.48
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
--1.58 – 1.37
+-0.28 – 1.23
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
--0.15
+1.28
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3">
-0.881
+0.209
 </td>
 </tr>
 <tr>
@@ -700,28 +746,28 @@ poverty
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.81
+-0.12
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
--0.50 – 2.11
+-1.55 – 1.30
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
-1.28
+-0.17
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
-0.214
+0.864
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
-0.12
+0.49
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
--2.01 – 2.25
+-0.44 – 1.43
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
-0.12
+1.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3">
-0.904
+0.294
 </td>
 </tr>
 <tr>
@@ -737,24 +783,24 @@ homes_with_cockroaches * poverty
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
 0.02
 </td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7">
+-0.01 – 0.05
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">
+1.15
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">
+0.255
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0">
+</td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">
--0.03 – 0.07
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">
-0.85
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3">
-0.405
 </td>
 </tr>
 <tr>
@@ -762,13 +808,13 @@ homes_with_cockroaches * poverty
 Observations
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="4">
-94
+188
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="4">
-24
+47
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="4">
-24
+47
 </td>
 </tr>
 <tr>
@@ -776,13 +822,13 @@ Observations
 R<sup>2</sup> / R<sup>2</sup> adjusted
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
-0.279 / 0.271
+0.279 / 0.275
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
-0.422 / 0.367
+0.357 / 0.312
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
-0.443 / 0.359
+0.337 / 0.307
 </td>
 </tr>
 <tr>
@@ -790,13 +836,13 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 AIC
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
-821.102
+1636.204
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
-201.623
+388.539
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
-202.770
+387.971
 </td>
 </tr>
 </table>
