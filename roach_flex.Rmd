@@ -23,14 +23,10 @@ tidy_asthma =
 ```
 
 
+Column {data-width=650}
+-----------------------------------------------------------------------
 
-Asthma in NYC Neighborhoods 
-==================================
-
-Column {.sidebar}
----------------------------------------------------------------------
-
-### Graph 
+### Chart A: Asthma in NYC Neighborhoods
 
 ```{r nyc_asthma}
 #labeling options for axes
@@ -66,7 +62,7 @@ The distribution of asthma
 Asthma in NYC Boroughs
 ==================================
 
-Column {.sidebar}
+Column {width = 650}
 --------------------------------------------------------------------
 
 ### Graph
