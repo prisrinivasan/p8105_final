@@ -551,7 +551,12 @@ tidy_asthma =
 <div id="correlation-matrix" class="section level2">
 <h2><em>Correlation Matrix</em></h2>
 <p><img src="Overview_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<p>A correlation matrix was then compiled to analyze our other predictors. The correlation matrix displays the baseline association between each variable. All of the correlations are above 0.53 which indicates fairly strong correlation. As we model build we will be aware of any multicollinearity from those variables with large correlations.</p>
+<p>A correlation matrix was then compiled to analyze our other predictors. The correlation matrix displays the baseline association between each variable. All of the correlations are above 0.53 which indicates fairly strong correlation:</p>
+<ul>
+<li></li>
+<li></li>
+</ul>
+<p>As we model build we will be aware of any multicollinearity from those variables with large correlations.</p>
 </div>
 <div id="crude-association-between-childhood-asthma-and-cockroaches-in-the-home" class="section level2">
 <h2><em>Crude Association between Childhood Asthma and Cockroaches in the Home</em></h2>
@@ -1105,6 +1110,11 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 <li><p>Visualization of geographic variation of cockroach and asthma prevalence can provide insight for different interventions–such as the one conducted in <a href="https://www-sciencedirect-com.ezproxy.cul.columbia.edu/science/article/pii/S0091674916313495">New Orleans</a>– in target neighborhoods such as Crotona, Tremont, Hunts Point, and Mott Haven– all of which are located in the Bronx. However, it is interesting to note that Williamsburg, which is now known to be a rather affluent neighborhood, has high cockroach prevalence. This could point out to the fact that it is difficult to decrease number of cockroaches in an area, and thus other types of interventions need to be done to decrease number of children developing asthma.</p></li>
 <li><p>Similar to <a href="https://www.cdc.gov/pcd/issues/2019/19_0074.htm">previous research</a>, there are several limitations, including not having and including all the confounding health and social risk factors.</p></li>
 </ul>
+</div>
+<div id="additional-observations" class="section level2">
+<h2>Additional Observations</h2>
+<p>Using the <code>shiny</code> and <code>leaflet</code> packages, we created a <a href="https://prisrinivasan.shinyapps.io/roach_shiny/">visualization</a> of homes with cockroaches in New York City neighborhood. By inputting boroughs and years, the map shows the percentage of homes that have reported seeing a cockroach every day for one month within neighborhoods. Based on this map, most cockroaches are seen in the Bronx, Queens, and Brooklyn, while neighborhoods in lower Manhattan, Staten Island, and closer to Long Island see a relatively lower percent of cockroaches. Switching between 2011 and 2014 (the years for which cockroach data was collected), we can see that the percentage of homes that see cockroaches have generally increased in Brooklyn and Queens.</p>
+<p>The dashboard includes <code>plotly</code> bar charts showing asthma prevalence in boroughs and neighborhood among public school children aged 5 - 14 years old over a four-year period. Playing these graphs, we can see that asthma prevalence has generally increased each year from 2011 to 2014.</p>
 </div>
 
 

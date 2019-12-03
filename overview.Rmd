@@ -237,12 +237,18 @@ roach_asth_borough
 To first assess if this issue was one worth looking into, we analyzed the cockroach and asthma relationship by borough. Our prediction was that boroughs with higher cockroach distributions would have higher asthma rates. These violin plots support our initial hypothesis with the Bronx having both the highest cockroach distribution and asthma rates.
 
 ## _Correlation Matrix_
+
 ```{r, echo = FALSE}
 
 chart.Correlation(tidy_asthma[,5:9], histogram = TRUE, method = c("pearson", "kendall", "spearman"))
 ```
 
-A correlation matrix was then compiled to analyze our other predictors. The correlation matrix displays the baseline association between each variable. All of the correlations are above 0.53 which indicates fairly strong correlation. As we model build we will be aware of any multicollinearity from those variables with large correlations. 
+A correlation matrix was then compiled to analyze our other predictors. The correlation matrix displays the baseline association between each variable. All of the correlations are above 0.53 which indicates fairly strong correlation:
+
+  * 
+  *
+
+As we model build we will be aware of any multicollinearity from those variables with large correlations. 
 
 ## _Crude Association between Childhood Asthma and Cockroaches in the Home_
 
@@ -281,10 +287,10 @@ linear_model =
   lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id, data = ggplot_data)
 
 ## Model 1
-model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id, data=ggplot_data) 
+model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id, data = ggplot_data) 
 
 ## Model 5
-model5_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id * asthma_hospitalizations_children_5_to_17_yrs_old, data=ggplot_data)
+model5_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id * asthma_hospitalizations_children_5_to_17_yrs_old, data = ggplot_data)
 ```
 
 ```{r, echo = FALSE}
@@ -312,3 +318,9 @@ In the process of analyzing the association between prevalence of cockroach in h
 
 *	Similar to [previous research](https://www.cdc.gov/pcd/issues/2019/19_0074.htm), there are several limitations, including not having and including all the confounding health and social risk factors. 
 
+
+## Additional Observations
+
+Using the `shiny` and `leaflet` packages, we created a [visualization](https://prisrinivasan.shinyapps.io/roach_shiny/) of homes with cockroaches in New York City neighborhood. By inputting boroughs and years, the map shows the percentage of homes that have reported seeing a cockroach every day for one month within neighborhoods. Based on this map, most cockroaches are seen in the Bronx, Queens, and Brooklyn, while neighborhoods in lower Manhattan, Staten Island, and closer to Long Island see a relatively lower percent of cockroaches. Switching between 2011 and 2014 (the years for which cockroach data was collected), we can see that the percentage of homes that see cockroaches have generally increased in Brooklyn and Queens.
+
+The dashboard includes `plotly` bar charts showing asthma prevalence in boroughs and neighborhood among public school children aged 5 - 14 years old over a four-year period. Playing these graphs, we can see that asthma prevalence has generally increased each year from 2011 to 2014.
