@@ -18,10 +18,8 @@ library(sp)
 library(devtools)
 library(rgdal)
 library(magick)
-
 tidy_asthma = 
   read_csv(file = "./final_data/tidy_asthma.csv")
-
 ```
 
 
@@ -40,11 +38,9 @@ xa_1 = list(
   title = "Neighborhood",
   showticklabels = FALSE
 )
-
 ya = list(
   title = "Asthma Prevalence"
 )
-
 tidy_asthma %>%
   filter(geo_type_name == "UHF42") %>%
   arrange(geo_join_id) %>%
@@ -80,7 +76,6 @@ Column {.sidebar}
 xa_2 = list(
   title = "Borough"
 )
-
 tidy_asthma %>%
   filter(geo_type_name == "Borough") %>%
   arrange(geo_join_id) %>%
