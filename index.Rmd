@@ -4,16 +4,24 @@ output:
   html_document:
     code_folding: hide
 ---
+<center>
+</font>
+<br><br>
+
 <font size="3"> _Hannah Bowlin, Lorraine Kwok, Priyanka Srinivasan, Alice Tivarovsky, Kelly Wang_ </font>
 <br><br>
 <img align="center" img src="images/kids.jpg" style="width:74%"/>  
 <font size = "0.7">Image from [Centers for Disease Control](https://www.cdc.gov/vitalsigns/childhood-asthma/index.html)</font>
 
+</center>
+</font>
+<br><br>
 
 ## Motivation
 Asthma is one of the most common chronic conditions in children across the United States, currently affecting more than [6 million children](https://www.aafa.org/asthma-facts/). New York City (NYC) hosts a much higher prevalence of childhood asthma [(13%)](https://www1.nyc.gov/assets/doh/downloads/pdf/epi/databrief90.pdf) than the rest of the United States [(7.5%)](https://www.cdc.gov/nchs/fastats/asthma.htm) - with children of color and low-income neighborhoods affected disproportionately: 
 
-
+<center>
+<br><br>
 ```{r, echo = FALSE, include = FALSE}
 
 library(tidyverse)
@@ -85,6 +93,8 @@ tidy_asthma_sf_ll %>%
               opacity = 1)
 asthma_map
 ```
+</center>
+<br><br>
 
 Aside from creating a financial [burden](https://www.ajmc.com/newsroom/cdc-study-puts-economic-burden-of-asthma-at-more-than-80-billion-per-year) for the US economy and families, asthma leads to student absenteeism, further perpetuating educational gaps and socioeconomic disparities. It has been estimated that [14 - 18%](https://www.cdc.gov/pcd/issues/2019/19_0074.htm) of missed school days are explained by asthma episodes, making asthma one of the top causes of absenteeism. 
 
