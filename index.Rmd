@@ -20,8 +20,7 @@ output:
 ## Motivation
 Asthma is one of the most common chronic conditions in children across the United States, currently affecting more than [6 million children](https://www.aafa.org/asthma-facts/). New York City (NYC) hosts a much higher prevalence of childhood asthma [(13%)](https://www1.nyc.gov/assets/doh/downloads/pdf/epi/databrief90.pdf) than the rest of the United States [(7.5%)](https://www.cdc.gov/nchs/fastats/asthma.htm) - with children of color and low-income neighborhoods affected disproportionately: 
 
-<center>
-<br><br>
+
 ```{r, echo = FALSE, include = FALSE}
 
 library(tidyverse)
@@ -91,6 +90,11 @@ tidy_asthma_sf_ll %>%
               values = ~public_school_children_5_14_yrs_old_with_asthma,
               title = "Children 5-14 with Asthma (rate per 1000)",
               opacity = 1)
+```
+
+<center>
+<br><br>
+```{r}
 asthma_map
 ```
 </center>

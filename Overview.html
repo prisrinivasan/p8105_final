@@ -495,7 +495,7 @@ tidy_asthma =
 <hr />
 <div id="cockroach-and-asthma-distributions-by-borough" class="section level3">
 <h3><em>Cockroach and Asthma Distributions by Borough</em></h3>
-<p>Using our tidied dataset, we first looked at the distribution of homes with cockroaches and distribution of public school children, ages 5-14 years old, with asthma by NYC borough.</p>
+<p>Using our tidied dataset, we first looked at the distribution of homes with cockroaches and distribution of public school children, ages 5-14 years old, with asthma by NYC borough. These frequency distributions give insight into how these two might be related.</p>
 <pre class="r"><code>p1 = 
   tidy_asthma_sf_ll %&gt;%
   ggplot(aes(x = homes_with_cockroaches)) + 
@@ -547,7 +547,7 @@ roach_asth_borough =
 
 roach_asth_borough</code></pre>
 <p><img src="Overview_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<p>To first assess if this issue was one worth looking into, we analyzed the cockroach and asthma relationship by borough. Our prediction was that boroughs with higher cockroach distributions would have higher asthma rates. These violin plots support our initial hypothesis with the Bronx having both the highest cockroach distribution and asthma rates.</p>
+<p>To assess the crude relationship between these two variables, we analyzed the cockroach and asthma relationship by borough. Our prediction was that boroughs with higher cockroach distributions would have higher asthma rates. These violin plots support our initial hypothesis with the Bronx having both the highest cockroach distribution and asthma rates.</p>
 </div>
 <div id="correlation-matrix" class="section level3">
 <h3><em>Correlation Matrix</em></h3>
