@@ -75,13 +75,16 @@ tidy_asthma =
          geo_place_name = as.character(geo_place_name)) 
 ```
 
+Asthma in NYC Neighborhoods 
+==================================
 
 Column {.sidebar}
 -----------------------------------------------------------------------
 
-### Chart A: Asthma in NYC Neighborhoods
 
-```{r for_sidebar}
+Column {.tabset}
+----------------------------------------------------------------------
+```{r nyc_asthma}
 #labeling options for axes
 xa_1 = list(
   title = "Neighborhood",
@@ -107,11 +110,13 @@ tidy_asthma %>%
   layout(xaxis = xa_1, yaxis = ya, showlegend = FALSE)
 ```
 
-Column {.tabset}
-----------------------------------------------------------------------
-
-
 ### Description 
+
+The Asthma in NYC Neighborhoods chart displays asthma rates in different neighborhoods from 2011-2014. Users can move between different years and watch regional asthma rates change across NYC. 
+
+The distribution of asthma 
+
+
 
 Column {.sidebar}
 ----------------------------------------------------------------------
