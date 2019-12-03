@@ -29,12 +29,13 @@ tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id
 tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
 ```
 
-## Introduction
+## Introduction and Motivation
 Asthma is one of the most common chronic conditions in children across the United States, currently affecting more than [6 million children](https://www.aafa.org/asthma-facts/). New York City (NYC) hosts a much higher prevalence of childhood asthma [(13%)](https://www1.nyc.gov/assets/doh/downloads/pdf/epi/databrief90.pdf) than the rest of the United States [(7.5%)](https://www.cdc.gov/nchs/fastats/asthma.htm).
+Interestingly, literature also shows an association between cockroach levels, and cockroach populations are projected to continue increasing in NYC. This project was done to explore the relationship between cockroach prevalence in NYC and rate of asthma among public school children aged 5-14.
 
 ## Initial Questions 
 
-Based on existing literature discussed in our [about](about.html) page, we can see that cockroaches and related allergens could be correlated with prevalence of asthma in New York City. For example, the charts below show the distributions of cockroaches (left) and childhood asthma (right) by NYC borough. We are interested in exploring the **relationship between cockroaches and asthma prevalence** in New York City. To do so, we wanted to **visualize the prevalence of roaches and asthma in New York as well as their correlations** using what we have learned in the course so far. Using our tidied dataset described below, we explored these interests.
+Based on existing literature discussed in our [about](about.html) page, we can see that cockroaches and related allergens could be correlated with prevalence of asthma in New York City. For example, the charts below show the distributions of cockroaches (left) and childhood asthma (right) by NYC borough. We are interested in exploring the relationship between cockroaches and asthma prevalence in New York City, **predicting that neighborhoods with a greater number of homes with cockroaches would also show higher rates of asthma in our population**. To do so, we wanted to **visualize the prevalence of roaches and asthma in New York as well as their correlations** using what we have learned in the course so far. Using our tidied dataset described below, we explored these interests.
 
 ## Data
 
@@ -50,29 +51,17 @@ We downloaded all available data from the [NYC Gov Environmental & Health Data P
 
 **Predictor**
 
-  * `homes_with_cockroaches` (Percent): Estimated number of households in an 
-    area that reported seeing at least one cockroach daily over the last 
-    month, divided by the number of households in the area, expressed as a 
-    percent.
+  * `homes_with_cockroaches` (Percent): Estimated number of households in an area that reported seeing at least one cockroach daily over the last month, divided by the number of households in the area, expressed as a percent.
 
 **Outcomes of interest**
 
-  * `public_school_children_5_14_yrs_old_with_asthma` (Rate): Number of 
-    public school children, aged 5-14 years, with a diagnosis of asthma that 
-    has been reported to NYC DOHMH during the current or previous school 
-    year, divided by the 5-14 year old population, per 1,000. 
+  * `public_school_children_5_14_yrs_old_with_asthma` (Rate): Number of public school children, aged 5-14 years, with a diagnosis of asthma that has been reported to NYC DOHMH during the current or previous school year, divided by the 5-14 year old population, per 1,000. 
     
-  * `asthma_hospitalizations_children_5_to_17_yrs_old` (Rate): Number of 
-    asthma-related hospitalizations among NYC resident children aged 5 to 17 
-    years, divided by the population of children 5 to 17 years old, using NYC
-    DOHMH intercensal estimates; expressed as cases per 10,000 residents.
+  * `asthma_hospitalizations_children_5_to_17_yrs_old` (Rate): Number of asthma-related hospitalizations among NYC resident children aged 5 to 17 years, divided by the population of children 5 to 17 years old, using NYC DOHMH intercensal estimates; expressed as cases per 10,000 residents.
 
 **Potential confounder**
 
-  * `poverty` (Percent): Estimated number of people for whom poverty status 
-    is determined, whose annual income falls below 100% of the federal 
-    poverty level, divided by the number of people for whom poverty status is
-    determined, expressed as a percent.
+  * `poverty` (Percent): Estimated number of people for whom poverty status is determined, whose annual income falls below 100% of the federal poverty level, divided by the number of people for whom poverty status is determined, expressed as a percent.
 
 Spatial geometries were taken from the NYC Health Department's [GIS Center](https://www1.nyc.gov/site/doh/data/health-tools/maps-gis-data-files-for-download.page). The map was built using the United Hospital Fund (UHF) neighborhood code key from [NYC Health](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf). 
 
@@ -147,6 +136,7 @@ The dataset we used was compiled using the Environmental and Health Dataset from
 ## Preliminary Analysis
 
 ```{r setup, include=FALSE}
+#Packages used and data loaded
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
@@ -170,7 +160,7 @@ tidy_asthma
 
 ### _Cockroach and Asthma Distributions by Borough_
 
-Using our tidied dataset, we first looked at the distribution of homes with cockroaches and distribution of public school children, ages 5-14 years old, with asthma by NYC borough. These frequency distributions give insight into how these two might be related. 
+Using our tidied dataset, we first looked at the distribution of homes with cockroaches and distribution of public school children, ages 5-14 years old, with asthma by NYC borough. The frequency distributions below, depicted separately as density plots and together in a violin plot, give insight into how these two might be related. 
 
 ```{r, eval = TRUE, message = FALSE, warning = FALSE}
 p1 = 
@@ -193,14 +183,10 @@ p2 =
     y = "Frequency",
     title = "Childhood Asthma by Borough")
 
-p1
-p2
+p1 + p2
 ```
 
-### _Cockroaches and Asthma by Borough_
-
 ```{r, warning = FALSE}
-
 shape = st_read("./final_data/shapefiles/", quiet = TRUE)
 
 tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id") %>% 
@@ -224,10 +210,9 @@ roach_asth_borough =
        y = "Asthma Among School Children Ages 5-14 years old")
 
 roach_asth_borough
-
 ```
 
-To assess the crude relationship between these two variables, we analyzed the cockroach and asthma relationship by borough. Our prediction was that boroughs with higher cockroach distributions would have higher asthma rates. These violin plots support our initial hypothesis with the Bronx having both the highest cockroach distribution and asthma rates.
+To assess the crude relationship between these two variables, we analyzed the relationship between homes with cockroaches and asthma by borough. Our prediction was that boroughs with higher cockroach distributions would have higher asthma rates. These violin plots support our initial hypothesis, with the Bronx having both the highest distribution of homes with cockroaches and asthma rates.
 
 ### _Correlation Matrix_
 
@@ -308,7 +293,7 @@ tab_model(crude_model, model1_fit, model2_fit, show.stat = TRUE, show.aic = TRUE
 
 ---
 
-We chose the crude model in the end because poverty may be a large confounder of the relationship between homes with cockroaches and rate of asthma. Our final estimated model based on the first column is below:
+We chose the crude model in the end because poverty may be a large confounder of the relationship between homes with cockroaches and rate of asthma. Our final estimated model predicting `public_school_children_5_14_yrs_old_with_asthma` based on the first column is below:
 
 $$ y_i = 43.65 + 0.11*homes\_with\_cockroaches + \epsilon_{i} $$
 
