@@ -1,5 +1,5 @@
 ---
-title: "Asthma and Cockroacches: Final Report"
+title: "Asthma and Cockroaches: Final Report"
 output: 
   html_document:
     toc: true
@@ -35,33 +35,6 @@ tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
 ## Initial Questions 
 
 Based on existing literature discussed in our [about](about.html) page, we can see that cockroaches and related allergens could be correlated with prevalence of asthma in New York City. For example, the charts below show the distributions of cockroaches (left) and childhood asthma (right) by NYC borough. We are interested in exploring the **relationship between cockroaches and asthma prevalence** in New York City. To do so, we wanted to **visualize the prevalence of roaches and asthma in New York as well as their correlations** using what we have learned in the course so far. Using our tidied dataset described below, we explored these interests.
-
-### Cockroach and Asthma Distributions by Borough
-
-```{r, eval = TRUE, message = FALSE, warning = FALSE}
-p1 = 
-  tidy_asthma_sf_ll %>%
-  ggplot(aes(x = homes_with_cockroaches)) + 
-  geom_density() +
-  facet_grid(~borough) +
-  labs(
-    x = "Percent of Homes with Cockroaches",
-    y = "Frequency",
-    title = "Cockroaches by Borough") 
-
-p2 = 
-  tidy_asthma_sf_ll %>%
-  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma)) + 
-  geom_density() +
-  facet_grid(~borough) +
-  labs(
-    x = "Percent of Public School Children with Asthma",
-    y = "Frequency",
-    title = "Childhood Asthma by Borough")
-
-p1
-p2
-```
 
 ## Data
 
@@ -194,6 +167,35 @@ tidy_asthma =
   read_csv(file = "./final_data/tidy_asthma.csv")
 
 tidy_asthma 
+```
+
+### Cockroach and Asthma Distributions by Borough
+
+Using our tidied dataset, we first looked at the distribution of homes with cockroaches and distribution of public school children, ages 5-14 years old, with asthma by NYC borough. 
+
+```{r, eval = TRUE, message = FALSE, warning = FALSE}
+p1 = 
+  tidy_asthma_sf_ll %>%
+  ggplot(aes(x = homes_with_cockroaches)) + 
+  geom_density() +
+  facet_grid(~borough) +
+  labs(
+    x = "Percent of Homes with Cockroaches",
+    y = "Frequency",
+    title = "Cockroaches by Borough") 
+
+p2 = 
+  tidy_asthma_sf_ll %>%
+  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma)) + 
+  geom_density() +
+  facet_grid(~borough) +
+  labs(
+    x = "Rate of Public School Children with Asthma",
+    y = "Frequency",
+    title = "Childhood Asthma by Borough")
+
+p1
+p2
 ```
 
 ## _Method_

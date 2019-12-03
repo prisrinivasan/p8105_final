@@ -12,7 +12,7 @@
 
 
 
-<title>Asthma and Cockroacches: Final Report</title>
+<title>Asthma and Cockroaches: Final Report</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -388,7 +388,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Asthma and Cockroacches: Final Report</h1>
+<h1 class="title toc-ignore">Asthma and Cockroaches: Final Report</h1>
 
 </div>
 
@@ -399,33 +399,6 @@ div.tocify {
 <div id="initial-questions" class="section level2">
 <h2>Initial Questions</h2>
 <p>Based on existing literature discussed in our <a href="about.html">about</a> page, we can see that cockroaches and related allergens could be correlated with prevalence of asthma in New York City. For example, the charts below show the distributions of cockroaches (left) and childhood asthma (right) by NYC borough. We are interested in exploring the <strong>relationship between cockroaches and asthma prevalence</strong> in New York City. To do so, we wanted to <strong>visualize the prevalence of roaches and asthma in New York as well as their correlations</strong> using what we have learned in the course so far. Using our tidied dataset described below, we explored these interests.</p>
-<div id="cockroach-and-asthma-distributions-by-borough" class="section level3">
-<h3>Cockroach and Asthma Distributions by Borough</h3>
-<pre class="r"><code>p1 = 
-  tidy_asthma_sf_ll %&gt;%
-  ggplot(aes(x = homes_with_cockroaches)) + 
-  geom_density() +
-  facet_grid(~borough) +
-  labs(
-    x = &quot;Percent of Homes with Cockroaches&quot;,
-    y = &quot;Frequency&quot;,
-    title = &quot;Cockroaches by Borough&quot;) 
-
-p2 = 
-  tidy_asthma_sf_ll %&gt;%
-  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma)) + 
-  geom_density() +
-  facet_grid(~borough) +
-  labs(
-    x = &quot;Percent of Public School Children with Asthma&quot;,
-    y = &quot;Frequency&quot;,
-    title = &quot;Childhood Asthma by Borough&quot;)
-
-p1</code></pre>
-<p><img src="Overview_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
-<pre class="r"><code>p2</code></pre>
-<p><img src="Overview_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
-</div>
 </div>
 <div id="data" class="section level2">
 <h2>Data</h2>
@@ -515,6 +488,34 @@ tidy_asthma =
 <div id="preliminary-analysis" class="section level2">
 <h2>Preliminary Analysis</h2>
 <hr />
+<div id="cockroach-and-asthma-distributions-by-borough" class="section level3">
+<h3>Cockroach and Asthma Distributions by Borough</h3>
+<p>Using our tidied dataset, we first looked at the distribution of homes with cockroaches and distribution of public school children, ages 5-14 years old, with asthma by NYC borough.</p>
+<pre class="r"><code>p1 = 
+  tidy_asthma_sf_ll %&gt;%
+  ggplot(aes(x = homes_with_cockroaches)) + 
+  geom_density() +
+  facet_grid(~borough) +
+  labs(
+    x = &quot;Percent of Homes with Cockroaches&quot;,
+    y = &quot;Frequency&quot;,
+    title = &quot;Cockroaches by Borough&quot;) 
+
+p2 = 
+  tidy_asthma_sf_ll %&gt;%
+  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma)) + 
+  geom_density() +
+  facet_grid(~borough) +
+  labs(
+    x = &quot;Rate of Public School Children with Asthma&quot;,
+    y = &quot;Frequency&quot;,
+    title = &quot;Childhood Asthma by Borough&quot;)
+
+p1</code></pre>
+<p><img src="Overview_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>p2</code></pre>
+<p><img src="Overview_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
+</div>
 </div>
 <div id="method" class="section level2">
 <h2><em>Method</em></h2>
@@ -540,11 +541,15 @@ tidy_asthma =
 </div>
 <div id="crude-association-between-childhood-asthma-and-cockroaches-in-the-home" class="section level2">
 <h2><em>Crude Association between Childhood Asthma and Cockroaches in the Home</em></h2>
+<pre><code>## Warning in time_period == c(&quot;2011&quot;, &quot;2014&quot;): longer object length is not a
+## multiple of shorter object length</code></pre>
 <p><img src="Overview_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>The crude relationship between childhood asthma and cockroaches in the home is demonstrated above across 2011 and 2014. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation.</p>
 </div>
 <div id="table" class="section level2">
 <h2><em>Table</em></h2>
+<pre><code>## Warning in time_period == c(&quot;2011&quot;, &quot;2014&quot;): longer object length is not a
+## multiple of shorter object length</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
@@ -606,13 +611,13 @@ p
 (Intercept)
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-41.83
+39.51
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-30.65 – 53.01
+30.85 – 48.17
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-7.53
+9.06
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -647,13 +652,13 @@ p
 homes_with_cockroaches
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.95
+1.03
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.51 – 1.39
+0.69 – 1.38
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-4.37
+5.96
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 <strong>&lt;0.001
@@ -758,7 +763,7 @@ homes_with_cockroaches * poverty
 Observations
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="4">
-48
+94
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="4">
 24
@@ -772,7 +777,7 @@ Observations
 R<sup>2</sup> / R<sup>2</sup> adjusted
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
-0.293 / 0.278
+0.279 / 0.271
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
 0.422 / 0.367
@@ -786,7 +791,7 @@ R<sup>2</sup> / R<sup>2</sup> adjusted
 AIC
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
-416.681
+821.102
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="4">
 201.623
