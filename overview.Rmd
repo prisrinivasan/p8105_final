@@ -62,7 +62,7 @@ Outcomes of interest
   * `asthma_hospitalizations_children_5_to_17_yrs_old` (Rate): Number of 
     asthma-related hospitalizations among NYC resident children aged 5 to 17 
     years, divided by the population of children 5 to 17 years old, using NYC
-    DOHMH intercensal estimates; expressed as cases per 10,000 residents
+    DOHMH intercensal estimates; expressed as cases per 10,000 residents.
 
 Potential confounder
 
@@ -128,7 +128,7 @@ tidy_asthma =
 
 We downloaded the data as a csv file from the NYC Environmental & Health Data Portal and called the initial dataset `all_available_data`. We restricted our data to include boroughs and UHF42 neighborhoods as our geographical areas of interest and to include the indicators: `homes_with_cockroaches`, `poverty` `public_school_children_5_14_yrs_old_with_asthma` and `asthma_hospitalizations_children_5_to_17_yrs_old`. 
 
-Data for the rate of public school children with asthma were presented for a range of years (i.e. 2010-2011, 2011-2012, etc). For our analysis, we recoded these ranges into single years in order to  2011-2014. Data on cockroaches were only available for 2011 and 2014. Data on percent poverty in NYC were also presented in ranges and we chose 2010-2014 as our reference. We recoded this into a single year for 2011. Since the data for these four variables overlapped for the years 2011-2014, we restricted our analysis to these four years. Data for the rate of asthma hospitalizations among children ages 5-17 years old were available for all four years. 
+Data for the rate of public school children with asthma were presented for a range of years (i.e. 2010-2011, 2011-2012, etc). For our analysis, we recoded these ranges into single years in order from 2011 to 2014. Data on cockroaches were only available for 2011 and 2014. Data on percent poverty in NYC were also presented in ranges and we chose 2010-2014 as our reference. We recoded this into a single year for 2011. Since the data for these four variables overlapped for the years 2011-2014, we restricted our analysis to these four years. Data for the rate of asthma hospitalizations among children ages 5-17 years old were available for all four years. 
 
 After recoding the years, separate dataframes were created for each of the four variables and then joined together in order to fill in the missing values (NAs) that first existed when filtering for these variables and years in the larger dataset. We called the tidied, joined dataset `tidy_asthma`, which can be found [here](./final_data/tidy_asthma.csv). 
 
@@ -302,7 +302,7 @@ In the process of analyzing the association between prevalence of cockroach in h
 
 * In addition, the positive linear association between percent of children with asthma and percent of homes with cockroaches at home between years 2011 and 2014 provides further evidence that the percentage of school children with asthma is continuing to increase, as stated in this [article](https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pmc/articles/PMC4803579/). Visualization of asthma prevalence by neighborhood and by borough display this increase as well.
 
-* Visualization of geographic variation of cockroach and asthma prevalence can provide insight for different interventions--such as the one conducted in [New Orleans](https://www-sciencedirect-com.ezproxy.cul.columbia.edu/science/article/pii/S0091674916313495)-- in target neighborhoods such as Crotona, Tremont, Hunts Point, and Mott Haven-- all of which are located in the Bronx. It should be noted that the Bronx has the highest prevalence of children with asthma in comparison to the other NYC Boroughs. Thus, it is important to focus on these neighborhoods specifically. However, it is interesting to note that Williamsburg, which is now known to be a rather affluent neighborhood, has high cockroach prevalence. This could point out to the fact that it is difficult to decrease number of cockroaches in an area, and thus other types of interventions need to be done to decrease number of children developing asthma. Also, based off of our coding, it is interesting to note that Rikers Island is coded as part of the neighborhood "West Queens," displaying a asthma rate of 54.6 per 1000 in 2011, and 77.3 per 1000 in 2014. Future studies could explore the relationship between cockroach prevalence and environmental habitats. 
+* Visualization of geographic variation of cockroach and asthma prevalence can provide insight for different interventions--such as the one conducted in [New Orleans](https://www-sciencedirect-com.ezproxy.cul.columbia.edu/science/article/pii/S0091674916313495)-- in target neighborhoods such as Crotona, Tremont, Hunts Point, and Mott Haven-- all of which are located in the Bronx. However, it is interesting to note that Williamsburg, which is now known to be a rather affluent neighborhood, has high cockroach prevalence. This could point out to the fact that it is difficult to decrease number of cockroaches in an area, and thus other types of interventions need to be done to decrease number of children developing asthma. Also, based off of our coding, it is interesting to note that Rikers Island is coded as part of the neighborhood "West Queens," displaying a asthma rate of 54.6 per 1000 in 2011, and 77.3 per 1000 in 2014. Future studies could explore the relationship between cockroach prevalence and environmental habitats. 
 
 *	Similar to [previous research](https://www.cdc.gov/pcd/issues/2019/19_0074.htm), there are several limitations, including not having and including all the confounding health and sociodemographic factors that were not accounted for, such as immigration status, race, gender, etc. 
 
@@ -315,12 +315,12 @@ The dashboard includes `plotly` bar charts showing asthma prevalence in boroughs
 
 ## Related work 
 
-We were inspired to work on this project given our collective interest in environmental health and in information that we had learned during the CORE semester the our Master of Public Health program here at Columbia University's Mailman School of Public Health. In addition, we were inspired by the fact that having asthma is more than just a chronic illness. It is also a social justice issue. The following sites were the basis of our inspiration:
+We were inspired to work on this project given our collective interest in environmental health and from classes we took during the CORE semester of the Master of Public Health program here at Columbia University's Mailman School of Public Health. In addition, we were inspired by the fact that having asthma is more than just a chronic illness. It is also a social justice issue. The following sites were the basis of our inspiration:
 
-*[Why is asthma a social justice issue](http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html)
+  *[Why is asthma a social justice issue](http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html)
 
-*[Staten Island Asthma Coaltion](https://www.statenislandusa.com/asthma-coalition.html)
+  *[Staten Island Asthma Coalition](https://www.statenislandusa.com/asthma-coalition.html)
 
-*[Bronx Respirar Asthma Coaalition](http://www.asthmacommunitynetwork.org/node/14847)
+  *[Bronx Respirar Asthma Coalition](http://www.asthmacommunitynetwork.org/node/14847)
 
 
