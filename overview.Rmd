@@ -1,5 +1,5 @@
 ---
-title: "Overview"
+title: "Asthma and Cockroacches: Final Report"
 output: 
   html_document:
     toc: true
@@ -7,9 +7,7 @@ output:
     code_folding: hide
 ---
 
-## Cockroach and Asthma Distributions by Borough
-
-```{r, eval = TRUE, message = FALSE}
+```{r, eval = TRUE, message = FALSE, include=FALSE}
 library(tidyverse)
 library(PerformanceAnalytics)
 library(sf)
@@ -31,22 +29,14 @@ tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id
 tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
 ```
 
-```{r, eval = TRUE, message = FALSE, warning = FALSE}
+### Related work 
 
-p2 = 
-  tidy_asthma_sf_ll %>%
-  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma)) + 
-  geom_density() +
-  facet_grid(~borough) +
-  labs(
-    x = "Percent of Public School Children with Asthma",
-    y = "Frequency",
-    title = "Distribution of Childhood Asthma by Borough")
 
-p2
-```
+## Initial Questions 
 
-## Cockroach Prevalence by Borough Graph 
+Based on existing literature discussed in our [about](about.html) page, we can see that cockroaches and related allergens could be correlated with prevalence of asthma in New York City. For example, the charts below show the distributions of cockroaches (left) and childhood asthma (right) by NYC borough. We are interested in exploring the **relationship between cockroaches and asthma prevalence** in New York City. To do so, we wanted to **visualize the prevalence of roaches and asthma in New York as well as their correlations** using what we have learned in the course so far. Using our tidied dataset described below, we explored these interests.
+
+### Cockroach and Asthma Distributions by Borough
 
 ```{r, eval = TRUE, message = FALSE, warning = FALSE}
 p1 = 
@@ -57,15 +47,21 @@ p1 =
   labs(
     x = "Percent of Homes with Cockroaches",
     y = "Frequency",
-    title = "Distribution of Cockroaches by Borough"
-  ) 
+    title = "Cockroaches by Borough") 
+
+p2 = 
+  tidy_asthma_sf_ll %>%
+  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma)) + 
+  geom_density() +
+  facet_grid(~borough) +
+  labs(
+    x = "Percent of Public School Children with Asthma",
+    y = "Frequency",
+    title = "Childhood Asthma by Borough")
 
 p1
+p2
 ```
-
-### Related work 
-
-## Initial Questions 
 
 ## Data
 
