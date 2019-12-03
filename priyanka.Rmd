@@ -88,9 +88,6 @@ tidy_asthma =
   
 #save as csv
 write.csv(tidy_asthma,"./final_data/tidy_asthma.csv", row.names = FALSE)
-
-#save as Rda file for the flex dashboard
-save(tidy_asthma, file = "tidy_asthma.Rda")
 ```
 
 
