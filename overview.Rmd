@@ -133,7 +133,7 @@ We downloaded the data as a csv file from the NYC Environmental & Health Data Po
 
 Data for the rate of public school children with asthma were presented for a range of years (i.e. 2010-2011, 2011-2012, etc). For our analysis, we recoded these ranges into single years in order from 2011 to 2014. Data on cockroaches were only available for 2011 and 2014. Data on percent poverty in NYC were also presented in ranges and we chose 2010-2014 as our reference. We recoded this into a single year for 2011. Since the data for these four variables overlapped for the years 2011-2014, we restricted our analysis to these four years. Data for the rate of asthma hospitalizations among children ages 5-17 years old were available for all four years. 
 
-After recoding the years, separate dataframes were created for each of the four variables and then joined together in order to fill in the missing values (NAs) that first existed when filtering for these variables and years in the larger dataset. We called the tidied, joined dataset `tidy_asthma`, which can be found [here](./final_data/tidy_asthma.csv). 
+After recoding the years, separate dataframes were created for each of the four variables and then joined together in order to fill in the missing values (NAs) that first existed when filtering for these variables and years in the larger dataset. We called the tidied, joined dataset `tidy_asthma`, which can be downloaded [here](./final_data/tidy_asthma.csv). 
 
 Our github repository is linked [here](https://github.com/prisrinivasan/p8105_final).
 
@@ -270,7 +270,25 @@ The crude relationship between childhood asthma and cockroaches in the home is d
 
 ## Additional Analysis
 
-### _Table_
+Table 1 below displays the estimates, confidence intervals, test statistics, and p-values for each of our three potential models. The three columns of "Public School Children 5-14 Years Old With Asthma" show the intercept and slope values for each model
+
+**Crude Cockroach Model**
+* The first column shows the basic model with cockroaches against public school children with asthma. The ${r}^2$ value is 0.293, which is a weak positive relationship. The beta for cockroaches is significant with a p-value less than 0.001.
+
+$$ y_i = \beta_0 + \beta_1*homes\_with\_cockroaches + \epsilon_{i} $$
+
+**Adjusted for Poverty**
+* The second column shows one adjusted model based on our first crude model. Here we experiment with a potential confounder, poverty, to improve the ${r}^2$ value and find a better fit of our data. There are 2 slopes, cockroaches and poverty. The ${r}^2$ value is 0.422 which is higher than the crude model. The betas here are not significant, but the AIC is much lower than the first model.
+
+$$ y_i = \beta_0 + \beta_1*homes\_with\_cockroaches + \beta_2*poverty + \epsilon_{i} $$
+
+**Adjusted for Poverty with Interaction Term**
+* The third column shows the adjusted model with an interaction term. There are 3 slopes and none of the betas are significant. The ${r}^2$ value is 0.443 which is higher than the previous model, but the AIC went up slightly.
+
+$$ y_i = \beta_0 + \beta_1*homes\_with\_cockroaches + \beta_2*poverty + \beta_3*homes\_with\_cockroaches*poverty + \epsilon_{i} $$
+
+
+### _Table 1_
 ```{r}
 
 crude_model = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches, data = tidy_asthma)
@@ -284,12 +302,9 @@ tab_model(crude_model, model1_fit, model2_fit, show.stat = TRUE, show.aic = TRUE
 ```
 
 ---
-This table displays the values for each of our three potential models. The three columns of "Public School Children 5-14 Years Old With Asthma" show the intercept and slope values for each model. 
 
-* The first column shows the basic model with cockroaches against public school children with asthma. The ${r}^2$ value is 0.293, which is a weak positive relationship. The beta for cockroaches is significant with a p-value less than 0.001.
-* The second column shows one adjusted model based on our first crude model. Here we experiment with a potential confounder, poverty, to improve the ${r}^2$ value and find a better fit of our data. There are 2 slopes, cockroaches and poverty. The ${r}^2$ value is 0.422 which is higher than the crude model. The betas here are not significant, but the AIC is much lower than the first model.
-* The third column shows the adjusted model with an interaction term. There are 3 slopes and none of the betas are significant. The ${r}^2$ value is 0.443 which is higher than the previous model, but the AIC went up slightly.
-* Future analyses should include demographic variables and their interactions to improve significance, the ${r}^2$ value, and further decrease the AIC.
+Future analyses should include demographic variables and their interactions to improve significance, the ${r}^2$ value, and further decrease the AIC.
+
 
 ## Discussion
 
