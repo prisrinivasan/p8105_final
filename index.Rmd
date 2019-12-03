@@ -1,8 +1,6 @@
 ---
 title: "Cockroaches and Asthma in New York City"
-output: 
-  html_document:
-    code_folding: hide
+output: html_document
 ---
 <center>
 </font>
@@ -72,7 +70,7 @@ asthma_pal = colorBin("Reds", bins = asthma_bins)
 asthma_map = 
 tidy_asthma_sf_ll %>%
   filter(time_period == 2014) %>% 
-  mutate(asthma_label = str_c("Children 5-14 with Asthma: ", public_school_children_5_14_yrs_old_with_asthma, "\n, Neighborhood: ", uhfcode)) %>% 
+  mutate(asthma_label = str_c("Children 5-14 with Asthma: ", public_school_children_5_14_yrs_old_with_asthma, "\n, Neighborhood: ", uhf_neigh)) %>% 
     leaflet() %>%
     addProviderTiles("CartoDB.Positron") %>%
     addPolygons(stroke = TRUE,
@@ -90,7 +88,6 @@ tidy_asthma_sf_ll %>%
               values = ~public_school_children_5_14_yrs_old_with_asthma,
               title = "Children 5-14 with Asthma (rate per 1000)",
               opacity = 1)
-
 asthma_map
 ```
 
@@ -107,7 +104,7 @@ The analyses presented here explore the association between childhood asthma and
 roach_map = 
 tidy_asthma_sf_ll %>%
   filter(time_period == 2014) %>% 
-  mutate(roach_label = str_c("Homes with Cockroaches: ", homes_with_cockroaches, "\n, Neighborhood: ", uhfcode)) %>% 
+  mutate(roach_label = str_c("Homes with Cockroaches: ", homes_with_cockroaches, "\n, Neighborhood: ", uhf_neigh)) %>% 
     leaflet() %>%
     addProviderTiles("CartoDB.Positron") %>%
     addPolygons(stroke = TRUE,
@@ -124,7 +121,11 @@ tidy_asthma_sf_ll %>%
               pal = roach_pal,
               values = ~homes_with_cockroaches,
               title = "Homes with Cockroaches",
-              opacity = 1)
+              opacity = 1, 
+              labFormat = function(type, cuts, p) {
+                n = length(cuts)
+                paste0(round(cuts, 1)[-n], " &ndash; ", round(cuts, 1)[-1], "%")
+                })
 roach_map
 ```
 
