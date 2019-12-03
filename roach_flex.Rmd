@@ -76,12 +76,12 @@ tidy_asthma =
 ```
 
 
-Column {data-width=650}
+Column {.sidebar}
 -----------------------------------------------------------------------
 
 ### Chart A: Asthma in NYC Neighborhoods
 
-```{r}
+```{r for_sidebar}
 #labeling options for axes
 xa_1 = list(
   title = "Neighborhood",
@@ -107,12 +107,18 @@ tidy_asthma %>%
   layout(xaxis = xa_1, yaxis = ya, showlegend = FALSE)
 ```
 
-Column {data-width=650}
------------------------------------------------------------------------
+Column {.tabset}
+----------------------------------------------------------------------
+
+
+### Description 
+
+Column {.sidebar}
+----------------------------------------------------------------------
 
 ### Chart B: Asthma in NYC Boroughs
 
-```{r}
+```{r for_sidebar}
 #creating new x axis options and reusing y axis label options
 xa_2 = list(
   title = "Borough"
