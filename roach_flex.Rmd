@@ -4,6 +4,7 @@ output:
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
+    source_code: embed
     theme: journal
 ---
 
@@ -34,6 +35,9 @@ Column {.sidebar}
 
 Column {.tabset}
 ----------------------------------------------------------------------
+
+### Graph 
+
 ```{r nyc_asthma}
 #labeling options for axes
 xa_1 = list(
@@ -77,6 +81,7 @@ Column {.sidebar}
 Column {.tabset}
 ----------------------------------------------------------------------
 
+### Graph
 
 ```{r for_sidebar}
 #creating new x axis options and reusing y axis label options
@@ -100,3 +105,5 @@ tidy_asthma %>%
   ) %>% 
   layout(xaxis = xa_2, yaxis = ya, showlegend = FALSE)
 ```
+
+### Description
