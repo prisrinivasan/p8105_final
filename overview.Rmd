@@ -82,7 +82,6 @@ read.csv(file = "./final_data/all_available_data.csv") %>%
   filter(name %in% c("Homes with Cockroaches", 
                      "Poverty", 
                      "Public School Children (5-14 Yrs Old) with Asthma", 
-                     "Public School Children (5-14 Yrs Old) with Persistent Asthma", 
                      "Asthma Hospitalizations (Children 5 to 17 Yrs Old)"),
         geo_type_name %in% c("UHF42", "Borough"), 
         measure %in% c("Percent", "Rate")
@@ -97,7 +96,7 @@ read.csv(file = "./final_data/all_available_data.csv") %>%
   mutate(time_period = dplyr::recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-14" = "2011")) %>%
   filter(time_period %in% c("2011", "2012", "2013", "2014")) %>% 
   janitor::clean_names() %>% 
-  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old)
+  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma,  asthma_hospitalizations_children_5_to_17_yrs_old)
 
 df1 = all_data  %>% 
   dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches) %>% 
@@ -112,10 +111,6 @@ df3 = all_data %>%
   drop_na()
 
 df4 = all_data %>% 
-  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %>% 
-  drop_na()
-
-df5 = all_data %>% 
   dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
   drop_na()
 
@@ -124,8 +119,7 @@ tidy_asthma =
   full_join(df1, df2, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
   full_join(df3, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
   full_join(df4, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
-  full_join(df5, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
-  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
+  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
   mutate(time_period = as.numeric(levels(time_period)) [time_period],
          geo_join_id = as.character(as.numeric(levels(geo_join_id)) [geo_join_id]),
          geo_place_name = as.character(geo_place_name)) %>%
@@ -136,7 +130,7 @@ We downloaded the data as a csv file from the NYC Environmental & Health Data Po
 
 Data for the rate of public school children with asthma were presented for a range of years (i.e. 2010-2011, 2011-2012, etc). For our analysis, we recoded these ranges into single years in order to  2011-2014. Data on cockroaches were only available for 2011 and 2014. Data on percent poverty in NYC were also presented in ranges and we chose 2010-2014 as our reference. We recoded this into a single year for 2011. Since the data for these four variables overlapped for the years 2011-2014, we restricted our analysis to these four years. Data for the rate of asthma hospitalizations among children ages 5-17 years old were available for all four years. 
 
-After recoding the years, separate dataframes were created for each of the four variables and then joined together in order to fill in the missing values (NAs) that first existed when filtering for these variables and years in the larger dataset. We called the tidied, joined dataset `tidy_asthma` and exported it as a [csv file](tidy_asthma.csv). 
+After recoding the years, separate dataframes were created for each of the four variables and then joined together in order to fill in the missing values (NAs) that first existed when filtering for these variables and years in the larger dataset. We called the tidied, joined dataset `tidy_asthma`, which can be found [here](./data/tidy_asthma.csv). 
 
 Our github repository is linked [here](https://github.com/prisrinivasan/p8105_final).
 
