@@ -283,7 +283,10 @@ $(document).ready(function () {
   <a href="Overview.html">Report</a>
 </li>
 <li>
-  <a href="https://prisrinivasan.shinyapps.io/roach_shiny/">Find Your Neighborhood</a>
+  <a href="https://prisrinivasan.shinyapps.io/roach_shiny/">Roach Shiny App</a>
+</li>
+<li>
+  <a href="roach_flex.html">Asthma Dashboard</a>
 </li>
 <li>
   <a href="mailto:&lt;bowlin.hannah@columbia.edu&gt;">
@@ -312,6 +315,22 @@ $(document).ready(function () {
 
 
 <p>Most up to date tidy dataset</p>
+<p>{r tidying , message=FALSE, include=FALSE, error = TRUE} all_data = read.csv(file = “./final_data/all_available_data.csv”) %&gt;% janitor::clean_names() %&gt;% filter(name %in% c(“Homes with Cockroaches”, “Poverty”, “Public School Children (5-14 Yrs Old) with Asthma”, “Public School Children (5-14 Yrs Old) with Persistent Asthma”, “Asthma Hospitalizations (Children 5 to 17 Yrs Old)”), geo_type_name %in% c(“UHF42”, “Borough”), measure %in% c(“Percent”, “Rate”) ) %&gt;% mutate(geo_join_id = as.character(geo_join_id), geo_join_id = if_else(geo_place_name == “Bensonhurst - Bay Ridge”, “209”, geo_join_id), geo_join_id = as.factor(geo_join_id)) %&gt;% pivot_wider( names_from = name, values_from = data_value ) %&gt;% mutate(time_period = recode(time_period, “2010-2011” = “2011”, “2011-2012” = “2012”, “2012-2013” = “2013”, “2013-2014” = “2014”, “2010-2014” = “2011”)) %&gt;% filter(time_period %in% c(“2011”, “2012”, “2013”, “2014”)) %&gt;% janitor::clean_names() %&gt;% select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old)</p>
+<p>df1 = all_data %&gt;% select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches) %&gt;% drop_na()</p>
+<p>df2 = all_data %&gt;% select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, poverty) %&gt;% drop_na()</p>
+<p>df3 = all_data %&gt;% select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %&gt;% drop_na()</p>
+<p>df4 = all_data %&gt;% select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %&gt;% drop_na()</p>
+<p>df5 = all_data %&gt;% select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, asthma_hospitalizations_children_5_to_17_yrs_old) %&gt;% drop_na()</p>
+<p>{r tidying data, message=FALSE, include=FALSE} #all_data = #read.csv(file = “./final_data/all_available_data.csv”) %&gt;% # janitor::clean_names() %&gt;% # filter(name %in% c(“Homes with Cockroaches”, # “Poverty”, # “Public School Children (5-14 Yrs Old) with Asthma”, # “Public School Children (5-14 Yrs Old) with Persistent #Asthma”, # “Asthma Hospitalizations (Children 5 to 17 Yrs Old)”), # geo_type_name %in% c(“UHF42”, “Borough”), # measure %in% c(“Percent”, “Rate”) # ) %&gt;% # mutate(geo_join_id = as.character(geo_join_id), # geo_join_id = if_else(geo_place_name == “Bensonhurst - Bay Ridge”, #“209”, geo_join_id), # geo_join_id = as.factor(geo_join_id)) %&gt;% # pivot_wider( # names_from = name, # values_from = data_value # ) %&gt;% # mutate(time_period = recode(time_period, “2010-2011” = “2011”, “2011-2012” = “2012”, “2012-2013” = “2013”, “2013-2014” = “2014”, “2010-14” = “2011”)) %&gt;% # filter(time_period %in% c(“2011”, “2012”, “2013”, “2014”)) %&gt;% # janitor::clean_names() %&gt;% # select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old)</p>
+<p>#df1 = all_data %&gt;% # select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches) %&gt;% # drop_na()</p>
+<p>#df2 = all_data %&gt;% # select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, poverty) %&gt;% # drop_na()</p>
+<p>#df3 = all_data %&gt;% # select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %&gt;% # drop_na()</p>
+<p>#df4 = all_data %&gt;% # select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %&gt;% # drop_na()</p>
+<p>#df5 = all_data %&gt;% # select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, asthma_hospitalizations_children_5_to_17_yrs_old) %&gt;% # drop_na()</p>
+<div id="joining" class="section level2">
+<h2>Joining</h2>
+<p>#tidy_asthma = # full_join(df1, df2, by = c(“geo_type_name”, “geo_join_id”, “time_period”, “geo_place_name”)) %&gt;% # full_join(df3, by = c(“geo_type_name”, “geo_join_id”, “time_period”, “geo_place_name”)) %&gt;% # full_join(df4, by = c(“geo_type_name”, “geo_join_id”, “time_period”, “geo_place_name”)) %&gt;% # full_join(df5, by = c(“geo_type_name”, “geo_join_id”, “time_period”, “geo_place_name”)) %&gt;% # select(geo_type_name, geo_join_id, time_period, geo_place_name, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %&gt;% # mutate(time_period = as.numeric(levels(time_period)) [time_period], # geo_join_id = as.character(as.numeric(levels(geo_join_id)) #[geo_join_id]), # geo_place_name = as.character(geo_place_name)) %&gt;% # view()</p>
+<p>#write.csv(tidy_asthma,“./final_data/tidy_asthma.csv”, row.names = FALSE) ```</p>
 <p>PLOTS FOR PUBLIC SCHOOL CHILDREN VARIABLES</p>
 <p>SCATTERPLOTS</p>
 <pre class="r"><code>#plot_uhf_asthma =
@@ -432,6 +451,7 @@ $(document).ready(function () {
 #  )
 
 #plot_borough_cockroach</code></pre>
+</div>
 
 
 

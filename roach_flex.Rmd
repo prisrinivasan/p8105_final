@@ -1,0 +1,89 @@
+---
+title: "Asthma in NYC Neighborhoods"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    theme: journal
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(viridis)
+library(leaflet)
+library(plotly)
+library(sf)
+library(sp)
+library(devtools)
+library(rgdal)
+library(magick)
+tidy_asthma = 
+  read_csv(file = "./final_data/tidy_asthma.csv")
+```
+
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A: Asthma in NYC Neighborhoods
+
+```{r}
+#labeling options for axes
+xa_1 = list(
+  title = "Neighborhood",
+  showticklabels = FALSE
+)
+ya = list(
+  title = "Asthma Prevalence"
+)
+tidy_asthma %>%
+  filter(geo_type_name == "UHF42") %>%
+  arrange(geo_join_id) %>%
+    plot_ly(
+    x = ~geo_join_id, 
+    y = ~public_school_children_5_14_yrs_old_with_asthma, 
+    color = ~geo_place_name,
+    text = ~geo_place_name,
+    frame = ~time_period,
+    hoverinfo = "text",
+    type = 'bar'
+  ) %>% 
+  layout(xaxis = xa_1, yaxis = ya, showlegend = FALSE)
+```
+
+### Description 
+
+The Asthma in NYC Neighborhoods chart displays asthma rates in different neighborhoods from 2011-2014. Users can move between different years and watch regional asthma rates change across NYC. 
+
+The distribution of asthma 
+
+
+Column {width = 650}
+--------------------------------------------------------------------
+
+### Chart B: Asthma NYC by Borough
+
+```{r}
+#creating new x axis options and reusing y axis label options
+xa_2 = list(
+  title = "Borough"
+)
+tidy_asthma %>%
+  filter(geo_type_name == "Borough") %>%
+  arrange(geo_join_id) %>%
+  plot_ly(
+    x = ~geo_place_name, 
+    y = ~public_school_children_5_14_yrs_old_with_asthma, 
+    color = ~geo_place_name,
+    text = ~geo_place_name,
+    frame = ~time_period,
+    hovertemplate = paste(
+      "<b>%{x}</b><br>",
+      "<i>Rate</i>: %{y:.2f}"),
+    type = 'bar'
+  ) %>% 
+  layout(xaxis = xa_2, yaxis = ya, showlegend = FALSE)
+```
+
+### Description

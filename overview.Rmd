@@ -1,5 +1,5 @@
 ---
-title: "Overview"
+title: "Asthma and Cockroaches: Final Report"
 output: 
   html_document:
     toc: true
@@ -7,9 +7,7 @@ output:
     code_folding: hide
 ---
 
-## Cockroach and Asthma Distributions by Borough
-
-```{r, eval = TRUE, message = FALSE}
+```{r, eval = TRUE, message = FALSE, include=FALSE}
 library(tidyverse)
 library(PerformanceAnalytics)
 library(sf)
@@ -31,45 +29,13 @@ tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id
 tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
 ```
 
-```{r, eval = TRUE, message = FALSE, warning = FALSE}
-
-p2 = 
-  tidy_asthma_sf_ll %>%
-  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma)) + 
-  geom_density() +
-  facet_grid(~borough) +
-  labs(
-    x = "Percent of Public School Children with Asthma",
-    y = "Frequency",
-    title = "Distribution of Childhood Asthma by Borough")
-
-p2
-```
-
-## Cockroach Prevalence by Borough Graph 
-
-```{r, eval = TRUE, message = FALSE, warning = FALSE}
-p1 = 
-  tidy_asthma_sf_ll %>%
-  ggplot(aes(x = homes_with_cockroaches)) + 
-  geom_density() +
-  facet_grid(~borough) +
-  labs(
-    x = "Percent of Homes with Cockroaches",
-    y = "Frequency",
-    title = "Distribution of Cockroaches by Borough"
-  ) 
-
-p1
-```
-
-### Related work 
-
 ## Initial Questions 
+
+Based on existing literature discussed in our [about](about.html) page, we can see that cockroaches and related allergens could be correlated with prevalence of asthma in New York City. For example, the charts below show the distributions of cockroaches (left) and childhood asthma (right) by NYC borough. We are interested in exploring the **relationship between cockroaches and asthma prevalence** in New York City. To do so, we wanted to **visualize the prevalence of roaches and asthma in New York as well as their correlations** using what we have learned in the course so far. Using our tidied dataset described below, we explored these interests.
 
 ## Data
 
-We downloaded all available data from the [NYC Gov Environmental & Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx). The Environmental & Health Data Portal houses data from a variety of sources such as the New York City Automated School Health Records, American Community Survey and New York City Housing and Vacancy Survey (HVS). Data from this portal are used to study how the environment affects health. We initially filtered the dataset to include all variables related to asthma, cockroaches and poverty before finalizing the dataset to include variables only related to public school children with asthma, asthma hospitalizations for children ages 5-17 years old, homes with cockroaches and poverty. Definitions for the variables were taken from the "Source Information" csv file downloaded with the dataset from the Environmental & Health Data Portal. 
+We downloaded all available data from the [NYC Gov Environmental & Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx). The Environmental & Health Data Portal houses data from a variety of sources such as the New York City Automated School Health Records, American Community Survey and New York City Housing and Vacancy Survey (HVS). Data from this portal are used to study how the environment affects health. We initially filtered the dataset to include all variables related to asthma, cockroaches and poverty before finalizing the dataset to include variables only related to public school children with asthma, asthma hospitalizations for children ages 5-17 years old, homes with cockroaches and poverty. Definitions for the variables were taken from the ["Source Information" csv file](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTCsv/AllAvailableData.zip) downloaded with the dataset from the Environmental & Health Data Portal. 
 
   * `geo_type_name`: Type of geographical area (i.e borough, UHF42)
   
@@ -83,7 +49,8 @@ Predictor
 
   * `homes_with_cockroaches` (Percent): Estimated number of households in an 
     area that reported seeing at least one cockroach daily over the last 
-    month, divided by the number of households in the area.
+    month, divided by the number of households in the area, expressed as a 
+    percent.
 
 Outcomes of interest 
 
@@ -95,18 +62,16 @@ Outcomes of interest
   * `asthma_hospitalizations_children_5_to_17_yrs_old` (Rate): Number of 
     asthma-related hospitalizations among NYC resident children aged 5 to 17 
     years, divided by the population of children 5 to 17 years old, using NYC
-    DOHMH intercensal estimates; expressed as cases per 10,000 residents
+    DOHMH intercensal estimates; expressed as cases per 10,000 residents.
 
 Potential confounder
 
   * `poverty` (Percent): Estimated number of people for whom poverty status 
     is determined, whose annual income falls below 100% of the federal 
     poverty level, divided by the number of people for whom poverty status is
-    determined.
+    determined, expressed as a percent.
 
-Our github repository is linked [here](https://github.com/prisrinivasan/p8105_final).
-
-The map was built using the United Hospital Fund (UHF) neighborhood code key from [NYC Health](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf). 
+Spatial geometries were taken from the NYC Health Department's [GIS Center](https://www1.nyc.gov/site/doh/data/health-tools/maps-gis-data-files-for-download.page). The map was built using the United Hospital Fund (UHF) neighborhood code key from [NYC Health](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf). 
 
 ### Loading and tidying the data 
 
@@ -117,7 +82,6 @@ read.csv(file = "./final_data/all_available_data.csv") %>%
   filter(name %in% c("Homes with Cockroaches", 
                      "Poverty", 
                      "Public School Children (5-14 Yrs Old) with Asthma", 
-                     "Public School Children (5-14 Yrs Old) with Persistent Asthma", 
                      "Asthma Hospitalizations (Children 5 to 17 Yrs Old)"),
         geo_type_name %in% c("UHF42", "Borough"), 
         measure %in% c("Percent", "Rate")
@@ -132,26 +96,22 @@ read.csv(file = "./final_data/all_available_data.csv") %>%
   mutate(time_period = dplyr::recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-14" = "2011")) %>%
   filter(time_period %in% c("2011", "2012", "2013", "2014")) %>% 
   janitor::clean_names() %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old)
+  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma,  asthma_hospitalizations_children_5_to_17_yrs_old)
 
 df1 = all_data  %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches) %>% 
+  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches) %>% 
   drop_na()
 
 df2 = all_data %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, poverty) %>% 
+  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, poverty) %>% 
   drop_na()
 
 df3 = all_data %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %>% 
+  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %>% 
   drop_na()
 
 df4 = all_data %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %>% 
-  drop_na()
-
-df5 = all_data %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
+  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
   drop_na()
 
 ## Joining
@@ -159,23 +119,29 @@ tidy_asthma =
   full_join(df1, df2, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
   full_join(df3, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
   full_join(df4, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
-  full_join(df5, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
+  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
   mutate(time_period = as.numeric(levels(time_period)) [time_period],
          geo_join_id = as.character(as.numeric(levels(geo_join_id)) [geo_join_id]),
          geo_place_name = as.character(geo_place_name)) %>%
   view()
+
+## Saving CSV file
+write.csv(tidy_asthma,"./final_data/tidy_asthma.csv", row.names = FALSE)
 ```
 
-We downloaded the data as a csv file from the NYC Environmental & Health Data Portal and called the initial dataset `all_available_data`. We restricted our data to include boroughs and UHF42 neighborhoods as our geographical areas of interest and to include the indicators: `homes_with_cockroaches`, `poverty` and `public_school_children_5_14_yrs_old_with_asthma`. 
+We downloaded the data as a csv file from the NYC Environmental & Health Data Portal and called the initial dataset `all_available_data`. We restricted our data to include boroughs and UHF42 neighborhoods as our geographical areas of interest and to include the indicators: `homes_with_cockroaches`, `poverty` `public_school_children_5_14_yrs_old_with_asthma` and `asthma_hospitalizations_children_5_to_17_yrs_old`. 
 
-Data for the rate of public school children with asthma were presented for a range of years (i.e. 2010-2011, 2011-2012, etc). For our analysis, we recoded these ranges into single years in order to  2011-2014. Data on cockroaches were only available for 2011 and 2014. Data on percent poverty in NYC were also presented in ranges and we chose 2010-2014 as our reference. We recoded this into a single year for 2011. Since the data for these four variables overlapped for the years 2011-2014, we restricted our analysis to these four years. Data for the rate of asthma hospitalizations among children ages 5-17 years old were available for all four years. 
+Data for the rate of public school children with asthma were presented for a range of years (i.e. 2010-2011, 2011-2012, etc). For our analysis, we recoded these ranges into single years in order from 2011 to 2014. Data on cockroaches were only available for 2011 and 2014. Data on percent poverty in NYC were also presented in ranges and we chose 2010-2014 as our reference. We recoded this into a single year for 2011. Since the data for these four variables overlapped for the years 2011-2014, we restricted our analysis to these four years. Data for the rate of asthma hospitalizations among children ages 5-17 years old were available for all four years. 
 
-After recoding the years, separate dataframes were created for each of the [four/five variables] and then joined together in order to fill in the missing values (NAs) that first existed when filtering for these variables and years in the larger dataset. We called the tidied, joined dataset `tidy_asthma` and exported it as a [csv file](tidy_asthma.csv). 
+After recoding the years, separate dataframes were created for each of the four variables and then joined together in order to fill in the missing values (NAs) that first existed when filtering for these variables and years in the larger dataset. We called the tidied, joined dataset `tidy_asthma`, which can be found [here](./final_data/tidy_asthma.csv). 
+
+Our github repository is linked [here](https://github.com/prisrinivasan/p8105_final).
+
+## Methods
+
+The dataset we used was compiled using the Environmental and Health Dataset from the NYC Health Department. We selected variables based on our preliminary hypothesis regarding asthma, poverty, neighborhood, cockroaches, and school children. These analyses are exploring the correlations and relationships. The correlation matrix displays associations between all of our predictors and outcome to indicate any multicollinearity. The crude analysis shows the crude relationship between cockroach presence and childhood asthma. Finally, the linear model demonstrates the model with all of our predictors against our outcome. 
 
 ## Preliminary Analysis
-
----
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -199,14 +165,38 @@ tidy_asthma =
 tidy_asthma 
 ```
 
-## _Method_
-The dataset we used was compiled using the Environmental and Health Dataset from the NYC Health Department. We selected variables based on our preliminary hypothesis regarding asthma, poverty, neighborhood, cockroaches, and school children. These analyses are exploring the correlations and relationships. The correlation matrix displays associations between all of our predictors and outcome to indicate any multicollinearity. The crude analysis shows the crude relationship between cockroach presence and childhood asthma. Finally, the linear model demonstrates the model with all of our predictors against our outcome. 
+### _Cockroach and Asthma Distributions by Borough_
 
-The code for this page can be found [here](https://github.com/prisrinivasan/p8105_final/blob/master/regression.Rmd). 
+Using our tidied dataset, we first looked at the distribution of homes with cockroaches and distribution of public school children, ages 5-14 years old, with asthma by NYC borough. These frequency distributions give insight into how these two might be related. 
 
-## _Cockroaches and Asthma by Borough_
+```{r, eval = TRUE, message = FALSE, warning = FALSE}
+p1 = 
+  tidy_asthma_sf_ll %>%
+  ggplot(aes(x = homes_with_cockroaches)) + 
+  geom_density() +
+  facet_grid(~borough) +
+  labs(
+    x = "Percent of Homes with Cockroaches",
+    y = "Frequency",
+    title = "Cockroaches by Borough") 
 
-```{r, echo = FALSE}
+p2 = 
+  tidy_asthma_sf_ll %>%
+  ggplot(aes(x = public_school_children_5_14_yrs_old_with_asthma)) + 
+  geom_density() +
+  facet_grid(~borough) +
+  labs(
+    x = "Rate of Public School Children with Asthma",
+    y = "Frequency",
+    title = "Childhood Asthma by Borough")
+
+p1
+p2
+```
+
+### _Cockroaches and Asthma by Borough_
+
+```{r, warning = FALSE}
 
 shape = st_read("./final_data/shapefiles/", quiet = TRUE)
 
@@ -234,28 +224,36 @@ roach_asth_borough
 
 ```
 
-To first assess if this issue was one worth looking into, we analyzed the cockroach and asthma relationship by borough. Our prediction was that boroughs with higher cockroach distributions would have higher asthma rates. These violin plots support our initial hypothesis with the Bronx having both the highest cockroach distribution and asthma rates.
+To assess the crude relationship between these two variables, we analyzed the cockroach and asthma relationship by borough. Our prediction was that boroughs with higher cockroach distributions would have higher asthma rates. These violin plots support our initial hypothesis with the Bronx having both the highest cockroach distribution and asthma rates.
 
-## _Correlation Matrix_
-```{r, echo = FALSE}
+### _Correlation Matrix_
 
-chart.Correlation(tidy_asthma[,5:9], histogram = TRUE, method = c("pearson", "kendall", "spearman"))
+```{r}
+
+chart.Correlation(tidy_asthma[,5:8], histogram = TRUE, method = c("pearson", "kendall", "spearman"))
 ```
 
-A correlation matrix was then compiled to analyze our other predictors. The correlation matrix displays the baseline association between each variable. All of the correlations are above 0.53 which indicates fairly strong correlation. As we model build we will be aware of any multicollinearity from those variables with large correlations. 
+A correlation matrix was then compiled to analyze our other predictors. The correlation matrix displays the baseline association between each variable. All of the correlations between predictors and `homes_with_cockroaches` are above 0.53 which indicates a fairly strong positive correlation. Pearson _r_ values between predictors and `homes_with_cockroaches`:
 
-## _Crude Association between Childhood Asthma and Cockroaches in the Home_
+  * Poverty: 0.88
+  * Public school children (5-14 years old) with asthma: 0.53
+  * Public school children (5-14 years old) with persistent asthma: 0.67
+  * Asthma hospitalizations of children (5-17 years old): 0.77
 
-```{r, echo = FALSE}
+As we model build we will be aware of any multicollinearity from those variables with large correlations. 
+
+### _Crude Association between Childhood Asthma and Cockroaches in the Home_
+
+```{r, warning = FALSE, error = FALSE}
 set.seed(10)
 library(ggplot2)
 
-ggplot_data = 
-tidy_asthma %>%
+tidy_asthma_1 = 
+  tidy_asthma %>%
   filter(time_period == c("2011", "2014"))
 
 plot_tidy = 
-ggplot(ggplot_data, aes(x = homes_with_cockroaches, y = public_school_children_5_14_yrs_old_with_asthma, color = homes_with_cockroaches)) +
+ggplot(tidy_asthma_1, aes(x = homes_with_cockroaches, y = public_school_children_5_14_yrs_old_with_asthma, color = homes_with_cockroaches)) +
   geom_point() + 
   geom_smooth(method = "lm") +
   facet_grid(~time_period) +
@@ -268,47 +266,62 @@ plot_tidy
 
 ```
 
-Our crude relationship between childhood asthma and cockroaches in the home is demonstrated here. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation. 
+The crude relationship between childhood asthma and cockroaches in the home is demonstrated above across 2011 and 2014. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation.
 
+## Additional Analysis
 
-## _Table_
-```{r, echo = FALSE}
-ggplot_data = 
-tidy_asthma %>%
-  filter(time_period == c("2011", "2014"))
+### _Table_
+```{r}
 
-linear_model = 
-  lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id, data = ggplot_data)
+crude_model = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches, data = tidy_asthma)
 
-## Model 1
-model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id, data=ggplot_data) 
+model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty, data = tidy_asthma)
 
-## Model 5
-model5_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id * asthma_hospitalizations_children_5_to_17_yrs_old, data=ggplot_data)
-```
+model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty, data = tidy_asthma) 
 
-```{r, echo = FALSE}
+tab_model(crude_model, model1_fit, model2_fit, show.stat = TRUE, show.aic = TRUE)
 
-tab_model(model1_fit, linear_model, model5_fit)
 ```
 
 ---
-This table displays the values for each of our three potential models. The three columns of "Public School Children 5-14 Years Old With Asthma" show the intercept and slope values for each model. Geo Join ID is a proxy for neighborhood and demonstrates the relationship between neighborhood and asthma rates.
+This table displays the values for each of our three potential models. The three columns of "Public School Children 5-14 Years Old With Asthma" show the intercept and slope values for each model. 
 
-* The first column shows the basic model with 3 slopes: homes with cockroaches, poverty, geo_join_id. The ${r}^2$ value is 0.436, which is a moderate positive relationship. 
-* The second column shows one adjusted model based on our first crude model. Here we experiment with interactions terms to improve the ${r}^2$ value and find a better fit of our data. There are 7 slopes with three two-way interaction terms and one three-way interaction term between homes with cockroaches, poverty, and geo join id. The ${r}^2$ value is 0.589 which is higher than the crude model. 
-* The third column shows another adjusted model with asthma hospitalizations added in as a predictor of asthma. There are 15 slopes with all of the possible interactions between poverty, asthma hospitalizations, homes with cockroaches, and geo join id. The ${r}^2$ value is 0.887 which is much higher than the crude. This table demonstrates a significant interaction between our variables. 
-
+* The first column shows the basic model with cockroaches against public school children with asthma. The ${r}^2$ value is 0.293, which is a weak positive relationship. The beta for cockroaches is significant with a p-value less than 0.001.
+* The second column shows one adjusted model based on our first crude model. Here we experiment with a potential confounder, poverty, to improve the ${r}^2$ value and find a better fit of our data. There are 2 slopes, cockroaches and poverty. The ${r}^2$ value is 0.422 which is higher than the crude model. The betas here are not significant, but the AIC is much lower than the first model.
+* The third column shows the adjusted model with an interaction term. There are 3 slopes and none of the betas are significant. The ${r}^2$ value is 0.443 which is higher than the previous model, but the AIC went up slightly.
+* Future analyses should include demographic variables and their interactions to improve significance, the ${r}^2$ value, and further decrease the AIC.
 
 ## Discussion
 
 In the process of analyzing the association between prevalence of cockroach in homes and asthma, we gained the following insights:
 
-* In particular, the strength of association between homes with cockroaches and poverty, as well as the association between homes with cockroaches and hospitalization, are rather strong, with correlations r=0.88 and r=0.77 respectively. This aligns with previous research done by the [New York City Neighborhood Asthma and Allergy Study (NAAS)](https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pubmed/21536321/), and [other sources](http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html). Although the [NYC Department of Health](https://www1.nyc.gov/site/doh/health/health-topics/asthma.page) stated that the best way to manage asthma is through doctor’s visits, medication, avoiding triggers, and asthma management at school, this is not feasible for many people due to lack of access to high-quality healthcare, as discussed in this [article](http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html).
+* Overall, a strong positive correlation was observed between asthma and cockroaches. The highest asthma rates were observed among children in the Bronx. The highest proportion of homes with cockroaches was also observed in the Bronx. Furthermore, the strongest correlation between asthma and cockroaches was observed in the Bronx. 
+
+* In particular, the strength of association between homes with cockroaches and poverty, as well as the association between homes with cockroaches and hospitalization, are rather strong, with correlations _r_=0.88 and _r_=0.77 respectively. This aligns with previous research done by the [New York City Neighborhood Asthma and Allergy Study (NAAS)](https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pubmed/21536321/), and [other sources](http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html). Although the [NYC Department of Health](https://www1.nyc.gov/site/doh/health/health-topics/asthma.page) stated that the best way to manage asthma is through doctor’s visits, medication, avoiding triggers, and asthma management at school, this is not feasible for many people due to lack of access to high-quality healthcare, as discussed in this [article](http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html).
+
+* Based on our table, we can see that in the crude model, predictor `homes_with_cockroaches` has a $\hat{\beta}$ coefficient of 1.03. However, when we add poverty into the model, we see that the $\hat{\beta}$ coefficient of `homes_with_cockroaches` changes to 0.11, suggesting that poverty confounds the association between homes with cockroaches and number of public school children ages 5 to 14 with asthma. It would be interesting to explore poverty as a predictor in the model for future analyses. 
 
 * In addition, the positive linear association between percent of children with asthma and percent of homes with cockroaches at home between years 2011 and 2014 provides further evidence that the percentage of school children with asthma is continuing to increase, as stated in this [article](https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pmc/articles/PMC4803579/). Visualization of asthma prevalence by neighborhood and by borough display this increase as well.
 
-* Visualization of geographic variation of cockroach and asthma prevalence can provide insight for different interventions--such as the one conducted in [New Orleans](https://www-sciencedirect-com.ezproxy.cul.columbia.edu/science/article/pii/S0091674916313495)-- in target neighborhoods such as Crotona, Tremont, Hunts Point, and Mott Haven-- all of which are located in the Bronx. However, it is interesting to note that Williamsburg, which is now known to be a rather affluent neighborhood, has high cockroach prevalence. This could point out to the fact that it is difficult to decrease number of cockroaches in an area, and thus other types of interventions need to be done to decrease number of children developing asthma. 
+* Visualization of geographic variation of cockroach and asthma prevalence can provide insight for different interventions--such as the one conducted in [New Orleans](https://www-sciencedirect-com.ezproxy.cul.columbia.edu/science/article/pii/S0091674916313495)-- in target neighborhoods such as Crotona, Tremont, Hunts Point, and Mott Haven-- all of which are located in the Bronx. However, it is interesting to note that Williamsburg, which is now known to be a rather affluent neighborhood, has high cockroach prevalence. This could point out to the fact that it is difficult to decrease number of cockroaches in an area, and thus other types of interventions need to be done to decrease number of children developing asthma. Also, based off of our coding, it is interesting to note that Rikers Island is coded as part of the neighborhood "West Queens," displaying a asthma rate of 54.6 per 1000 in 2011, and 77.3 per 1000 in 2014. Future studies could explore the relationship between cockroach prevalence and environmental habitats. 
 
-*	Similar to [previous research](https://www.cdc.gov/pcd/issues/2019/19_0074.htm), there are several limitations, including not having and including all the confounding health and social risk factors. 
+*	Similar to [previous research](https://www.cdc.gov/pcd/issues/2019/19_0074.htm), there are several limitations, including not having and including all the confounding health and sociodemographic factors that were not accounted for, such as immigration status, race, gender, etc. 
+
+
+## Additional Observations
+
+Using the `shiny` and `leaflet` packages, we created a [visualization](https://prisrinivasan.shinyapps.io/roach_shiny/) of homes with cockroaches in New York City neighborhood. By inputting boroughs and years, the map shows the percentage of homes that have reported seeing a cockroach every day for one month within neighborhoods. Based on this map, most cockroaches are seen in the Bronx, Queens, and Brooklyn, while neighborhoods in lower Manhattan, Staten Island, and closer to Long Island see a relatively lower percent of cockroaches. Switching between 2011 and 2014 (the years for which cockroach data was collected), we can see that the percentage of homes that see cockroaches have generally increased in Brooklyn and Queens.
+
+The dashboard includes `plotly` bar charts showing asthma prevalence in boroughs and neighborhood among public school children aged 5 - 14 years old over a four-year period. Playing these graphs, we can see that asthma prevalence has generally increased each year from 2011 to 2014.
+
+## Related work 
+
+We were inspired to work on this project given our collective interest in environmental health and from classes we took during the CORE semester of the Master of Public Health program here at Columbia University's Mailman School of Public Health. In addition, we were inspired by the fact that having asthma is more than just a chronic illness. It is also a social justice issue. The following sites were the basis of our inspiration:
+
+  *[Why is asthma a social justice issue](http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html)
+
+  *[Staten Island Asthma Coalition](https://www.statenislandusa.com/asthma-coalition.html)
+
+  *[Bronx Respirar Asthma Coalition](http://www.asthmacommunitynetwork.org/node/14847)
+
 

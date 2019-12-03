@@ -7,8 +7,10 @@ navbar:
       href: about.html
     - text: "Report"
       href: Overview.html
-    - text: "Find Your Neighborhood"
+    - text: "Roach Shiny App"
       href: https://prisrinivasan.shinyapps.io/roach_shiny/
+    - text: "Asthma Dashboard"
+      href: roach_flex.html
     - icon: fa-envelope fa-lg
       href: mailto:<bowlin.hannah@columbia.edu>
     - icon: fa-github fa-lg
