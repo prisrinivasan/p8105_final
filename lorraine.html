@@ -12,7 +12,7 @@
 
 
 
-<title></title>
+<title>lorraine</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -23,6 +23,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -307,75 +309,220 @@ $(document).ready(function () {
 
 
 
+<h1 class="title toc-ignore">lorraine</h1>
 
 </div>
 
 
-<div id="lorraine" class="section level1">
-<h1>lorraine</h1>
-<p>Reading in the csv file.</p>
-<pre class="r"><code>asthma_data = read.csv(file = &quot;./final_data/asthma_data.csv&quot;) %&gt;%
-  janitor::clean_names() %&gt;%
-  mutate(
-    data_value = as.numeric(data_value), 
-    year = as.character(year_description)) %&gt;%
-  select(year, geo_entity_id, name, data_value) %&gt;%
-  pivot_wider(names_from = name,
-              values_from = data_value) %&gt;%
-  janitor::clean_names() %&gt;%
-  view()</code></pre>
-<p>Loading and tidying the new dataset with all available data. THis generates 4536 observations.</p>
-<pre class="r"><code>all_data_1 = 
-  read.csv(file = &quot;./final_data/all_available_data.csv&quot;) %&gt;%
-  janitor::clean_names() %&gt;%
-  rename(year = time_period) %&gt;%
-  mutate(
-    data_value = as.numeric(data_value), 
-    geo_join_id = as.numeric(geo_join_id),
-    year = as.character(year), 
-    name = as.character(name)) %&gt;%
-  filter(data_value != &quot;NULL&quot;,
-         str_detect(name, c(&quot;[A]sthma&quot;, &quot;[C]ockroach&quot;, &quot;[P]overty&quot;)),
-         !str_detect(name, c(&quot;[N]TA&quot;)),
-         name != &quot;Children 0-13 Years Old Ever Diagnosed with Asthma&quot;,
-         name != &quot;Youth Asthma in the Past 12 Months&quot;,
-         name != &quot;Adults Reporting Cockroaches in the Home&quot;,
-         geo_type_name == &quot;UHF42&quot;) %&gt;%
-  group_by(name) %&gt;%
-  janitor::clean_names() %&gt;%
-  view()</code></pre>
-<p>Tidying up the data using factors instead of strings for the <code>name</code> variable.</p>
-<pre class="r"><code>all_data = 
-  read.csv(file = &quot;./final_data/all_available_data.csv&quot;) %&gt;%
-  janitor::clean_names() %&gt;%
-  mutate(data_value = as.numeric(data_value),
-         time_period = recode(time_period, &quot;2010-2011&quot; = &quot;2011&quot;, &quot;2011-2012&quot; = &quot;2012&quot;, &quot;2012-2013&quot; = &quot;2013&quot;, &quot;2013-2014&quot; = &quot;2014&quot;, &quot;2010-14&quot; = &quot;2011&quot;),
-         geo_join_id = as.numeric(geo_join_id)) %&gt;%
-  filter(name %in% c(&quot;Homes with Cockroaches&quot;,
-                     &quot;Poverty&quot;, 
-                     &quot;Public School Children (5-14 Yrs Old) with Asthma&quot;, 
-                     &quot;Public School Children (5-14 Yrs Old) with Persistent Asthma&quot;),
-                     measure == &quot;Percent&quot; | measure == &quot;Rate&quot;,
-         geo_type_name == &quot;UHF42&quot;,
-         time_period %in% c(&quot;2011&quot;, &quot;2012&quot;, &quot;2013&quot;, &quot;2014&quot;)) %&gt;%
-  mutate(row = row_number(),
-         time_period = as.numeric(time_period)) %&gt;%
-  pivot_wider(names_from = &quot;name&quot;,
-              values_from = &quot;data_value&quot;) %&gt;%
-  janitor::clean_names() %&gt;%
-  select(geo_join_id, time_period, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma) %&gt;%
-  view()</code></pre>
-<p>Filtering for variables of interest (1344 observations)</p>
-<pre class="r"><code>test =
-  all_data %&gt;%
-  group_by(time_period, geo_join_id) %&gt;%
-  summarise_each(funs(sum(., na.rm = TRUE))) %&gt;% 
-  view()</code></pre>
-<pre class="r"><code>all_data %&gt;%
-  select(geo_join_id, poverty, time_period) %&gt;%
-  ggplot(aes(x = geo_join_id, y = poverty, color = time_period))  +
-  geom_line(aes(group = time_period))</code></pre>
-<p><img src="lorraine_files/figure-gfm/unnamed-chunk-5-1.png" width="90%" /></p>
+<p>Most up to date tidy dataset</p>
+<p>{r tidying , message=FALSE, include=FALSE, error = TRUE} all_data = read.csv(file = “./final_data/all_available_data.csv”) %&gt;% janitor::clean_names() %&gt;% filter(name %in% c(“Homes with Cockroaches”, “Poverty”, “Public School Children (5-14 Yrs Old) with Asthma”, “Public School Children (5-14 Yrs Old) with Persistent Asthma”, “Asthma Hospitalizations (Children 5 to 17 Yrs Old)”), geo_type_name %in% c(“UHF42”, “Borough”), measure %in% c(“Percent”, “Rate”) ) %&gt;% mutate(geo_join_id = as.character(geo_join_id), geo_join_id = if_else(geo_place_name == “Bensonhurst - Bay Ridge”, “209”, geo_join_id), geo_join_id = as.factor(geo_join_id)) %&gt;% pivot_wider( names_from = name, values_from = data_value ) %&gt;% mutate(time_period = recode(time_period, “2010-2011” = “2011”, “2011-2012” = “2012”, “2012-2013” = “2013”, “2013-2014” = “2014”, “2010-2014” = “2011”)) %&gt;% filter(time_period %in% c(“2011”, “2012”, “2013”, “2014”)) %&gt;% janitor::clean_names() %&gt;% select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old)</p>
+<p>df1 = all_data %&gt;% select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches) %&gt;% drop_na()</p>
+<p>df2 = all_data %&gt;% select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, poverty) %&gt;% drop_na()</p>
+<p>df3 = all_data %&gt;% select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %&gt;% drop_na()</p>
+<p>df4 = all_data %&gt;% select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %&gt;% drop_na()</p>
+<p>df5 = all_data %&gt;% select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, asthma_hospitalizations_children_5_to_17_yrs_old) %&gt;% drop_na()</p>
+<p>{r tidying data, message=FALSE, include=FALSE} #all_data = #read.csv(file = “./final_data/all_available_data.csv”) %&gt;% # janitor::clean_names() %&gt;% # filter(name %in% c(“Homes with Cockroaches”, # “Poverty”, # “Public School Children (5-14 Yrs Old) with Asthma”, # “Public School Children (5-14 Yrs Old) with Persistent #Asthma”, # “Asthma Hospitalizations (Children 5 to 17 Yrs Old)”), # geo_type_name %in% c(“UHF42”, “Borough”), # measure %in% c(“Percent”, “Rate”) # ) %&gt;% # mutate(geo_join_id = as.character(geo_join_id), # geo_join_id = if_else(geo_place_name == “Bensonhurst - Bay Ridge”, #“209”, geo_join_id), # geo_join_id = as.factor(geo_join_id)) %&gt;% # pivot_wider( # names_from = name, # values_from = data_value # ) %&gt;% # mutate(time_period = recode(time_period, “2010-2011” = “2011”, “2011-2012” = “2012”, “2012-2013” = “2013”, “2013-2014” = “2014”, “2010-14” = “2011”)) %&gt;% # filter(time_period %in% c(“2011”, “2012”, “2013”, “2014”)) %&gt;% # janitor::clean_names() %&gt;% # select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old)</p>
+<div id="df1-all_data" class="section level1">
+<h1>df1 = all_data %&gt;%</h1>
+</div>
+<div id="selectgeo_type_name-geo_join_id-time_period-geo_place_name-measure-indicator_id-homes_with_cockroaches" class="section level1">
+<h1>select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches) %&gt;%</h1>
+</div>
+<div id="drop_na" class="section level1">
+<h1>drop_na()</h1>
+</div>
+<div id="df2-all_data" class="section level1">
+<h1>df2 = all_data %&gt;%</h1>
+</div>
+<div id="selectgeo_type_name-geo_join_id-time_period-geo_place_name-measure-indicator_id-poverty" class="section level1">
+<h1>select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, poverty) %&gt;%</h1>
+</div>
+<div id="drop_na-1" class="section level1">
+<h1>drop_na()</h1>
+</div>
+<div id="df3-all_data" class="section level1">
+<h1>df3 = all_data %&gt;%</h1>
+</div>
+<div id="selectgeo_type_name-geo_join_id-time_period-geo_place_name-measure-indicator_id-public_school_children_5_14_yrs_old_with_asthma" class="section level1">
+<h1>select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %&gt;%</h1>
+</div>
+<div id="drop_na-2" class="section level1">
+<h1>drop_na()</h1>
+</div>
+<div id="df4-all_data" class="section level1">
+<h1>df4 = all_data %&gt;%</h1>
+</div>
+<div id="selectgeo_type_name-geo_join_id-time_period-geo_place_name-measure-indicator_id-public_school_children_5_14_yrs_old_with_persistent_asthma" class="section level1">
+<h1>select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %&gt;%</h1>
+</div>
+<div id="drop_na-3" class="section level1">
+<h1>drop_na()</h1>
+</div>
+<div id="df5-all_data" class="section level1">
+<h1>df5 = all_data %&gt;%</h1>
+</div>
+<div id="selectgeo_type_name-geo_join_id-time_period-geo_place_name-measure-indicator_id-asthma_hospitalizations_children_5_to_17_yrs_old" class="section level1">
+<h1>select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, asthma_hospitalizations_children_5_to_17_yrs_old) %&gt;%</h1>
+</div>
+<div id="drop_na-4" class="section level1">
+<h1>drop_na()</h1>
+<div id="joining" class="section level2">
+<h2>Joining</h2>
+</div>
+</div>
+<div id="tidy_asthma" class="section level1">
+<h1>tidy_asthma =</h1>
+</div>
+<div id="full_joindf1-df2-by-cgeo_type_name-geo_join_id-time_period-geo_place_name" class="section level1">
+<h1>full_join(df1, df2, by = c(“geo_type_name”, “geo_join_id”, “time_period”, “geo_place_name”)) %&gt;%</h1>
+</div>
+<div id="full_joindf3-by-cgeo_type_name-geo_join_id-time_period-geo_place_name" class="section level1">
+<h1>full_join(df3, by = c(“geo_type_name”, “geo_join_id”, “time_period”, “geo_place_name”)) %&gt;%</h1>
+</div>
+<div id="full_joindf4-by-cgeo_type_name-geo_join_id-time_period-geo_place_name" class="section level1">
+<h1>full_join(df4, by = c(“geo_type_name”, “geo_join_id”, “time_period”, “geo_place_name”)) %&gt;%</h1>
+</div>
+<div id="full_joindf5-by-cgeo_type_name-geo_join_id-time_period-geo_place_name" class="section level1">
+<h1>full_join(df5, by = c(“geo_type_name”, “geo_join_id”, “time_period”, “geo_place_name”)) %&gt;%</h1>
+</div>
+<div id="selectgeo_type_name-geo_join_id-time_period-geo_place_name-homes_with_cockroaches-poverty-public_school_children_5_14_yrs_old_with_asthma-public_school_children_5_14_yrs_old_with_persistent_asthma-asthma_hospitalizations_children_5_to_17_yrs_old" class="section level1">
+<h1>select(geo_type_name, geo_join_id, time_period, geo_place_name, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %&gt;%</h1>
+</div>
+<div id="mutatetime_period-as.numericlevelstime_period-time_period" class="section level1">
+<h1>mutate(time_period = as.numeric(levels(time_period)) [time_period],</h1>
+</div>
+<div id="geo_join_id-as.characteras.numericlevelsgeo_join_id-geo_join_id" class="section level1">
+<h1>geo_join_id = as.character(as.numeric(levels(geo_join_id)) #[geo_join_id]),</h1>
+</div>
+<div id="geo_place_name-as.charactergeo_place_name" class="section level1">
+<h1>geo_place_name = as.character(geo_place_name)) %&gt;%</h1>
+</div>
+<div id="view" class="section level1">
+<h1>view()</h1>
+</div>
+<div id="write.csvtidy_asthma.final_datatidy_asthma.csv-row.names-false" class="section level1">
+<h1>write.csv(tidy_asthma,“./final_data/tidy_asthma.csv”, row.names = FALSE)</h1>
+<p>```</p>
+<p>PLOTS FOR PUBLIC SCHOOL CHILDREN VARIABLES</p>
+<p>SCATTERPLOTS</p>
+<pre class="r"><code>#plot_uhf_asthma =
+#  tidy_asthma %&gt;%
+#  filter(geo_type_name == &quot;UHF42&quot;) %&gt;%
+#  arrange(geo_join_id) %&gt;%
+#    plot_ly(
+#    x = ~geo_join_id, 
+#    y = ~public_school_children_5_14_yrs_old_with_asthma, 
+#    color = ~geo_place_name,
+#    text = ~geo_place_name,
+#    frame = ~time_period,
+#    hoverinfo = &quot;text&quot;,
+#    type = &#39;scatter&#39;,
+#    mode = &#39;markers&#39;
+#  )
+  
+#plot_uhf_asthma</code></pre>
+<pre class="r"><code>#plot_uhf_persistent =
+#  tidy_asthma %&gt;%
+#  filter(geo_type_name == &quot;UHF42&quot;) %&gt;%
+#  arrange(geo_join_id) %&gt;%
+#  plot_ly(
+#    x = ~geo_join_id, 
+#    y = ~public_school_children_5_14_yrs_old_with_persistent_asthma, 
+#    color = ~geo_place_name,
+#    text = ~geo_place_name,
+#    frame = ~time_period,
+#    hoverinfo = &quot;text&quot;,
+#    type = &#39;scatter&#39;,
+#    mode = &#39;markers&#39;
+#  )
+
+#plot_uhf_persistent</code></pre>
+<pre class="r"><code>#subplot(plot_uhf_asthma, plot_uhf_persistent)</code></pre>
+<p>testing different types of plots for asthma variables</p>
+<p>BAR CHARTS</p>
+<pre class="r"><code>#bar_uhf_asthma =
+#  tidy_asthma %&gt;%
+#  filter(geo_type_name == &quot;UHF42&quot;) %&gt;%
+#  arrange(geo_join_id) %&gt;%
+#    plot_ly(
+#    x = ~geo_join_id, 
+#    y = ~public_school_children_5_14_yrs_old_with_asthma, 
+#    color = ~geo_place_name,
+#    text = ~geo_place_name,
+#    frame = ~time_period,
+#    hoverinfo = &quot;text&quot;,
+#    type = &#39;bar&#39;
+#  )
+  
+#bar_uhf_asthma</code></pre>
+<pre class="r"><code>#bar_uhf_persistent =
+#  tidy_asthma %&gt;%
+#  filter(geo_type_name == &quot;UHF42&quot;) %&gt;%
+#  arrange(geo_join_id) %&gt;%
+#  plot_ly(
+#    x = ~geo_join_id, 
+#    y = ~public_school_children_5_14_yrs_old_with_persistent_asthma, 
+#    color = ~geo_place_name,
+#    text = ~geo_place_name,
+#    frame = ~time_period,
+#    hovertemplate = paste(
+#      &quot;&lt;b&gt;%{text}&lt;/b&gt;&lt;br&gt;&quot;,
+#      &quot;&lt;i&gt;Rate&lt;/i&gt;: %{y:.2f}&quot;),
+#    type = &#39;bar&#39;
+#  )
+
+#bar_uhf_persistent</code></pre>
+<pre class="r"><code>#plot_borough_asthma =
+#  tidy_asthma %&gt;%
+#  filter(geo_type_name == &quot;Borough&quot;) %&gt;%
+#  arrange(geo_join_id) %&gt;%
+#  plot_ly(
+#    x = ~geo_place_name, 
+#    y = ~public_school_children_5_14_yrs_old_with_asthma, 
+#    color = ~geo_place_name,
+#    text = ~geo_place_name,
+#    frame = ~time_period,
+#    hovertemplate = paste(
+#      &quot;&lt;b&gt;%{x}&lt;/b&gt;&lt;br&gt;&quot;,
+#      &quot;&lt;i&gt;Rate&lt;/i&gt;: %{y:.2f}&quot;),
+#    type = &#39;bar&#39;
+#  )
+
+#plot_borough_asthma</code></pre>
+<pre class="r"><code>#plot_borough_persistent =
+#  tidy_asthma %&gt;%
+#  filter(geo_type_name == &quot;Borough&quot;) %&gt;%
+#  arrange(geo_join_id) %&gt;%
+#  plot_ly(
+#   x = ~geo_place_name, 
+#    y = ~public_school_children_5_14_yrs_old_with_persistent_asthma, 
+#    color = ~geo_place_name,
+#    text = ~geo_place_name,
+#    frame = ~time_period,
+#    hovertemplate = paste(
+#      &quot;&lt;b&gt;%{x}&lt;/b&gt;&lt;br&gt;&quot;,
+#      &quot;&lt;i&gt;Rate&lt;/i&gt;: %{y:.2f}&quot;),
+#    type = &#39;bar&#39;
+#  )
+
+#plot_borough_persistent</code></pre>
+<pre class="r"><code>#plot_borough_cockroach =
+#  tidy_asthma %&gt;%
+#  filter(geo_type_name == &quot;Borough&quot;) %&gt;%
+#  arrange(geo_join_id) %&gt;%
+#  plot_ly(
+#    x = ~geo_place_name, 
+#    y = ~homes_with_cockroaches, 
+#    color = ~geo_place_name,
+#    text = ~geo_place_name,
+#    frame = ~time_period,
+#    hovertemplate = paste(
+#      &quot;&lt;b&gt;%{x}&lt;/b&gt;&lt;br&gt;&quot;,
+#     &quot;&lt;i&gt;Percent&lt;/i&gt;: %{y:.2f}&quot;),
+#    type = &#39;bar&#39;
+#  )
+
+#plot_borough_cockroach</code></pre>
 </div>
 
 

@@ -150,7 +150,7 @@ tidy_asthma_sf_ll %>%
                                              color = "white",
                                              bringToFront = TRUE),
                 label = ~roach_label) %>% 
-    addLegend("bottomright",
+    leaflet::addLegend("bottomright",
               pal = pal,
               values = ~homes_with_cockroaches,
               title = "Percent of Homes with Cockroaches",
