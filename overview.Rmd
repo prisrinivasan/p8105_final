@@ -298,10 +298,9 @@ tab_model(crude_model, model1_fit, model5_fit, show.stat = TRUE, show.aic = TRUE
 ---
 This table displays the values for each of our three potential models. The three columns of "Public School Children 5-14 Years Old With Asthma" show the intercept and slope values for each model. 
 
-* The first column shows the basic model with cockroaches against public school children with asthma. The ${r}^2$ value is 0.293, which is a weak positive relationship. 
-* The second column shows one adjusted model based on our first crude model. Here we experiment with a potential confounder, poverty, to improve the ${r}^2$ value and find a better fit of our data. There are 2 slopes, cockroaches and poverty. The ${r}^2$ value is 0.422 which is higher than the crude model. 
-* The third column shows the adjusted model with an interaction term. The 
-
+* The first column shows the basic model with cockroaches against public school children with asthma. The ${r}^2$ value is 0.293, which is a weak positive relationship. The beta for cockroaches is significant with a p-value less than 0.001.
+* The second column shows one adjusted model based on our first crude model. Here we experiment with a potential confounder, poverty, to improve the ${r}^2$ value and find a better fit of our data. There are 2 slopes, cockroaches and poverty. The ${r}^2$ value is 0.422 which is higher than the crude model. The betas here are not significant. 
+* The third column shows the adjusted model with an interaction term. There are 3 slopes and none of the betas are significant. The ${r}^2$ value is 0.443 which is higher than the previous model, but it could be higher.
 
 ## Discussion
 
