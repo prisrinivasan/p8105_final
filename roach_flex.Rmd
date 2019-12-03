@@ -29,10 +29,6 @@ tidy_asthma =
 Asthma in NYC Neighborhoods 
 ==================================
 
-Column {.sidebar}
------------------------------------------------------------------------
-
-
 Column {.tabset}
 ----------------------------------------------------------------------
 ```{r nyc_asthma}
@@ -68,11 +64,12 @@ The Asthma in NYC Neighborhoods chart displays asthma rates in different neighbo
 The distribution of asthma 
 
 
+Asthma in NYC Boroughs
+==================================
 
-Column {.sidebar}
+Column {.tabset}
 ----------------------------------------------------------------------
 
-### Chart B: Asthma in NYC Boroughs
 
 ```{r for_sidebar}
 #creating new x axis options and reusing y axis label options
