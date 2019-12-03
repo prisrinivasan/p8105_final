@@ -127,26 +127,26 @@ read.csv(file = "./final_data/all_available_data.csv") %>%
   mutate(time_period = dplyr::recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-14" = "2011")) %>%
   filter(time_period %in% c("2011", "2012", "2013", "2014")) %>% 
   janitor::clean_names() %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old)
+  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old)
 
 df1 = all_data  %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches) %>% 
+  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches) %>% 
   drop_na()
 
 df2 = all_data %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, poverty) %>% 
+  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, poverty) %>% 
   drop_na()
 
 df3 = all_data %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %>% 
+  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %>% 
   drop_na()
 
 df4 = all_data %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %>% 
+  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %>% 
   drop_na()
 
 df5 = all_data %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
+  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
   drop_na()
 
 ## Joining
@@ -155,7 +155,7 @@ tidy_asthma =
   full_join(df3, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
   full_join(df4, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
   full_join(df5, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
+  dplyr::select(geo_type_name, geo_join_id, time_period, geo_place_name, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
   mutate(time_period = as.numeric(levels(time_period)) [time_period],
          geo_join_id = as.character(as.numeric(levels(geo_join_id)) [geo_join_id]),
          geo_place_name = as.character(geo_place_name)) %>%
@@ -282,28 +282,27 @@ ggplot_data =
 tidy_asthma %>%
   filter(time_period == c("2011", "2014"))
 
-linear_model = 
-  lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id, data = ggplot_data)
-
-## Model 1
-model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty + geo_join_id, data = ggplot_data) 
+crude_model = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches, data = ggplot_data)
 
 ## Model 5
-model5_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty * geo_join_id * asthma_hospitalizations_children_5_to_17_yrs_old, data = ggplot_data)
+model5_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty, data=ggplot_data)
+
+model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty, data = ggplot_data) 
+
 ```
 
 ```{r, echo = FALSE}
 
-tab_model(model1_fit, linear_model, model5_fit)
+tab_model(crude_model, model1_fit, model5_fit, show.stat = TRUE, show.aic = TRUE)
 ```
 
 ---
-This table displays the values for each of our three potential models. The three columns of "Public School Children 5-14 Years Old With Asthma" show the intercept and slope values for each model. Geo Join ID is a proxy for neighborhood and demonstrates the relationship between neighborhood and asthma rates.
+This table displays the values for each of our three potential models. The three columns of "Public School Children 5-14 Years Old With Asthma" show the intercept and slope values for each model. 
 
-* The first column shows the basic model with 3 slopes: homes with cockroaches, poverty, geo_join_id. The ${r}^2$ value is 0.436, which is a moderate positive relationship. 
-* The second column shows one adjusted model based on our first crude model. Here we experiment with interactions terms to improve the ${r}^2$ value and find a better fit of our data. There are 7 slopes with three two-way interaction terms and one three-way interaction term between homes with cockroaches, poverty, and geo join id. The ${r}^2$ value is 0.589 which is higher than the crude model. 
-* The third column shows another adjusted model with asthma hospitalizations added in as a predictor of asthma. There are 15 slopes with all of the possible interactions between poverty, asthma hospitalizations, homes with cockroaches, and geo join id. The ${r}^2$ value is 0.887 which is much higher than the crude. This table demonstrates a significant interaction between our variables. 
-
+* The first column shows the basic model with cockroaches against public school children with asthma. The ${r}^2$ value is 0.293, which is a weak positive relationship. The beta for cockroaches is significant with a p-value less than 0.001.
+* The second column shows one adjusted model based on our first crude model. Here we experiment with a potential confounder, poverty, to improve the ${r}^2$ value and find a better fit of our data. There are 2 slopes, cockroaches and poverty. The ${r}^2$ value is 0.422 which is higher than the crude model. The betas here are not significant. 
+* The third column shows the adjusted model with an interaction term. There are 3 slopes and none of the betas are significant. The ${r}^2$ value is 0.443 which is higher than the previous model, but it could be higher.
+* Future analyses should include demographic variables and their interactions to improve significance, the ${r}^2$ value, and decrease the AIC.
 
 ## Discussion
 
