@@ -28,7 +28,7 @@ Column {data-width=650}
 
 ### Chart A: Asthma in NYC Neighborhoods
 
-```{r nyc_asthma}
+```{r}
 #labeling options for axes
 xa_1 = list(
   title = "Neighborhood",
@@ -59,15 +59,12 @@ The Asthma in NYC Neighborhoods chart displays asthma rates in different neighbo
 The distribution of asthma 
 
 
-Asthma in NYC Boroughs
-==================================
-
 Column {width = 650}
 --------------------------------------------------------------------
 
-### Graph
+### Chart B: Asthma NYC by Borough
 
-```{r for_sidebar}
+```{r}
 #creating new x axis options and reusing y axis label options
 xa_2 = list(
   title = "Borough"
