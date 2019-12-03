@@ -5,6 +5,7 @@ output:
     orientation: columns
     vertical_layout: fill
     theme: journal
+  runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
@@ -13,26 +14,24 @@ library(tidyverse)
 library(viridis)
 library(leaflet)
 library(plotly)
+library(shiny)
 library(sf)
 library(sp)
 library(devtools)
 library(rgdal)
 library(magick)
 
-tidy_asthma = 
-  read_csv(file = "./final_data/tidy_asthma.csv")
-
+load("./p8105_final/tidy_asthma_2.Rda")
 ```
 
-
-
-Asthma in NYC Neighborhoods 
-==================================
-
 Column {.sidebar}
----------------------------------------------------------------------
+----------------------------------------------------------------------
 
-Column {.tabset}
+Testing with inputs
+
+
+
+Column {data-width=650}
 ----------------------------------------------------------------------
 
 ### Graph 
@@ -63,21 +62,7 @@ tidy_asthma %>%
   layout(xaxis = xa_1, yaxis = ya, showlegend = FALSE)
 ```
 
-### Description 
-
-The Asthma in NYC Neighborhoods chart displays asthma rates in different neighborhoods from 2011-2014. Users can move between different years and watch regional asthma rates change across NYC. 
-
-The distribution of asthma 
-
-
-Asthma in NYC Boroughs
-==================================
-
-Column {.sidebar}
---------------------------------------------------------------------
-
-
-Column {.tabset}
+Column {data-width=650}
 ----------------------------------------------------------------------
 
 ### Graph
@@ -104,5 +89,3 @@ tidy_asthma %>%
   ) %>% 
   layout(xaxis = xa_2, yaxis = ya, showlegend = FALSE)
 ```
-
-### Description
