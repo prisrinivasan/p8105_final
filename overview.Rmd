@@ -243,10 +243,12 @@ To first assess if this issue was one worth looking into, we analyzed the cockro
 chart.Correlation(tidy_asthma[,5:9], histogram = TRUE, method = c("pearson", "kendall", "spearman"))
 ```
 
-A correlation matrix was then compiled to analyze our other predictors. The correlation matrix displays the baseline association between each variable. All of the correlations are above 0.53 which indicates fairly strong correlation:
+A correlation matrix was then compiled to analyze our other predictors. The correlation matrix displays the baseline association between each variable. All of the correlations between predictors and `homes_with_cockroaches` are above 0.53 which indicates a fairly strong positive correlation. Pearson _r_ values between predictors and `homes_with_cockroaches`:
 
-  * 
-  *
+  * Poverty: 0.88
+  * Public school children (5-14 years old) with asthma: 0.53
+  * Public school children (5-14 years old) with persistent asthma: 0.67
+  * Asthma hospitalizations of children (5-17 years old): 0.77
 
 As we model build we will be aware of any multicollinearity from those variables with large correlations. 
 
@@ -274,7 +276,7 @@ plot_tidy
 
 ```
 
-Our crude relationship between childhood asthma and cockroaches in the home is demonstrated here. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation. 
+The crude relationship between childhood asthma and cockroaches in the home is demonstrated above across 2011 and 2014. As the percent of homes with cockroaches increases, so does the number of public school children with asthma. This is not a perfectly linear correlation, but on average, it is a positive linear correlation.
 
 
 ## _Table_
