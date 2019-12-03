@@ -40,6 +40,7 @@ theme_set(theme_minimal() + theme(legend.position = "bottom"))
 
 Most up to date tidy dataset
 
+<<<<<<< HEAD
 ```{r tidying data, message=FALSE, include=FALSE, error = TRUE}
 all_data = 
 read.csv(file = "./final_data/all_available_data.csv") %>% 
@@ -83,20 +84,65 @@ df4 = all_data %>%
 df5 = all_data %>% 
   select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
   drop_na()
+=======
+```{r tidying data, message=FALSE, include=FALSE}
+#all_data = 
+#read.csv(file = "./final_data/all_available_data.csv") %>% 
+#  janitor::clean_names() %>% 
+#  filter(name %in% c("Homes with Cockroaches", 
+#                     "Poverty", 
+#                     "Public School Children (5-14 Yrs Old) with Asthma", 
+#                     "Public School Children (5-14 Yrs Old) with Persistent #Asthma", 
+#                     "Asthma Hospitalizations (Children 5 to 17 Yrs Old)"),
+#        geo_type_name %in% c("UHF42", "Borough"), 
+#        measure %in% c("Percent", "Rate")
+#         ) %>% 
+#  mutate(geo_join_id = as.character(geo_join_id),
+#         geo_join_id = if_else(geo_place_name == "Bensonhurst - Bay Ridge", #"209", geo_join_id),
+#         geo_join_id = as.factor(geo_join_id)) %>% 
+#  pivot_wider(
+#    names_from = name, 
+#    values_from = data_value
+#    ) %>%
+#  mutate(time_period = recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-14" = "2011")) %>%
+#  filter(time_period %in% c("2011", "2012", "2013", "2014")) %>% 
+#  janitor::clean_names() %>% 
+#  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old)
+
+#df1 = all_data  %>% 
+#  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches) %>% 
+#  drop_na()
+
+#df2 = all_data %>% 
+#  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, poverty) %>% 
+#  drop_na()
+
+#df3 = all_data %>% 
+#  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %>% 
+#  drop_na()
+
+#df4 = all_data %>% 
+#  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %>%
+#  drop_na()
+
+#df5 = all_data %>% 
+#  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
+#  drop_na()
+>>>>>>> 48bbf48d5143b9046209037fdfbbeb30c5b1e671
 
 ## Joining
-tidy_asthma = 
-  full_join(df1, df2, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
-  full_join(df3, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
-  full_join(df4, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
-  full_join(df5, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
-  mutate(time_period = as.numeric(levels(time_period)) [time_period],
-         geo_join_id = as.character(as.numeric(levels(geo_join_id)) [geo_join_id]),
-         geo_place_name = as.character(geo_place_name)) %>%
-  view()
+#tidy_asthma = 
+#  full_join(df1, df2, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
+#  full_join(df3, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
+#  full_join(df4, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
+#  full_join(df5, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
+#  select(geo_type_name, geo_join_id, time_period, geo_place_name, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
+#  mutate(time_period = as.numeric(levels(time_period)) [time_period],
+#         geo_join_id = as.character(as.numeric(levels(geo_join_id)) #[geo_join_id]),
+#         geo_place_name = as.character(geo_place_name)) %>%
+#  view()
 
-write.csv(tidy_asthma,"./final_data/tidy_asthma.csv", row.names = FALSE)
+#write.csv(tidy_asthma,"./final_data/tidy_asthma.csv", row.names = FALSE)
 ```
 
 PLOTS FOR PUBLIC SCHOOL CHILDREN VARIABLES
@@ -104,45 +150,45 @@ PLOTS FOR PUBLIC SCHOOL CHILDREN VARIABLES
 SCATTERPLOTS
 
 ```{r}
-plot_uhf_asthma =
-  tidy_asthma %>%
-  filter(geo_type_name == "UHF42") %>%
-  arrange(geo_join_id) %>%
-    plot_ly(
-    x = ~geo_join_id, 
-    y = ~public_school_children_5_14_yrs_old_with_asthma, 
-    color = ~geo_place_name,
-    text = ~geo_place_name,
-    frame = ~time_period,
-    hoverinfo = "text",
-    type = 'scatter',
-    mode = 'markers'
-  )
+#plot_uhf_asthma =
+#  tidy_asthma %>%
+#  filter(geo_type_name == "UHF42") %>%
+#  arrange(geo_join_id) %>%
+#    plot_ly(
+#    x = ~geo_join_id, 
+#    y = ~public_school_children_5_14_yrs_old_with_asthma, 
+#    color = ~geo_place_name,
+#    text = ~geo_place_name,
+#    frame = ~time_period,
+#    hoverinfo = "text",
+#    type = 'scatter',
+#    mode = 'markers'
+#  )
   
-plot_uhf_asthma
+#plot_uhf_asthma
 ```
 
 ```{r}
-plot_uhf_persistent =
-  tidy_asthma %>%
-  filter(geo_type_name == "UHF42") %>%
-  arrange(geo_join_id) %>%
-  plot_ly(
-    x = ~geo_join_id, 
-    y = ~public_school_children_5_14_yrs_old_with_persistent_asthma, 
-    color = ~geo_place_name,
-    text = ~geo_place_name,
-    frame = ~time_period,
-    hoverinfo = "text",
-    type = 'scatter',
-    mode = 'markers'
-  )
+#plot_uhf_persistent =
+#  tidy_asthma %>%
+#  filter(geo_type_name == "UHF42") %>%
+#  arrange(geo_join_id) %>%
+#  plot_ly(
+#    x = ~geo_join_id, 
+#    y = ~public_school_children_5_14_yrs_old_with_persistent_asthma, 
+#    color = ~geo_place_name,
+#    text = ~geo_place_name,
+#    frame = ~time_period,
+#    hoverinfo = "text",
+#    type = 'scatter',
+#    mode = 'markers'
+#  )
 
-plot_uhf_persistent
+#plot_uhf_persistent
 ```
 
 ```{r}
-subplot(plot_uhf_asthma, plot_uhf_persistent)
+#subplot(plot_uhf_asthma, plot_uhf_persistent)
 ```
 
 testing different types of plots for asthma variables
@@ -150,120 +196,104 @@ testing different types of plots for asthma variables
 BAR CHARTS
 
 ```{r}
-bar_uhf_asthma =
-  tidy_asthma %>%
-  filter(geo_type_name == "UHF42") %>%
-  arrange(geo_join_id) %>%
-    plot_ly(
-    x = ~geo_join_id, 
-    y = ~public_school_children_5_14_yrs_old_with_asthma, 
-    color = ~geo_place_name,
-    text = ~geo_place_name,
-    frame = ~time_period,
-    hoverinfo = "text",
-    type = 'bar'
-  )
+#bar_uhf_asthma =
+#  tidy_asthma %>%
+#  filter(geo_type_name == "UHF42") %>%
+#  arrange(geo_join_id) %>%
+#    plot_ly(
+#    x = ~geo_join_id, 
+#    y = ~public_school_children_5_14_yrs_old_with_asthma, 
+#    color = ~geo_place_name,
+#    text = ~geo_place_name,
+#    frame = ~time_period,
+#    hoverinfo = "text",
+#    type = 'bar'
+#  )
   
-bar_uhf_asthma
+#bar_uhf_asthma
 ```
 
 ```{r}
-bar_uhf_persistent =
-  tidy_asthma %>%
-  filter(geo_type_name == "UHF42") %>%
-  arrange(geo_join_id) %>%
-  plot_ly(
-    x = ~geo_join_id, 
-    y = ~public_school_children_5_14_yrs_old_with_persistent_asthma, 
-    color = ~geo_place_name,
-    text = ~geo_place_name,
-    frame = ~time_period,
-    hovertemplate = paste(
-      "<b>%{text}</b><br>",
-      "<i>Rate</i>: %{y:.2f}"),
-    type = 'bar'
-  )
+#bar_uhf_persistent =
+#  tidy_asthma %>%
+#  filter(geo_type_name == "UHF42") %>%
+#  arrange(geo_join_id) %>%
+#  plot_ly(
+#    x = ~geo_join_id, 
+#    y = ~public_school_children_5_14_yrs_old_with_persistent_asthma, 
+#    color = ~geo_place_name,
+#    text = ~geo_place_name,
+#    frame = ~time_period,
+#    hovertemplate = paste(
+#      "<b>%{text}</b><br>",
+#      "<i>Rate</i>: %{y:.2f}"),
+#    type = 'bar'
+#  )
 
-bar_uhf_persistent
+#bar_uhf_persistent
 ```
 
 ```{r}
-plot_borough_asthma =
-  tidy_asthma %>%
-  filter(geo_type_name == "Borough") %>%
-  arrange(geo_join_id) %>%
-  plot_ly(
-    x = ~geo_place_name, 
-    y = ~public_school_children_5_14_yrs_old_with_asthma, 
-    color = ~geo_place_name,
-    text = ~geo_place_name,
-    frame = ~time_period,
-    hovertemplate = paste(
-      "<b>%{x}</b><br>",
-      "<i>Rate</i>: %{y:.2f}"),
-    type = 'bar'
-  )
+#plot_borough_asthma =
+#  tidy_asthma %>%
+#  filter(geo_type_name == "Borough") %>%
+#  arrange(geo_join_id) %>%
+#  plot_ly(
+#    x = ~geo_place_name, 
+#    y = ~public_school_children_5_14_yrs_old_with_asthma, 
+#    color = ~geo_place_name,
+#    text = ~geo_place_name,
+#    frame = ~time_period,
+#    hovertemplate = paste(
+#      "<b>%{x}</b><br>",
+#      "<i>Rate</i>: %{y:.2f}"),
+#    type = 'bar'
+#  )
 
-plot_borough_asthma
+#plot_borough_asthma
 ```
 
 ```{r}
-plot_borough_persistent =
-  tidy_asthma %>%
-  filter(geo_type_name == "Borough") %>%
-  arrange(geo_join_id) %>%
-  plot_ly(
-    x = ~geo_place_name, 
-    y = ~public_school_children_5_14_yrs_old_with_persistent_asthma, 
-    color = ~geo_place_name,
-    text = ~geo_place_name,
-    frame = ~time_period,
-    hovertemplate = paste(
-      "<b>%{x}</b><br>",
-      "<i>Rate</i>: %{y:.2f}"),
-    type = 'bar'
-  )
+#plot_borough_persistent =
+#  tidy_asthma %>%
+#  filter(geo_type_name == "Borough") %>%
+#  arrange(geo_join_id) %>%
+#  plot_ly(
+#   x = ~geo_place_name, 
+#    y = ~public_school_children_5_14_yrs_old_with_persistent_asthma, 
+#    color = ~geo_place_name,
+#    text = ~geo_place_name,
+#    frame = ~time_period,
+#    hovertemplate = paste(
+#      "<b>%{x}</b><br>",
+#      "<i>Rate</i>: %{y:.2f}"),
+#    type = 'bar'
+#  )
 
-plot_borough_persistent
+#plot_borough_persistent
 ```
 
 ```{r}
-plot_borough_cockroach =
-  tidy_asthma %>%
-  filter(geo_type_name == "Borough") %>%
-  arrange(geo_join_id) %>%
-  plot_ly(
-    x = ~geo_place_name, 
-    y = ~homes_with_cockroaches, 
-    color = ~geo_place_name,
-    text = ~geo_place_name,
-    frame = ~time_period,
-    hovertemplate = paste(
-      "<b>%{x}</b><br>",
-      "<i>Percent</i>: %{y:.2f}"),
-    type = 'bar'
-  )
+#plot_borough_cockroach =
+#  tidy_asthma %>%
+#  filter(geo_type_name == "Borough") %>%
+#  arrange(geo_join_id) %>%
+#  plot_ly(
+#    x = ~geo_place_name, 
+#    y = ~homes_with_cockroaches, 
+#    color = ~geo_place_name,
+#    text = ~geo_place_name,
+#    frame = ~time_period,
+#    hovertemplate = paste(
+#      "<b>%{x}</b><br>",
+#     "<i>Percent</i>: %{y:.2f}"),
+#    type = 'bar'
+#  )
 
-plot_borough_cockroach
+#plot_borough_cockroach
 ```
 
-test_2 = 
-  tidy_asthma %>%
-  ggplot(aes(x = geo_join_id, y = public_school_children_5_14_yrs_old_with_asthma, frame = time_period)) +
-geom_point(aes(colour = geo_join_id, alpha = 0.5)) + 
-labs(title = "Test",
-x = 'UHF Code', 
-y = 'Public School Children (5-14 Years Old) with Asthma (%)',
-colour = 'Year') +
-theme(plot.title = element_text(size = 40, face = "bold"),
-axis.text = element_text(size = 18),
-axis.title = element_text(size = 18,face = "bold")) + 
-theme(legend.text = element_text(size = 16), legend.title = element_text(size = 18,face = "bold") ) +
-transition_states(time_period, transition_length = 1, state_length = 3, wrap = TRUE) +
-  enter_fade() +
-  exit_fade()
 
-animate(test_2, fps = 2, height = 600, width = 1000)
 
 
     
