@@ -229,7 +229,7 @@ To assess the crude relationship between these two variables, we analyzed the co
 
 ```{r}
 
-chart.Correlation(tidy_asthma[,5:9], histogram = TRUE, method = c("pearson", "kendall", "spearman"))
+chart.Correlation(tidy_asthma[,5:8], histogram = TRUE, method = c("pearson", "kendall", "spearman"))
 ```
 
 A correlation matrix was then compiled to analyze our other predictors. The correlation matrix displays the baseline association between each variable. All of the correlations between predictors and `homes_with_cockroaches` are above 0.53 which indicates a fairly strong positive correlation. Pearson _r_ values between predictors and `homes_with_cockroaches`:

@@ -544,7 +544,7 @@ roach_asth_borough</code></pre>
 </div>
 <div id="correlation-matrix" class="section level3">
 <h3><em>Correlation Matrix</em></h3>
-<pre class="r"><code>chart.Correlation(tidy_asthma[,5:9], histogram = TRUE, method = c(&quot;pearson&quot;, &quot;kendall&quot;, &quot;spearman&quot;))</code></pre>
+<pre class="r"><code>chart.Correlation(tidy_asthma[,5:8], histogram = TRUE, method = c(&quot;pearson&quot;, &quot;kendall&quot;, &quot;spearman&quot;))</code></pre>
 <p><img src="Overview_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>A correlation matrix was then compiled to analyze our other predictors. The correlation matrix displays the baseline association between each variable. All of the correlations between predictors and <code>homes_with_cockroaches</code> are above 0.53 which indicates a fairly strong positive correlation. Pearson <em>r</em> values between predictors and <code>homes_with_cockroaches</code>:</p>
 <ul>
