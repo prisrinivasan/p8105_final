@@ -564,13 +564,12 @@ roach_asth_borough</code></pre>
 <pre class="r"><code>set.seed(10)
 library(ggplot2)
 
-ggplot_data = 
-tidy_asthma %&gt;%
-  filter(time_period == c(&quot;2011&quot;, &quot;2014&quot;))</code></pre>
-<pre><code>## Warning in time_period == c(&quot;2011&quot;, &quot;2014&quot;): longer object length is not a
-## multiple of shorter object length</code></pre>
-<pre class="r"><code>plot_tidy = 
-ggplot(ggplot_data, aes(x = homes_with_cockroaches, y = public_school_children_5_14_yrs_old_with_asthma, color = homes_with_cockroaches)) +
+tidy_asthma_1 = 
+  tidy_asthma %&gt;%
+  filter(time_period == c(&quot;2011&quot;, &quot;2014&quot;))
+
+plot_tidy = 
+ggplot(tidy_asthma_1, aes(x = homes_with_cockroaches, y = public_school_children_5_14_yrs_old_with_asthma, color = homes_with_cockroaches)) +
   geom_point() + 
   geom_smooth(method = &quot;lm&quot;) +
   facet_grid(~time_period) +
@@ -590,11 +589,11 @@ plot_tidy</code></pre>
 <h3><em>Table</em></h3>
 <pre class="r"><code>crude_model = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches, data = tidy_asthma)
 
-
 model1_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches * poverty, data = tidy_asthma)
 
-model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty, data = tidy_asthma) </code></pre>
-<pre class="r"><code>tab_model(crude_model, model1_fit, model2_fit, show.stat = TRUE, show.aic = TRUE)</code></pre>
+model2_fit = lm(public_school_children_5_14_yrs_old_with_asthma ~ homes_with_cockroaches + poverty, data = tidy_asthma) 
+
+tab_model(crude_model, model1_fit, model2_fit, show.stat = TRUE, show.aic = TRUE)</code></pre>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
