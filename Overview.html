@@ -398,11 +398,11 @@ div.tocify {
 
 <div id="introduction-and-motivation" class="section level2">
 <h2>Introduction and Motivation</h2>
-<p>Asthma is one of the most common chronic conditions in children across the United States, currently affecting more than <a href="https://www.aafa.org/asthma-facts/">6 million children</a>. New York City (NYC) hosts a much higher prevalence of childhood asthma <a href="https://www1.nyc.gov/assets/doh/downloads/pdf/epi/databrief90.pdf">(13%)</a> than the rest of the United States <a href="https://www.cdc.gov/nchs/fastats/asthma.htm">(7.5%)</a>. Interestingly, literature also shows an association between cockroach levels, and cockroach populations are projected to continue increasing in NYC. This project was done to explore the relationship between cockroach prevalence in NYC and rate of asthma among public school children aged 5-14.</p>
+<p>The motivation for this project was the high prevalence of childhood asthma in New York City, as detailed in the <a href="https://prisrinivasan.github.io/p8105_final/about.html">about</a> page. <a href="https://www.cdc.gov/asthma/triggers_indoor.html">Historically</a>, indoor allergens including household pests have been linked with asthma in children. Cockroaches <a href="https://rdcu.be/bX3KA">in particular</a> are thought to exacerbate asthma symptoms. In the report below, we explored the association between asthma and cockroaches using correlation and regression analyses.</p>
 </div>
 <div id="related-work" class="section level2">
 <h2>Related Work</h2>
-<p>We were inspired by our collective interest in environmental health and by classes we took during the CORE semester. In addition, we were inspired by the fact that having asthma is more than just a chronic illness. It is also a social justice issue. The following sites were the basis of our inspiration:</p>
+<p>This project was inspired by the team’s collective interest in environmental health, as well as heightened attention from the public health community on the social justice impacts of chronic illnesses. The following sites were the basis of our inspiration:</p>
 <ul>
 <li>Why asthma is a social justice <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html">issue</a></li>
 <li>Staten Island Asthma <a href="https://www.statenislandusa.com/asthma-coalition.html">Coalition</a></li>
@@ -810,7 +810,7 @@ poverty
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-homes_with_cockroaches * poverty
+homes_with_cockroaches *<br>poverty
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 </td>
@@ -885,9 +885,9 @@ AIC
 </tr>
 </table>
 <hr />
-<p>We chose the crude model in the end because poverty may be a large confounder of the relationship between homes with cockroaches and rate of asthma. Our final estimated model predicting <code>public_school_children_5_14_yrs_old_with_asthma</code> based on the first column is below:</p>
-<p><span class="math display">\[ y_i = 43.65 + 0.11*homes\_with\_cockroaches + \epsilon_{i} \]</span></p>
-<p>Future exploration could include analysis on poverty as a confounder or effect measure modifier. Further analysis should also include demographic variables and their interactions to improve significance, the <span class="math inline">\({r}^2\)</span> value, and further decrease the AIC.</p>
+<p>Our analyses confirmed that the relationship between asthma and cockroaches is confounded by poverty. From a purely statistical standpoint, we chose the crude model based on significance of exposure with respect to outcome. Our final estimated model predicting <code>public_school_children_5_14_yrs_old_with_asthma</code> based on the first column is below:</p>
+<p><span class="math display">\[ y_i = 39.51 + 1.03*homes\_with\_cockroaches + \epsilon_{i} \]</span></p>
+<p>Future exploration should include analysis of poverty and other socieconomic factors, along with their interactions to improve significance, maximize the <span class="math inline">\({r}^2\)</span> value, and minimize the AIC.</p>
 </div>
 </div>
 <div id="discussion" class="section level2">
@@ -897,9 +897,10 @@ AIC
 <li><p>Overall, a strong positive correlation was observed between asthma and cockroaches. The highest asthma rates were observed among children in the Bronx. The highest proportion of homes with cockroaches was also observed in the Bronx. Furthermore, the strongest correlation between asthma and cockroaches was observed in the Bronx.</p></li>
 <li><p>In particular, the strength of association between homes with cockroaches and poverty, as well as the association between homes with cockroaches and hospitalization, are rather strong, with correlations <em>r</em> = 0.88 and <em>r</em> = 0.77 respectively. This aligns with previous research done by the <a href="https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pubmed/21536321/">New York City Neighborhood Asthma and Allergy Study (NAAS)</a>, and <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html">other sources</a>. Although the <a href="https://www1.nyc.gov/site/doh/health/health-topics/asthma.page">NYC Department of Health</a> stated that the best way to manage asthma is through doctor’s visits, medication, avoiding triggers, and asthma management at school, this is not feasible for many people due to lack of access to high-quality healthcare, as discussed in this <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html">article</a>.</p></li>
 <li><p>Based on our table, we can see that in the crude model, predictor <code>homes_with_cockroaches</code> has a <span class="math inline">\(\hat{\beta}\)</span> coefficient of 1.03. However, when we add poverty into the model, we see that the <span class="math inline">\(\hat{\beta}\)</span> coefficient of <code>homes_with_cockroaches</code> changes to 0.11, suggesting that poverty confounds the association between homes with cockroaches and number of public school children ages 5 to 14 with asthma. It would be interesting to explore poverty as a predictor in the model for future analyses.</p></li>
-<li><p>In addition, the positive linear association between percent of children with asthma and percent of homes with cockroaches at home between years 2011 and 2014 provides further evidence that the percentage of school children with asthma is continuing to increase, as stated in this <a href="https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pmc/articles/PMC4803579/">article</a>. Visualization of asthma prevalence by neighborhood and by borough display this increase as well.</p></li>
+<li><p>The positive linear association between percent of children with asthma and percent of homes with cockroaches at home between years 2011 and 2014 provides further evidence that the percentage of school children with asthma is continuing to increase, as stated in this <a href="https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pmc/articles/PMC4803579/">article</a>. Visualization of asthma prevalence by neighborhood and by borough display this increase as well.</p></li>
+<li><p>Overall, the relationship between asthma and cockroaches is more complex than a simple regression model can address. Future work should attempt to control for socioeconomic factors and other potential confounders.</p></li>
 <li><p>Visualization of geographic variation of cockroach and asthma prevalence can provide insight for different interventions–such as the one conducted in <a href="https://www-sciencedirect-com.ezproxy.cul.columbia.edu/science/article/pii/S0091674916313495">New Orleans</a>– in target neighborhoods such as Crotona, Tremont, Hunts Point, and Mott Haven– all of which are located in the Bronx. However, it is interesting to note that Williamsburg, which is now known to be a rather affluent neighborhood, has high cockroach prevalence. This could point out to the fact that it is difficult to decrease number of cockroaches in an area, and thus other types of interventions need to be done to decrease number of children developing asthma. Also, based on our coding, Rikers Island is coded as part of the neighborhood “West Queens,” displaying a asthma rate of 54.6 per 1000 in 2011, and 77.3 per 1000 in 2014. Future studies could explore the relationship between cockroach prevalence and environmental habitats.</p></li>
-<li><p>Similar to <a href="https://www.cdc.gov/pcd/issues/2019/19_0074.htm">previous research</a>, there are several limitations, including not having and including all the confounding health and sociodemographic factors that were not accounted for, such as immigration status, race, gender, etc.</p></li>
+<li><p>Similar to <a href="https://www.cdc.gov/pcd/issues/2019/19_0074.htm">previous research</a>, there are several limitations, including not having and including all the confounding health and sociodemographic factors that were not accounted for, such as immigration status, race, gender, etc. Temporality is another limitation given the cross-sectional nature of our analysis.</p></li>
 </ul>
 </div>
 <div id="additional-observations" class="section level2">
