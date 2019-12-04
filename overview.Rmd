@@ -1,5 +1,5 @@
 ---
-title: "Asthma and Cockroaches: Final Report"
+title: "Final Report"
 output: 
   html_document:
     toc: true
@@ -37,11 +37,9 @@ Interestingly, literature also shows an association between cockroach levels, an
 
 We were inspired by our collective interest in environmental health and by classes we took during the CORE semester. In addition, we were inspired by the fact that having asthma is more than just a chronic illness. It is also a social justice issue. The following sites were the basis of our inspiration:
 
-  *[Why is asthma a social justice issue](http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html)
-
-  *[Staten Island Asthma Coalition](https://www.statenislandusa.com/asthma-coalition.html)
-
-  *[Bronx Respirar Asthma Coalition](http://www.asthmacommunitynetwork.org/node/14847)
+* Why asthma is a social justice [issue](http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html)
+* Staten Island Asthma [Coalition](https://www.statenislandusa.com/asthma-coalition.html)
+* Bronx Respirar Asthma [Coalition](http://www.asthmacommunitynetwork.org/node/14847)
 
 ## Project Goals
 * Visualize distributions of childhood asthma prevalence across NYC neighborhoods
@@ -51,6 +49,7 @@ We were inspired by our collective interest in environmental health and by class
 ## Initial Questions 
 
 Based on existing literature discussed in our [about](about.html) page, we can see that cockroaches and related allergens could be correlated with prevalence of asthma. We were interested in the following questions:
+
 * Which boroughs and neighborhoods are most affected by cockroaches? 
 * Which boroughs and neighborhoods have highest prevalence of childhood asthma? 
 * Do neighborhoods with a greater proportion of homes with cockroaches also show higher rates of childhood asthma? 
@@ -193,7 +192,11 @@ p1 =
   labs(
     x = "Percent of Homes with Cockroaches",
     y = "Frequency",
-    title = "Cockroaches by Borough") 
+    title = "Cockroaches by Borough") +
+  theme(strip.text.x = element_text(size = 6)) +
+  scale_x_continuous(
+    breaks = c(25, 50), 
+    labels = c("25", "50")) 
 
 p2 = 
   tidy_asthma_sf_ll %>%
@@ -203,7 +206,11 @@ p2 =
   labs(
     x = "Rate of Public School Children with Asthma",
     y = "Frequency",
-    title = "Childhood Asthma by Borough")
+    title = "Childhood Asthma by Borough") +
+  theme(strip.text.x = element_text(size = 6)) +
+  scale_x_continuous(
+    breaks = c(50, 100), 
+    labels = c("50", "100"))
 
 p1 + p2
 ```

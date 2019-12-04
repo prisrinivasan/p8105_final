@@ -12,7 +12,7 @@
 
 
 
-<title>Asthma and Cockroaches: Final Report</title>
+<title>Final Report</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -391,7 +391,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Asthma and Cockroaches: Final Report</h1>
+<h1 class="title toc-ignore">Final Report</h1>
 
 </div>
 
@@ -403,9 +403,11 @@ div.tocify {
 <div id="related-work" class="section level2">
 <h2>Related work</h2>
 <p>We were inspired by our collective interest in environmental health and by classes we took during the CORE semester. In addition, we were inspired by the fact that having asthma is more than just a chronic illness. It is also a social justice issue. The following sites were the basis of our inspiration:</p>
-<p>*<a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html">Why is asthma a social justice issue</a></p>
-<p>*<a href="https://www.statenislandusa.com/asthma-coalition.html">Staten Island Asthma Coalition</a></p>
-<p>*<a href="http://www.asthmacommunitynetwork.org/node/14847">Bronx Respirar Asthma Coalition</a></p>
+<ul>
+<li>Why asthma is a social justice <a href="http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html">issue</a></li>
+<li>Staten Island Asthma <a href="https://www.statenislandusa.com/asthma-coalition.html">Coalition</a></li>
+<li>Bronx Respirar Asthma <a href="http://www.asthmacommunitynetwork.org/node/14847">Coalition</a></li>
+</ul>
 </div>
 <div id="project-goals" class="section level2">
 <h2>Project Goals</h2>
@@ -417,7 +419,14 @@ div.tocify {
 </div>
 <div id="initial-questions" class="section level2">
 <h2>Initial Questions</h2>
-<p>Based on existing literature discussed in our <a href="about.html">about</a> page, we can see that cockroaches and related allergens could be correlated with prevalence of asthma. We were interested in the following questions: * Which boroughs and neighborhoods are most affected by cockroaches? * Which boroughs and neighborhoods have highest prevalence of childhood asthma? * Do neighborhoods with a greater proportion of homes with cockroaches also show higher rates of childhood asthma? * Have childhood asthma rates increased over time? * To what degree is the relationship between cockroaches and asthma affected by income?</p>
+<p>Based on existing literature discussed in our <a href="about.html">about</a> page, we can see that cockroaches and related allergens could be correlated with prevalence of asthma. We were interested in the following questions:</p>
+<ul>
+<li>Which boroughs and neighborhoods are most affected by cockroaches?</li>
+<li>Which boroughs and neighborhoods have highest prevalence of childhood asthma?</li>
+<li>Do neighborhoods with a greater proportion of homes with cockroaches also show higher rates of childhood asthma?</li>
+<li>Have childhood asthma rates increased over time?</li>
+<li>To what degree is the relationship between cockroaches and asthma affected by income?</li>
+</ul>
 <p>Using our tidied dataset described below, we explored these interests.</p>
 </div>
 <div id="data" class="section level2">
@@ -519,7 +528,11 @@ write.csv(tidy_asthma,&quot;./final_data/tidy_asthma.csv&quot;, row.names = FALS
   labs(
     x = &quot;Percent of Homes with Cockroaches&quot;,
     y = &quot;Frequency&quot;,
-    title = &quot;Cockroaches by Borough&quot;) 
+    title = &quot;Cockroaches by Borough&quot;) +
+  theme(strip.text.x = element_text(size = 6)) +
+  scale_x_continuous(
+    breaks = c(25, 50), 
+    labels = c(&quot;25&quot;, &quot;50&quot;)) 
 
 p2 = 
   tidy_asthma_sf_ll %&gt;%
@@ -529,7 +542,11 @@ p2 =
   labs(
     x = &quot;Rate of Public School Children with Asthma&quot;,
     y = &quot;Frequency&quot;,
-    title = &quot;Childhood Asthma by Borough&quot;)
+    title = &quot;Childhood Asthma by Borough&quot;) +
+  theme(strip.text.x = element_text(size = 6)) +
+  scale_x_continuous(
+    breaks = c(50, 100), 
+    labels = c(&quot;50&quot;, &quot;100&quot;))
 
 p1 + p2</code></pre>
 <p><img src="Overview_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
@@ -793,7 +810,7 @@ poverty
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-homes_with_cockroaches * poverty
+homes_with_cockroaches *<br>poverty
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 </td>
