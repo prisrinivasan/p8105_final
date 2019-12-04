@@ -92,7 +92,7 @@ The analyses presented here explore the association between childhood asthma and
 roach_map = 
 tidy_asthma_sf_ll %>%
   filter(time_period == 2014) %>% 
-  mutate(roach_label = str_c("Homes with Cockroaches: ", homes_with_cockroaches, "\n, Neighborhood: ", uhf_neigh)) %>% 
+  mutate(roach_label = str_c("Homes with Cockroaches: ", homes_with_cockroaches,"%", "\n, Neighborhood: ", uhf_neigh)) %>% 
     leaflet() %>%
     addProviderTiles("CartoDB.Positron") %>%
     addPolygons(stroke = TRUE,
