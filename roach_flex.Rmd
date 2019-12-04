@@ -70,6 +70,7 @@ Column {width = 650}
 xa_2 = list(
   title = "Borough"
 )
+
 tidy_asthma %>%
   filter(geo_type_name == "Borough") %>%
   arrange(geo_join_id) %>%
