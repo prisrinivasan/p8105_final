@@ -40,7 +40,6 @@ ya = list(
 
 tidy_asthma %>%
   filter(geo_type_name == "UHF42") %>%
-  arrange(geo_join_id) %>%
     plot_ly(
     x = ~geo_join_id, 
     y = ~public_school_children_5_14_yrs_old_with_asthma, 
