@@ -33,7 +33,7 @@ tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
 Asthma is one of the most common chronic conditions in children across the United States, currently affecting more than [6 million children](https://www.aafa.org/asthma-facts/). New York City (NYC) hosts a much higher prevalence of childhood asthma [(13%)](https://www1.nyc.gov/assets/doh/downloads/pdf/epi/databrief90.pdf) than the rest of the United States [(7.5%)](https://www.cdc.gov/nchs/fastats/asthma.htm).
 Interestingly, literature also shows an association between cockroach levels, and cockroach populations are projected to continue increasing in NYC. This project was done to explore the relationship between cockroach prevalence in NYC and rate of asthma among public school children aged 5-14.
 
-## Related work 
+## Related Work 
 
 We were inspired by our collective interest in environmental health and by classes we took during the CORE semester. In addition, we were inspired by the fact that having asthma is more than just a chronic illness. It is also a social justice issue. The following sites were the basis of our inspiration:
 
@@ -86,7 +86,7 @@ We downloaded all available data from the [NYC Gov Environmental & Health Data P
 
 Spatial geometries were taken from the NYC Health Department's [GIS Center](https://www1.nyc.gov/site/doh/data/health-tools/maps-gis-data-files-for-download.page). The map was built using the United Hospital Fund (UHF) neighborhood code key from [NYC Health](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTPDF/uhf42.pdf). 
 
-### Loading and tidying the data 
+### _Loading and Tidying the Data_ 
 
 ```{r tidying data, eval = TRUE, message = FALSE, warning = FALSE}
 all_data = 

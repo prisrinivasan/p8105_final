@@ -4,7 +4,7 @@ output: html_document
 ---
 <center>
 </font>
-<br><br>
+<br>
 
 <font size="3"> _Hannah Bowlin, Lorraine Kwok, Priyanka Srinivasan, Alice Tivarovsky, Kelly Wang_ </font>
 <br><br>
