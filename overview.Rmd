@@ -33,9 +33,31 @@ tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
 Asthma is one of the most common chronic conditions in children across the United States, currently affecting more than [6 million children](https://www.aafa.org/asthma-facts/). New York City (NYC) hosts a much higher prevalence of childhood asthma [(13%)](https://www1.nyc.gov/assets/doh/downloads/pdf/epi/databrief90.pdf) than the rest of the United States [(7.5%)](https://www.cdc.gov/nchs/fastats/asthma.htm).
 Interestingly, literature also shows an association between cockroach levels, and cockroach populations are projected to continue increasing in NYC. This project was done to explore the relationship between cockroach prevalence in NYC and rate of asthma among public school children aged 5-14.
 
+## Related work 
+
+We were inspired by our collective interest in environmental health and by classes we took during the CORE semester. In addition, we were inspired by the fact that having asthma is more than just a chronic illness. It is also a social justice issue. The following sites were the basis of our inspiration:
+
+  *[Why is asthma a social justice issue](http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html)
+
+  *[Staten Island Asthma Coalition](https://www.statenislandusa.com/asthma-coalition.html)
+
+  *[Bronx Respirar Asthma Coalition](http://www.asthmacommunitynetwork.org/node/14847)
+
+## Project Goals
+* Visualize distributions of childhood asthma prevalence across NYC neighborhoods
+* Measure the relationship between childhood asthma and cockroaches, socioeconomic status, and asthma-related hospitalizations
+* Visualize time trends in childhood asthma
+
 ## Initial Questions 
 
-Based on existing literature discussed in our [about](about.html) page, we can see that cockroaches and related allergens could be correlated with prevalence of asthma in New York City. For example, the charts below show the distributions of cockroaches (left) and childhood asthma (right) by NYC borough. We are interested in exploring the relationship between cockroaches and asthma prevalence in New York City, **predicting that neighborhoods with a greater number of homes with cockroaches would also show higher rates of asthma in our population**. To do so, we wanted to **visualize the prevalence of roaches and asthma in New York as well as their correlations** using what we have learned in the course so far. Using our tidied dataset described below, we explored these interests.
+Based on existing literature discussed in our [about](about.html) page, we can see that cockroaches and related allergens could be correlated with prevalence of asthma. We were interested in the following questions:
+* Which boroughs and neighborhoods are most affected by cockroaches? 
+* Which boroughs and neighborhoods have highest prevalence of childhood asthma? 
+* Do neighborhoods with a greater proportion of homes with cockroaches also show higher rates of childhood asthma? 
+* Have childhood asthma rates increased over time? 
+* To what degree is the relationship between cockroaches and asthma affected by income?  
+
+Using our tidied dataset described below, we explored these interests.
 
 ## Data
 
@@ -312,7 +334,7 @@ In the process of analyzing the association between prevalence of cockroach in h
 
 * In addition, the positive linear association between percent of children with asthma and percent of homes with cockroaches at home between years 2011 and 2014 provides further evidence that the percentage of school children with asthma is continuing to increase, as stated in this [article](https://www-ncbi-nlm-nih-gov.ezproxy.cul.columbia.edu/pmc/articles/PMC4803579/). Visualization of asthma prevalence by neighborhood and by borough display this increase as well.
 
-* Visualization of geographic variation of cockroach and asthma prevalence can provide insight for different interventions--such as the one conducted in [New Orleans](https://www-sciencedirect-com.ezproxy.cul.columbia.edu/science/article/pii/S0091674916313495)-- in target neighborhoods such as Crotona, Tremont, Hunts Point, and Mott Haven-- all of which are located in the Bronx. However, it is interesting to note that Williamsburg, which is now known to be a rather affluent neighborhood, has high cockroach prevalence. This could point out to the fact that it is difficult to decrease number of cockroaches in an area, and thus other types of interventions need to be done to decrease number of children developing asthma. Also, based off of our coding, it is interesting to note that Rikers Island is coded as part of the neighborhood "West Queens," displaying a asthma rate of 54.6 per 1000 in 2011, and 77.3 per 1000 in 2014. Future studies could explore the relationship between cockroach prevalence and environmental habitats. 
+* Visualization of geographic variation of cockroach and asthma prevalence can provide insight for different interventions--such as the one conducted in [New Orleans](https://www-sciencedirect-com.ezproxy.cul.columbia.edu/science/article/pii/S0091674916313495)-- in target neighborhoods such as Crotona, Tremont, Hunts Point, and Mott Haven-- all of which are located in the Bronx. However, it is interesting to note that Williamsburg, which is now known to be a rather affluent neighborhood, has high cockroach prevalence. This could point out to the fact that it is difficult to decrease number of cockroaches in an area, and thus other types of interventions need to be done to decrease number of children developing asthma. Also, based on our coding, Rikers Island is coded as part of the neighborhood "West Queens," displaying a asthma rate of 54.6 per 1000 in 2011, and 77.3 per 1000 in 2014. Future studies could explore the relationship between cockroach prevalence and environmental habitats. 
 
 *	Similar to [previous research](https://www.cdc.gov/pcd/issues/2019/19_0074.htm), there are several limitations, including not having and including all the confounding health and sociodemographic factors that were not accounted for, such as immigration status, race, gender, etc. 
 
@@ -323,14 +345,6 @@ Using the `shiny` and `leaflet` packages, we created a [visualization](https://p
 
 The dashboard includes `plotly` bar charts showing asthma prevalence in boroughs and neighborhood among public school children aged 5 - 14 years old over a four-year period. Playing these graphs, we can see that asthma prevalence has generally increased each year from 2011 to 2014.
 
-## Related work 
 
-We were inspired to work on this project given our collective interest in environmental health and from classes we took during the CORE semester of the Master of Public Health program here at Columbia University's Mailman School of Public Health. In addition, we were inspired by the fact that having asthma is more than just a chronic illness. It is also a social justice issue. The following sites were the basis of our inspiration:
-
-  *[Why is asthma a social justice issue](http://a816-dohbesp.nyc.gov/IndicatorPublic/Closerlook/povasthma/index.html)
-
-  *[Staten Island Asthma Coalition](https://www.statenislandusa.com/asthma-coalition.html)
-
-  *[Bronx Respirar Asthma Coalition](http://www.asthmacommunitynetwork.org/node/14847)
 
 
