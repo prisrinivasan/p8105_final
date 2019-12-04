@@ -191,7 +191,11 @@ p1 =
   labs(
     x = "Percent of Homes with Cockroaches",
     y = "Frequency",
-    title = "Cockroaches by Borough") 
+    title = "Cockroaches by Borough") +
+  theme(strip.text.x = element_text(size = 6)) +
+  scale_x_continuous(
+    breaks = c(25, 50), 
+    labels = c("25", "50")) 
 
 p2 = 
   tidy_asthma_sf_ll %>%
@@ -201,7 +205,11 @@ p2 =
   labs(
     x = "Rate of Public School Children with Asthma",
     y = "Frequency",
-    title = "Childhood Asthma by Borough")
+    title = "Childhood Asthma by Borough") +
+  theme(strip.text.x = element_text(size = 6)) +
+  scale_x_continuous(
+    breaks = c(50, 100), 
+    labels = c("50", "100"))
 
 p1 + p2
 ```

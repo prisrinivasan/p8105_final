@@ -521,7 +521,11 @@ write.csv(tidy_asthma,&quot;./final_data/tidy_asthma.csv&quot;, row.names = FALS
   labs(
     x = &quot;Percent of Homes with Cockroaches&quot;,
     y = &quot;Frequency&quot;,
-    title = &quot;Cockroaches by Borough&quot;) 
+    title = &quot;Cockroaches by Borough&quot;) +
+  theme(strip.text.x = element_text(size = 6)) +
+  scale_x_continuous(
+    breaks = c(25, 50), 
+    labels = c(&quot;25&quot;, &quot;50&quot;)) 
 
 p2 = 
   tidy_asthma_sf_ll %&gt;%
@@ -531,7 +535,11 @@ p2 =
   labs(
     x = &quot;Rate of Public School Children with Asthma&quot;,
     y = &quot;Frequency&quot;,
-    title = &quot;Childhood Asthma by Borough&quot;)
+    title = &quot;Childhood Asthma by Borough&quot;) +
+  theme(strip.text.x = element_text(size = 6)) +
+  scale_x_continuous(
+    breaks = c(50, 100), 
+    labels = c(&quot;50&quot;, &quot;100&quot;))
 
 p1 + p2</code></pre>
 <p><img src="Overview_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
@@ -795,7 +803,7 @@ poverty
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-homes_with_cockroaches *<br>poverty
+homes_with_cockroaches * poverty
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 </td>
