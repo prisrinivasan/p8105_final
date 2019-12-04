@@ -3,6 +3,7 @@ title: "Asthma in NYC Neighborhoods"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
+    source_code: embed
     vertical_layout: fill
     navbar:
       - icon: fa-home
