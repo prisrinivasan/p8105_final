@@ -18,60 +18,8 @@ library(sp)
 library(devtools)
 library(rgdal)
 library(magick)
-
-#tidied code below
-all_data = 
-read.csv(file = "./final_data/all_available_data.csv") %>% 
-  janitor::clean_names() %>% 
-  filter(name %in% c("Homes with Cockroaches", 
-                     "Poverty", 
-                     "Public School Children (5-14 Yrs Old) with Asthma", 
-                     "Public School Children (5-14 Yrs Old) with Persistent Asthma", 
-                     "Asthma Hospitalizations (Children 5 to 17 Yrs Old)"),
-        geo_type_name %in% c("UHF42", "Borough"), 
-        measure %in% c("Percent", "Rate")
-         ) %>% 
-  mutate(geo_join_id = as.character(geo_join_id),
-         geo_join_id = if_else(geo_place_name == "Bensonhurst - Bay Ridge", "209", geo_join_id),
-         geo_join_id = as.factor(geo_join_id)) %>% 
-  pivot_wider(
-    names_from = name, 
-    values_from = data_value
-    ) %>%
-  mutate(time_period = recode(time_period, "2010-2011" = "2011", "2011-2012" = "2012", "2012-2013" = "2013", "2013-2014" = "2014", "2010-2014" = "2011")) %>%
-  filter(time_period %in% c("2011", "2012", "2013", "2014")) %>% 
-  janitor::clean_names() %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old)
-
-df1 = all_data  %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, homes_with_cockroaches) %>% 
-  drop_na()
-
-df2 = all_data %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, poverty) %>% 
-  drop_na()
-
-df3 = all_data %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_asthma) %>% 
-  drop_na()
-
-df4 = all_data %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, public_school_children_5_14_yrs_old_with_persistent_asthma) %>% 
-  drop_na()
-
-df5 = all_data %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, measure, indicator_id, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
-  drop_na()
-
 tidy_asthma = 
-  full_join(df1, df2, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
-  full_join(df3, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
-  full_join(df4, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
-  full_join(df5, by = c("geo_type_name", "geo_join_id", "time_period", "geo_place_name")) %>% 
-  select(geo_type_name, geo_join_id, time_period, geo_place_name, homes_with_cockroaches, poverty, public_school_children_5_14_yrs_old_with_asthma, public_school_children_5_14_yrs_old_with_persistent_asthma, asthma_hospitalizations_children_5_to_17_yrs_old) %>% 
-  mutate(time_period = as.numeric(levels(time_period)) [time_period],
-         geo_join_id = as.character(as.numeric(levels(geo_join_id)) [geo_join_id]),
-         geo_place_name = as.character(geo_place_name)) 
+  read_csv(file = "./final_data/tidy_asthma.csv")
 ```
 
 
@@ -79,7 +27,6 @@ Column {data-width=650}
 -----------------------------------------------------------------------
 
 ### Chart A: Asthma in NYC Neighborhoods
-
 ```{r}
 #labeling options for axes
 xa_1 = list(
@@ -89,7 +36,6 @@ xa_1 = list(
 ya = list(
   title = "Asthma Prevalence"
 )
-
 tidy_asthma %>%
   filter(geo_type_name == "UHF42") %>%
   arrange(geo_join_id) %>%
@@ -106,7 +52,6 @@ tidy_asthma %>%
 ```
 
 ### Description 
-
 The _Asthma in NYC Neighborhoods_ chart displays asthma rates in different neighborhoods from 2011-2014. Users can move between different years and watch neighborhood asthma rates change across NYC or press `play` to view these changes.
 
 This chart shows the distribution of asthma across neighborhoods over time. The Bronx consistently has the highest asthma prevalence with Hunt's Point as one of the most impacted neighborhoods. Manhattan is generally the borough with the lowest asthma prevalence, although certain neighborhoods such as East Harlem are consistently high. 
@@ -115,8 +60,7 @@ This chart shows the distribution of asthma across neighborhoods over time. The 
 Column {width = 650}
 --------------------------------------------------------------------
 
-### Chart B: Asthma NYC Boroughs
-
+### Chart B: Asthma Prevalence in NYC by Borough
 ```{r}
 #creating new x axis options and reusing y axis label options
 xa_2 = list(
@@ -124,6 +68,7 @@ xa_2 = list(
 )
 tidy_asthma %>%
   filter(geo_type_name == "Borough") %>%
+  arrange(geo_join_id) %>%
   plot_ly(
     x = ~geo_place_name, 
     y = ~public_school_children_5_14_yrs_old_with_asthma, 
@@ -139,7 +84,6 @@ tidy_asthma %>%
 ```
 
 ### Description
-
 The _Asthma in NYC Boroughs_ chart shows the regional asthma trends from 2011-2014. Moving through different years shows the changes in regional asthma prevalence over time.
 
 The Bronx is consistently the highest rate of asthma with Queens following. Brooklyn asthma rates have increased by nearly 15% from 2011 to 2014. Overall, all of the boroughs demonstrate increased asthma prevalence from 2011 to 2014.
