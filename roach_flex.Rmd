@@ -4,6 +4,7 @@ output:
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
+    theme: journal
 ---
 
 ```{r setup, include=FALSE}
@@ -26,6 +27,7 @@ Column {data-width=650}
 -----------------------------------------------------------------------
 
 ### Chart A: Asthma in NYC Neighborhoods
+
 ```{r}
 #labeling options for axes
 xa_1 = list(
@@ -35,6 +37,7 @@ xa_1 = list(
 ya = list(
   title = "Asthma Prevalence"
 )
+
 tidy_asthma %>%
   filter(geo_type_name == "UHF42") %>%
   arrange(geo_join_id) %>%
@@ -51,7 +54,8 @@ tidy_asthma %>%
 ```
 
 ### Description 
-The _Asthma in NYC Neighborhoods_ chart displays asthma rates in different neighborhoods from 2011-2014. Users can move between different years and watch neighborhood asthma rates change across NYC or press `play` to view these changes.
+
+The Asthma in NYC Neighborhoods chart displays asthma rates in different neighborhoods from 2011-2014. Users can move between different years and watch neighborhood asthma rates change across NYC. 
 
 This chart shows the distribution of asthma across neighborhoods over time. The Bronx consistently has the highest asthma prevalence with Hunt's Point as one of the most impacted neighborhoods. Manhattan is generally the borough with the lowest asthma prevalence, although certain neighborhoods such as East Harlem are consistently high. 
 
@@ -60,6 +64,7 @@ Column {width = 650}
 --------------------------------------------------------------------
 
 ### Chart B: Asthma Prevalence in NYC by Borough
+
 ```{r}
 #creating new x axis options and reusing y axis label options
 xa_2 = list(
@@ -84,6 +89,7 @@ tidy_asthma %>%
 ```
 
 ### Description
-The _Asthma in NYC Boroughs_ chart shows the regional asthma trends from 2011-2014. Moving through different years shows the changes in regional asthma prevalence over time.
+
+The Asthma Rate per Borough shows the regional asthma trends from 2011-2014. Moving through different years shows the changes in regional asthma prevalence over time.
 
 The Bronx is consistently the highest rate of asthma with Queens following. Brooklyn asthma rates have increased by nearly 15% from 2011 to 2014. Overall, all of the boroughs demonstrate increased asthma prevalence from 2011 to 2014.
