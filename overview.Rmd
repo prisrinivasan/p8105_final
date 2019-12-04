@@ -49,6 +49,7 @@ We were inspired by our collective interest in environmental health and by class
 ## Initial Questions 
 
 Based on existing literature discussed in our [about](about.html) page, we can see that cockroaches and related allergens could be correlated with prevalence of asthma. We were interested in the following questions:
+
 * Which boroughs and neighborhoods are most affected by cockroaches? 
 * Which boroughs and neighborhoods have highest prevalence of childhood asthma? 
 * Do neighborhoods with a greater proportion of homes with cockroaches also show higher rates of childhood asthma? 
