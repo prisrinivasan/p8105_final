@@ -56,7 +56,6 @@ asthma_pal = colorBin("Reds", bins = asthma_bins)
 
 ```{r, eval = TRUE}
 
-#FIX LEGEND
 asthma_map = 
 tidy_asthma_sf_ll %>%
   filter(time_period == 2014) %>% 
@@ -90,7 +89,6 @@ The analyses presented here explore the association between childhood asthma and
 
 ```{r, eval = TRUE}
 
-#FIX LEGEND
 roach_map = 
 tidy_asthma_sf_ll %>%
   filter(time_period == 2014) %>% 
