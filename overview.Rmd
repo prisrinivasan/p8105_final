@@ -8,7 +8,15 @@ output:
     includes:
       after_body: footers.Rhtml
 ---
+<style type="text/css">
+h1.title {
+  text-align: center;
+}
+</style>
+<center></font><font size="3"> _Hannah Bowlin, Lorraine Kwok, Priyanka Srinivasan, Alice Tivarovsky, Kelly Wang_ </font></center>
 
+
+<br>
 ```{r, eval = TRUE, message = FALSE, include=FALSE}
 library(tidyverse)
 library(PerformanceAnalytics)
