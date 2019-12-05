@@ -354,7 +354,7 @@ In the process of analyzing the association between prevalence of cockroach in h
 
 Using the `shiny` and `leaflet` packages, we created a [visualization](https://prisrinivasan.shinyapps.io/roach_shiny/) of homes with cockroaches in New York City neighborhood. By inputting boroughs and years, the map shows the percentage of homes that have reported seeing a cockroach every day for one month within neighborhoods. Based on this map, most cockroaches are seen in the Bronx, Queens, and Brooklyn, while neighborhoods in lower Manhattan, Staten Island, and closer to Long Island see a relatively lower percent of cockroaches. Switching between 2011 and 2014 (the years for which cockroach data was collected), we can see that the percentage of homes that see cockroaches have generally increased in Brooklyn and Queens.
 
-The dashboard includes `plotly` bar charts showing asthma prevalence in boroughs and neighborhood among public school children aged 5 - 14 years old over a four-year period. Playing these graphs, we can see that asthma prevalence has generally increased each year from 2011 to 2014.
+The dashboard includes `plotly` bar charts showing asthma prevalence in boroughs and neighborhoods among public school children aged 5 - 14 years old over a four-year period. Playing these graphs, we can see that asthma prevalence has generally increased each year from 2011 to 2014.
 
 
 
