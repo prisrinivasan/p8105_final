@@ -63,7 +63,7 @@ Using our tidied dataset described below, we explored these interests.
 
 ## Data
 
-We downloaded all available data from the [NYC Gov Environmental & Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx). The Environmental & Health Data Portal houses data from a variety of sources such as the New York City Automated School Health Records, American Community Survey and New York City Housing and Vacancy Survey (HVS). Data from this portal are used to study how the environment affects health. We initially filtered the dataset to include all variables related to asthma, cockroaches and poverty before finalizing the dataset to include variables only related to public school children with asthma, asthma hospitalizations for children ages 5-17 years old, homes with cockroaches and poverty. Definitions for the variables were taken from the ["Source Information" csv file](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTCsv/AllAvailableData.zip) downloaded with the dataset from the Environmental & Health Data Portal. 
+We downloaded all available data from the [NYC Gov Environmental & Health Data Portal](http://a816-dohbesp.nyc.gov/IndicatorPublic/BuildATable.aspx). The Environmental & Health Data Portal houses data from a variety of sources such as the New York City Automated School Health Records, American Community Survey and New York City Housing and Vacancy Survey (HVS). Data from this portal are used to study how the environment affects health. We initially filtered the dataset to include all variables related to asthma, cockroaches and poverty before finalizing the dataset to include variables only related to public school children with asthma, asthma hospitalizations for children ages 5-17 years old, homes with cockroaches and poverty. Definitions for the variables were taken from the "Source Information" [csv file](http://a816-dohbesp.nyc.gov/IndicatorPublic/EPHTCsv/AllAvailableData.zip) downloaded with the dataset from the Environmental & Health Data Portal. 
 
   * `geo_type_name`: Type of geographical area (i.e borough, UHF42)
   
@@ -143,6 +143,19 @@ tidy_asthma =
 
 ## Saving CSV file
 write.csv(tidy_asthma,"./final_data/tidy_asthma.csv", row.names = FALSE)
+
+## Loading shapefiles 
+shape = st_read("./final_data/shapefiles/", quiet = TRUE)
+
+## Merging shapefiles
+tidy_asthma_sf = merge(shape, tidy_asthma, by.x = "UHFCODE", by.y = "geo_join_id") %>% 
+  janitor::clean_names() %>% 
+  mutate(uhfcode = as.character(uhfcode),
+         time_period = as.character(time_period),
+         homes_with_cockroaches = as.numeric(homes_with_cockroaches))
+
+## Changing geometries to latitude and longitude
+tidy_asthma_sf_ll = st_transform(tidy_asthma_sf, "+proj=longlat +datum=WGS84")
 ```
 
 We downloaded the data as a csv file from the NYC Environmental & Health Data Portal and called the initial dataset `all_available_data`. We restricted our data to include boroughs and UHF42 neighborhoods as our geographical areas of interest and to include the indicators: `homes_with_cockroaches`, `poverty` `public_school_children_5_14_yrs_old_with_asthma` and `asthma_hospitalizations_children_5_to_17_yrs_old`. 
@@ -150,6 +163,8 @@ We downloaded the data as a csv file from the NYC Environmental & Health Data Po
 Data for the rate of public school children with asthma were presented for a range of years (i.e. 2010-2011, 2011-2012, etc). For our analysis, we recoded these ranges into single years in order from 2011 to 2014. Data on cockroaches were only available for 2011 and 2014. Data on percent poverty in NYC were also presented in ranges and we chose 2010-2014 as our reference. We recoded this into a single year for 2011. Since the data for these four variables overlapped for the years 2011-2014, we restricted our analysis to these four years. Data for the rate of asthma hospitalizations among children ages 5-17 years old were available for all four years. 
 
 After recoding the years, separate dataframes were created for each of the four variables and then joined together in order to fill in the missing values (NAs) that first existed when filtering for these variables and years in the larger dataset. We called the tidied, joined dataset `tidy_asthma`, which can be downloaded [here](./final_data/tidy_asthma.csv). 
+
+In order to create our maps, we added [spatial geometries](https://www1.nyc.gov/site/doh/data/health-tools/maps-gis-data-files-for-download.page) following UHF42 codes to `tidy_asthma.csv`. In the original dataset, we noticed that UHF42 code 209 was incorrectly code to the wrong neighborhood, so we recoded it to Bensonhurst - Bay Ridge. Then, we merged our original dataset with the shapefiles to create `tidy_asthma_sf`, and we transformed the geometries to latitude and longitude in `tidy_asthma_sf_ll`. 
 
 Our github repository is linked [here](https://github.com/prisrinivasan/p8105_final).
 
@@ -346,7 +361,7 @@ In the process of analyzing the association between prevalence of cockroach in h
 
 * Overall, the relationship between asthma and cockroaches is more complex than a simple regression model can address. Future work should attempt to control for socioeconomic factors and other potential confounders. 
 
-* Visualization of geographic variation of cockroach and asthma prevalence can provide insight for different interventions--such as the one conducted in [New Orleans](https://www-sciencedirect-com.ezproxy.cul.columbia.edu/science/article/pii/S0091674916313495)-- in target neighborhoods such as Crotona, Tremont, Hunts Point, and Mott Haven-- all of which are located in the Bronx. However, it is interesting to note that Williamsburg, which is now known to be a rather affluent neighborhood, has high cockroach prevalence. This could point out to the fact that it is difficult to decrease number of cockroaches in an area, and thus other types of interventions need to be done to decrease number of children developing asthma. Also, based on our coding, Rikers Island is coded as part of the neighborhood "West Queens," displaying a asthma rate of 54.6 per 1000 in 2011, and 77.3 per 1000 in 2014. Future studies could explore the relationship between cockroach prevalence and environmental habitats. 
+* Visualization of geographic variation of cockroach and asthma prevalence can provide insight for different interventions--such as the one conducted in [New Orleans](https://www-sciencedirect-com.ezproxy.cul.columbia.edu/science/article/pii/S0091674916313495)-- in target neighborhoods such as Crotona, Tremont, Hunts Point, and Mott Haven-- all of which are located in the Bronx. However, it is interesting to note that Williamsburg, which is now known to be a rather affluent neighborhood, has high cockroach prevalence. This could point out to the fact that it is difficult to decrease number of cockroaches in an area, and thus other types of interventions need to be done to decrease number of children developing asthma. Also, based on our coding, Rikers Island is coded as part of the neighborhood "West Queens," displaying an asthma rate of 54.6 per 1000 in 2011, and 77.3 per 1000 in 2014. Future studies could explore the relationship between cockroach prevalence and environmental habitats. 
 
 *	Similar to [previous research](https://www.cdc.gov/pcd/issues/2019/19_0074.htm), there are several limitations, including not having and including all the confounding health and sociodemographic factors that were not accounted for, such as immigration status, race, gender, etc. Temporality is another limitation given the cross-sectional nature of our analysis. 
 

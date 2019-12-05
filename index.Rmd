@@ -5,13 +5,18 @@ output:
     includes:
       after_body: footers.Rhtml
 ---
+<style type="text/css">
+h1.title {
+  text-align: center;
+}
+</style>
+
 <center>
 </font>
-<br>
 
 <font size="3"> _Hannah Bowlin, Lorraine Kwok, Priyanka Srinivasan, Alice Tivarovsky, Kelly Wang_ </font>
 <br><br>
-<img align="center" img src="images/kids.jpg" style="width:74%"/>  
+<img align="center" img src="images/kids.jpg" style="width:95%"/>  
 <font size = "0.7">Image from [Centers for Disease Control](https://www.cdc.gov/vitalsigns/childhood-asthma/index.html)</font>
 
 </center>
