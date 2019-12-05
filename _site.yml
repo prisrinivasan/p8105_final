@@ -13,6 +13,8 @@ navbar:
       href: roach_flex.html
     - icon: fa-envelope fa-lg
       href: mailto:<bowlin.hannah@columbia.edu>
+    - icon: fa-youtube fa-lg
+      href: https://www.youtube.com/watch?v=vsvMQi4xUP8&feature=emb_logo
     - icon: fa-github fa-lg
       href: https://github.com/prisrinivasan/p8105_final/
 
