@@ -21,5 +21,3 @@ navbar:
 output:
   html_document:
     theme: journal
-    includes:
-      after_body: footers.Rhtml

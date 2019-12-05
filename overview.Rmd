@@ -5,6 +5,8 @@ output:
     toc: true
     toc_float: true
     code_folding: hide
+    includes:
+      after_body: footers.Rhtml
 ---
 
 ```{r, eval = TRUE, message = FALSE, include=FALSE}

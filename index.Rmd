@@ -1,6 +1,9 @@
 ---
 title: "Cockroaches and Asthma in New York City"
-output: html_document
+output: 
+  html_document:
+    includes:
+      after_body: footers.Rhtml
 ---
 <center>
 </font>
